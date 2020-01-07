@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Main</title>
+    <style>
+        *{margin:0; padding:0;}
+        #root{
+            width:1200px;
+            margin:0 auto;
+        }
+        #header-bar{
+            text-align: right;
+
+        }
+        .header-bar-item{
+            display: inline-block;
+            width:100px;
+            height:30px;
+            border:1px solid gray;
+            border-right:0px ;
+            margin-top:30px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+        }
+        .header-bar-item:nth-child(n+2){ margin-left: -5px;}
+        .header-bar-item:nth-child(4){border-right:1px solid gray;}
+        #header-logo-box{
+            display: inline-block;
+            width:207px;
+            height:145px;
+        }
+        #header-nav{
+            display: inline-block;
+            height: 100px;
+            
+        }
+        .header-nav-item{
+            display: inline-block;
+            width:290px;
+            height: 37px;
+            border: 1px solid gray;
+            border-right:0px;
+            text-align: center;
+            line-height: 37px;
+            position: relative;
+            top:-63px;
+            cursor: pointer;
+        }
+        .header-nav-item:nth-child(1){ margin-left: 108px;}
+        .header-nav-item:nth-child(n+2){margin-left:-5px;}
+        .header-nav-item:nth-last-child(1){border-right:1px solid gray;}
+    </style>
+</head>
+<body>
+    <div id="root">
+        <header>
+            <div id="header-bar"> 
+                <span class="header-bar-item">로그인</span>
+                <span class="header-bar-item">마이페이지</span>
+                <span class="header-bar-item">주문배송조회</span>
+                <span class="header-bar-item">장바구니</span>
+            </div>
+            <div id="header-logo-box">
+                <img width="100%" height="145"src="{% static 'img/logo.png'%}">
+            </div>
+            <div id="header-nav">
+                
+               <span class="header-nav-item">본빵이야기</span>
+               <span class="header-nav-item">주문하기</span>
+               <span class="header-nav-item">추천 베스트</span>
+            </div>
+        </header>
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</body>
+</html>
