@@ -14,4 +14,6 @@ urlpatterns = [
 
     #본빵이야기
     path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),
+    path('boeun_logo_story/', views.bread_logo_story, name="bread_logo_story"),
+    path('boeun_jujube_story/', views.boeun_jujube_story, name="boeun_jujube_story"),
 ]

@@ -52,3 +52,9 @@ def LoginPage(request):
 #본빵이야기
 def Bread_Birth(request):
     return render(request,'boeun_bread_story/birth.html')
+
+def bread_logo_story(request):
+    return render(request,'boeun_bread_story/logo_story.html')
+
+def boeun_jujube_story(request):
+    return render(request,'boeun_bread_story/boeun_jujube_story.html')
