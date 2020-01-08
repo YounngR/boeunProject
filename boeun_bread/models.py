@@ -14,6 +14,7 @@ class Product(models.Model):
     P_nutrition = models.TextField(null=True, blank=True)
     P_info = models.TextField(null=True, blank=True)
     P_sales = models.IntegerField(default=0)
+    P_newProduct = models.BooleanField(default=False) #True : 신제품
 
 class Cart(models.Model):
     User = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
@@ -27,6 +28,7 @@ class Order(models.Model):
     User = User = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     User_address = models.CharField(max_length=50)
     Total_price = models.IntegerField(default=0)
+    Order_date = models.DateTimeField()
 
 class Order_Product(models.Model):
     Order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
