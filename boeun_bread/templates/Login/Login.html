@@ -1,0 +1,28 @@
+<form name="login" action="{% url 'boeun_bread:LoginPage' %}" method="POST">
+    {% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+        
+        </div>
+        <div class="col-md-8">
+            <label style="font-weight: 600; font-size: 33px; margin-top: 7%;">로그인</label>
+            <div class="form-group" id="id-text">
+                <label style="font-weight:150; font-size:16px;">회원아이디</label>
+                <input type="text" id="user_id" name="user_id" class= "form-control" maxlength="20" style="width:180px;">
+            </div>
+            <div class="form-group" id="pw-text">
+                <label style="font-weight:150; font-size:16px; margin-right:0.8%; " >비밀번호</label>
+                <input type="password" id="user_pwd" name="user_pwd" class="form-control" maxlength="20" style="width:180px;">
+            </div>
+            <div class="form-group" style="font-size:12px;" style="margin-top:5%;" >
+                <label><input type="checkbox" id="id_checkbox" name="id_checkbox"  style="width:18px; height:18px; vertical-align:middle;" >아이디 저장</label>
+            </div>
+            <div class="form-group" style="margin-top:3%;">
+                <button type="submit"><a class="btn" style="width: 6%;">로그인</button>
+                <button><a class="btn" style="width: 6%;" href="{% url 'boeun_bread:SignUp' %}">회원가입</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
