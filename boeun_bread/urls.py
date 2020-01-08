@@ -5,4 +5,5 @@ app_name = 'boeun_bread'
 
 urlpatterns = [
     path('',views.main,name="main"),
+    path('manage/',views.manage,name="manage"),
 ]

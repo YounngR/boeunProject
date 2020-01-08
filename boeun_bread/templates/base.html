@@ -1,11 +1,8 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=db5bbf556c4d3f2a45c4279896d09bb6"></script>
     <title>Main</title>
     <style>
         *{margin:0; padding:0;}
@@ -64,7 +61,7 @@
             text-align: center;
             line-height: 37px;
             position: relative;
-            top:-63px;
+            top:0px;
             cursor: pointer;
         }
         .header-nav-item:nth-child(1){ margin-left: 108px;}
@@ -79,6 +76,11 @@
             margin-right: 50px;
         }
     </style>
+    <!--부트스트랩-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!--제이쿼리-->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
     <div id="root">
@@ -123,6 +125,7 @@
         </footer>
     </div>
 </body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=db5bbf556c4d3f2a45c4279896d09bb6"></script>
 <script>
 		var container = document.getElementById('map');
 		var options = {
@@ -131,6 +134,6 @@
 		};
 
 		var map = new kakao.maps.Map(container, options);
-        console.log(2*3);
+        
 	</script>
 </html>
