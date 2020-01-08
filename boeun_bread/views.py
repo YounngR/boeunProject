@@ -6,6 +6,8 @@ from django.contrib import auth #로그
 def main(request):
     return render(request,'boeun_bread/main.html')
 
+def manage(request):
+    return render(request,'manage/manage_main.html')
 
 def Login(request):
     return render(request, 'Login/Login.html')
