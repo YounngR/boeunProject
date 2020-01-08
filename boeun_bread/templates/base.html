@@ -97,14 +97,17 @@
             <div id="header-nav">
 
                <span class="header-nav-item">본빵이야기</span>
-               <span class="header-nav-item">주문하기</span>
+               <span class="header-nav-item"><a href="{% url 'boeun_bread:order' %}">주문하기</a></span>
                <span class="header-nav-item">추천 베스트</span>
             </div>
         </header>
+        <div>
         {% block content %}
 
         {% endblock %}
-        <footer>
+        </div>
+    
+        <footer style= "margin-top:30px;">
           <div id ="footer-bar">
             <span class="footer-bar-item">찾아오시는길</span>
             <span class="footer-bar-item" src="#">고객센터</span>
