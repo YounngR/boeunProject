@@ -16,8 +16,14 @@ urlpatterns = [
     #주문하기
     path('order/',views.order,name="order"),
     #end 주문하기
-    path('boeun/Login',views.Login, name="Login"),
-    path('boeun/SignUp',views.SignUp, name="SignUp"),
-    path('boeun/Login/LoginPage',views.LoginPage, name="LoginPage"),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    #로그인
+    path('Login',views.Login, name="Login"),
+    path('SignUp',views.SignUp, name="SignUp"),
+    path('Login/LoginPage',views.LoginPage, name="LoginPage"),
 
+
+    #본빵이야기
+    path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),
+    path('boeun_logo_story/', views.bread_logo_story, name="bread_logo_story"),
+    path('boeun_jujube_story/', views.boeun_jujube_story, name="boeun_jujube_story"),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
