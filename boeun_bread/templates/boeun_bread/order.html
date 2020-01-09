@@ -1,0 +1,65 @@
+
+{% extends 'base.html' %}
+{% load extra %}
+{% block content %}
+
+    <style>
+        #order-header{
+            margin-top:30px;
+        }
+        #order-header > span{
+            display: inline-block;
+            width:298px;
+            height: 57px;
+            border: 1px solid gray;
+            border-right:0px;
+            text-align: center;
+            line-height: 57px;
+            position: relative;
+            top:0px;
+            cursor: pointer;
+        }
+        
+        
+        #order-header > span:nth-child(n+2){margin-left:-5px;}
+        #order-header > span:nth-last-child(1){border-right:1px solid gray;}
+        #bread-list-box{
+            margin-bottom: 30px;
+            
+        }
+        #bread-list-box li{
+            list-style: none;
+            width:200px;
+            height:200px;
+            display: inline-block;
+            margin-right:129px;
+            margin-top:60px;
+            
+        }
+        #bread-list-box :nth-child(4n){
+            margin-right: 0;
+        }
+    </style>
+    <div id="order-header">
+        <span style="background:rgb(210,210,210);">제빵</span>
+        <span>제과</span>
+        <span>케익</span>
+        <span>선문세트</span>
+    </div>
+    <ul id="bread-list-box">
+        {% for p in product %}
+            <li>
+                <img width="100%" height="100%" src="/media/{{p.P_img}}">
+                <div style="margin-left:10px; position: relative;">
+                    <b>{{p.P_name}}</b>
+                    
+                    <input type="number" value="1" style="width:50px; position: absolute; right: 0px; top:10px;"><br>
+                    <b>{{p.P_price|number_format}}원</b>
+                </div>
+                <div style="background: red; color:white; padding: 8px; text-align: center; cursor: pointer; ">
+                    장바구니 담기
+                </div>
+            </li>
+         {% endfor %}
+    </ul><br><br>
+{% endblock %}
