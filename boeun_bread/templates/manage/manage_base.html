@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,11 +12,24 @@
   <meta name="author" content="">
 
   <title>관리자페이지</title>
-
   
+
   <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/sb-admin.css'%}" rel="stylesheet">
+ <!-- Bootstrap core JavaScript-->
+ <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 
+ 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <style>
+   *{
+     margin:0;
+     padding:0;
+   }
+  </style>
+  {% block manage_style %}
+
+  {% endblock %}
 </head>
 
 <body id="page-top">
@@ -63,8 +77,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           
-          <a class="dropdown-item" href="#">상품등록</a>
-          <a class="dropdown-item" href="#">상품수정</a>
+          <a class="dropdown-item" href="{% url 'boeun_bread:create_product' %}">상품등록</a>
+          <a class="dropdown-item" href="{% url 'boeun_bread:modify_list' %}">상품관리</a>
         </div>
       </li>
       
@@ -87,15 +101,15 @@
       </div>
     </footer>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
-  <script src="{% static 'js/sb-admin.min.js'%}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'js/sb-admin.min.js'%}"></script>
 
   
 
 </body>
+{% block manage_script %}
 
+{% endblock %}
 </html>
 
 
