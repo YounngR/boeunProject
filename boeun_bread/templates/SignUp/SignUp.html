@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>회원가입</h1>
 
 <form name="signup" action="{% url 'boeun_bread:SignUp' %}" method="POST">
@@ -7,22 +9,22 @@
     <input type="text" id="user_name" name="user_name" class="form-control" style="border-radius: 10px!important;" maxlength="20">
 </div>
 <div class="form-group">
-    <label class="signuplabel">ID</label>
-    <input type="text" id="user_id" name="user_id" class="form-control" style="border-radius: 10px!important;" maxlength="20">
+    <label class="signuplabel">ID</label><label style="font-size:12px;" >(영어, 숫자 포함 4~12자 이내)</label>
+    <input type="text" id="user_id" name="user_id" class="form-control" style="border-radius: 10px!important;" maxlength="20"  >
 </div>
-<div class="form-group">
+<div class="form-group">  
     <label class="signuplabel">비밀번호</label>
-    <input type="password" id="user_pwd" name="user_pwd" class="form-control" style="border-radius: 10px!important;" maxlength="20">
+    <input type="password" id="user_pwd" name="user_pwd" class="form-control" style="border-radius: 10px!important;" maxlength="20" >
 </div>
 <div class="form-group">
     <label class="signuplabel">비밀번호 확인</label>
-    <input type="password" id="user_pwcheck" name="user_pwcheck" class="form-control" style="border-radius: 10px!important;" maxlength="20">
+    <input type="password" id="user_pwcheck" name="user_pwcheck" class="form-control" style="border-radius: 10px!important;" maxlength="20" >
 </div>
 <div class="form-group">
     <label class="signuplabel">이메일</label>
     <input type="email_text" id="email_text" name="email_text" class="form-control" style="border-radius: 10px!important;" maxlength="20">
-    <p style="font-size: 15px; position:absolute;left:237px;top:150px;">@</p>
-    <select class="form-control" id="email_select" name="email_select" onblur="emailcheck();" onchange="emailcheck();" style="position:absolute;left:257px;top:165px;">
+    <p style="font-size: 15px; position:absolute;left:590px;top:412px;">@</p>
+    <select class="form-control" id="email_select" name="email_select" onblur="emailcheck();" onchange="emailcheck();" style="position:absolute;left:612px;top:415px;">
         <option selected>주소 선택</option>
         <option>naver.com</option>
         <option>daum.net</option>
@@ -46,3 +48,54 @@
 </div>
 
 </form>
+
+<script>
+    function check(){
+        var getCheck= RegExp(/^[a-zA-Z0-9]{4,12}$/);
+        var getName= RegExp(/^[가-힣]+$/);
+    }
+
+    //아이디 공백 확인
+        if($("#user_id").val() == ""){
+            alert("아이디 입력바람");
+            $("#user_id").focus();
+            return false;
+      }
+    //아이디 유효성 검사
+        if(!getCheck.test($("#user_id").val())){
+            alert("형식에 맞게 입력해주세요");
+            $("#user_id").val("");
+            $("#user_id").focus();
+            return false;
+      }
+              //비밀번호
+        if(!getCheck.test($("#user_pwd").val())) {
+            alert("형식에 맞춰서 PW를 입력해줘용");
+            $("#user_pwd").val("");
+            $("#user_pwd").focus();
+            return false;
+      }
+            //비밀번호 똑같은지
+        if($("#user_pwd").val() != ($("#user_pwcheck").val())){ 
+            alert("비밀번호가 틀렸네용.");
+            $("#user_pwd").val("");
+            $("#user_pwcheck").val("");
+            $("#user_pwd").focus();
+            return false;
+     }
+             //이메일 공백 확인
+        if($("#email_text").val() == ""){
+            alert("이메일을 입력해주세요");
+            $("#email_text").focus();
+            return false;
+      }
+              //이름 유효성
+        if (!getName.test($("#user_name").val())) {
+            alert("이름 똑띠 쓰세용");
+            $("#user_name").val("");
+            $("#user_name").focus();
+            return false;
+      }
+</script>
+
+{% endblock %}

@@ -81,10 +81,18 @@
     </style>
 </head>
 <body>
+    {% if msg %}
+      <script>alert("{{msg}}")</script>
+    {% endif %}
     <div id="root">
         <header>
             <div id="header-bar">
+                {% if request.user.username %}
+                <a href="#">{{request.user.username}}님 </a>
+                <a href="{% url 'boeun_bread:logout' %}">로그아웃</a>
+                {% else %}
                 <a href="{% url 'boeun_bread:Login' %}"><span class="header-bar-item">로그인</span></a>
+                {% endif %}
                 <span class="header-bar-item">마이페이지</span>
                 <span class="header-bar-item">주문배송조회</span>
                 <span class="header-bar-item">장바구니</span>
