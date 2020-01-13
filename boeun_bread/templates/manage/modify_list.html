@@ -1,0 +1,64 @@
+{% extends 'manage/manage_base.html'%}
+{% load extra %}
+{% block manage_style %}
+    <style>
+        #bread-list-box{
+                margin-bottom: 30px;
+                
+            }
+        #bread-list-box li{
+            list-style: none;
+            width:200px;
+            height:200px;
+            display: inline-block;
+            margin-right:118px;
+            margin-top:20px;
+            
+        }
+        #bread-list-box :nth-child(4n){
+            margin-right: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block manage_content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'boeun_bread:manage' %}">관리자페이지</a>
+        </li>
+        <li class="breadcrumb-item active">상품관리</li>
+    </ol>
+    <ul id="bread-list-box">
+        {% for p in product %}
+            <li id="{{fo}}">
+                <img width="100%" height="100%" src="/media/{{p.P_img}}">
+                <div class="text-center">
+                     <b>{{p.P_name}}</b><br>
+                    <b>{{p.P_price|number_format}}원</b>
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'boeun_bread:modify_product' p.pk %}"class="btn btn-primary col-md-5">수정</a>
+                    <form action="{% url 'boeun_bread:delete_product' %}" method="POST" style="display:inline" onsubmit="return delete_product()">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{p.pk}}" name="pk">
+                        <input type="submit" class="btn btn-danger col-md-5" value="삭제">
+                    </form>
+                    
+                </div>
+            </li>
+            
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block manage_script %}
+    <script>
+        function delete_product(){
+            if(confirm("정말 삭제 하시겠습니까?")){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    </script>
+{% endblock %}

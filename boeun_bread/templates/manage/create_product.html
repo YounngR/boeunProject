@@ -1,0 +1,104 @@
+{% extends 'manage/manage_base.html'%}
+<!--css-->
+{% block manage_style %}
+    <style>
+        #product-form-box{
+            margin-bottom: 30px;
+        }
+        #bread-img-box{
+            width:200px; 
+            margin:0 auto;
+        }
+        #bread-img-box > label{
+            background: rgb(210,210,210);
+            padding: 5px;
+            border-radius: 13px;
+            margin-top:7px;
+            margin-left:50px;
+        }
+        #bread-img{
+            width:100%;
+            height:200px;
+            border: 1px solid gray;
+        }        
+        #bread-img > p{
+            text-align: center;
+            line-height: 200px;
+            color:gray;
+        }
+        #form-content{
+            width:300px;
+            margin:0 auto;
+        }
+        #form-content input{
+            width:100%;
+        }
+        #form-content label{
+            color:gray;
+            margin-top:20px;
+        }
+    </style>
+{% endblock %}
+<!--html-->
+{% block manage_content %}
+    
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'boeun_bread:manage' %}">관리자페이지</a>
+        </li>
+        <li class="breadcrumb-item active">상품등록</li>
+    </ol>
+    <div id="product-form-box">
+        <form action="{% url 'boeun_bread:create_product' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="bread-img-box">
+                <div id="bread-img">
+                    <img style="display:none;"  width="200" height="200" src="#">
+                    <p>빵사진</p>
+                </div>
+                <label for="img-file-up">이미지 업로드</label>
+                <input style="display: none;" id="img-file-up" name="bread_img" type="file">
+            </div>
+            <div id="form-content">
+                <!--빵이름-->
+                <label>빵이름</label><br>
+                <input type="text" class="form-control" name="bread_name">
+                <!--가격-->
+                <label>빵가격</label><br>
+                <input type="number" name="bread_price" style="display:inline-block; width:270px;" class="form-control">
+                <span style="color:gray; font-size:20px;">원</span>
+                <!--신제품-->
+                <label>
+                    신제품
+                </label>
+                <input style="width:10%;"type="checkbox" name="is_new">
+                <input type="submit" value="등록하기">
+                
+            </div>
+        </form>
+    </div>
+    
+{% endblock %}
+<!--javascript-->
+{% block manage_script %}
+<script>
+    $("#img-file-up").on('change', function(){
+        readURL(this);
+    });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#bread-img > p").css("display","none");
+                $("#bread-img > img").css("display","block");
+                $("#bread-img > img").attr("src", e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <a href="{% url 'boeun_bread:Bread_Birth' %}"><span class="birth_story_nav">본빵의 탄생</span></a>
+    <a href="{% url 'boeun_bread:bread_logo_story' %}"><span class="birth_story_nav">로고제작이야기</span></a>
+    <a href="{% url 'boeun_bread:boeun_jujube_story' %}"><span class="birth_story_nav">보은대추이야기</span></a>
+  <div class="birth_story_contents">
+    본빵의 탄생
+  </div>
+</div>
+
+{% endblock %}
