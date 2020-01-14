@@ -119,6 +119,11 @@ def logout(request):
     auth.logout(request)
     return render(request, 'boeun_bread/main.html')
 
+#회원가입 여부
+def is_signup(request):
+    if request.method == "POST":
+        pass
+    return render(request,'SignUp/is_signup.html')
 
 def SignUp(request):
     if request.method == "POST":
