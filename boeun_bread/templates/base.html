@@ -29,6 +29,15 @@
         position : absolute;
       }
 
+      .title_u{
+        font-weight: bold;
+        cursor: pointer;
+        font-size:10px;
+        margin-top:70px;
+        color:#ffffff;
+        position : absolute;
+      }
+
 
         *{margin:0; padding:0;}
         #root{
@@ -162,8 +171,13 @@
             -->
           <div class="banner_back">
               <a href="{% url 'boeun_bread:main'%}"><img src="{% static '/img/title_bar.png'%}" style=" margin-left:400px; position : absolute;"></a>
+              <div class="title_u" style="margin-left:912px;" onclick="main_login()">로그인</div>
+              <div class="title_u" style="margin-left:960px;">마이페이지</div>
+              <div class="title_u" style="margin-left:1031px;">주문배송조회</div>
+              <div class="title_u" style="margin-left:1113px;">장바구니</div>
+
               <div class="banner_font" style="margin-left:109px;" onclick="boeun_bread_story()">본빵스토리</div>
-              <div class="banner_font" style="margin-left:327px;">제품안내</div>
+              <div class="banner_font" style="margin-left:327px;" onclick="order_product()">제품안내</div>
               <div class="banner_font" style="margin-left:545px;">본빵배달신청</div>
               <div class="banner_font" style="margin-left:765px;">추천베스트</div>
               <div class="banner_font" style="margin-left:981px;">주문안내</div>
@@ -200,9 +214,17 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=db5bbf556c4d3f2a45c4279896d09bb6"></script>
 <script>
 
+    function main_login(){
+      location.href= "{% url 'boeun_bread:Login' %}";
+    }
+
     function boeun_bread_story(){
       location.href= "{% url 'boeun_bread:Bread_Birth' %}";
     }
+    function order_product(){
+      location.href= "{% url 'boeun_bread:order' %}";
+    }
+
 
 
 		var container = document.getElementById('map');
