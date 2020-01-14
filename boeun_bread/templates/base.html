@@ -16,14 +16,16 @@
       .banner_back{
         width: 1200px;
         height:170px;
-        background:url("./static/img/main_title_bar.jpg")
+        background:url("/static/img/title_back.jpg")
       }
 
       .banner_font{
         font-weight: bold;
+        cursor: pointer;
         font-size:18px;
         margin-top:140px;
         height:18px;
+        color:#ffffff;
         position : absolute;
       }
 
@@ -159,11 +161,12 @@
             </div>
             -->
           <div class="banner_back">
-              <div class="banner_font" style=" margin-left:75px; width:91px; " onclick="test(2)">본빵스토리</div>
-              <div class="banner_font" style=" margin-left:233px; width:77px; ">제품안내</div>
-              <div class="banner_font" style=" margin-left:391px; width:110px;">본빵배달신청</div>
-              <div class="banner_font" style=" margin-left:549px; width:95px;">추천베스트</div>
-              <div class="banner_font" style=" margin-left:707px; width:70px;" onclick="test(3)">주문안내</div>
+              <a href="{% url 'boeun_bread:main'%}"><img src="{% static '/img/title_bar.png'%}" style=" margin-left:400px; position : absolute;"></a>
+              <div class="banner_font" style="margin-left:109px;" onclick="boeun_bread_story()">본빵스토리</div>
+              <div class="banner_font" style="margin-left:327px;">제품안내</div>
+              <div class="banner_font" style="margin-left:545px;">본빵배달신청</div>
+              <div class="banner_font" style="margin-left:765px;">추천베스트</div>
+              <div class="banner_font" style="margin-left:981px;">주문안내</div>
           </div>
         </header>
 
@@ -197,9 +200,11 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=db5bbf556c4d3f2a45c4279896d09bb6"></script>
 <script>
 
-    function test(ss){
-      alert(ss);
+    function boeun_bread_story(){
+      location.href= "{% url 'boeun_bread:Bread_Birth' %}";
     }
+
+
 		var container = document.getElementById('map');
 		var options = {
 			center: new kakao.maps.LatLng(36.48831709247809 , 127.72394185633982 ),
