@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if msg %}
-        <script>
-            alert("{{msg}}");
-        </script>
-    {% endif %}
+{% load static %}
+    <style>
+
+    </style>
+
+    <img width="1200px" height="550px" src="{% static 'img/main_banner.jpg'%}" style="padding-top:12px;">
+
 {% endblock %}
