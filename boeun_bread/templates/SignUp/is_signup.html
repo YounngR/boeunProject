@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>회원가입</title>
+    <!-- 부트스트랩 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!--제이쿼리-->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <style>
+        *{padding:0; margin:0;}
+        @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+        body {
+           font-family: "Noto Sans KR", sans-serif !important;
+        }
+        #signup{
+            width:1200px;
+        }
+        header{
+            width:100%;
+            height: 81px;
+            background: rgb(31,33,32);
+            line-height: 81px;
+            
+        }
+        .title{
+            display: inline-block;
+            font-size: 50px;
+            font-weight: 530;
+            color: #000000;
+            margin-top:70px;
+        }
+        .description{
+            display: inline-block;
+            font-size: 15px;
+            font-weight: 500;
+            color:#888885;
+            margin-top:30px;
+        }
+        .field-box{
+            width:996px;
+            height: 250px;
+            border-top:2px solid #9E9E9E;
+            margin: 0 auto;
+            margin-top:65px;
+            background: #F8F8F8;
+        }
+        .fields{
+            display: inline-block;
+            margin-left:40px;
+            position: relative;
+            top:0px;
+
+        }
+        .fields input{
+            width: 408px;
+            height: 30px;
+            margin-top:8px;
+            padding-left:22px ;
+        }
+        input::-webkit-input-placeholder {
+            font-size: 12px;
+            color: #000000;
+            font-weight: 500;
+            opacity: 1;
+        }
+        /* IE */
+        input:-ms-input-placeholder {
+            font-size: 12px;
+            color: #000000;
+            font-weight: 500;
+            opacity: 1;
+        }
+        /* Firefox */
+        input:-mos-input-placeholder {
+            font-size: 12px;
+            color: #000000;
+            font-weight: 500;
+            opacity: 1;
+        }
+        .info-list{
+            margin-left:61px;
+        }
+        .info-list li{
+            font-size: 12px;
+            font-weight: 600;
+            color:#000000;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="signup-root">
+        <header>
+            <a style="margin-left: 109px;" href="{% url 'boeun_bread:main' %}">
+                <img src="{% static 'img/signup_logo.png' %}">
+            </a>
+        </header>
+        <div id="content"> 
+            <p class="text-center">
+                <span class="title">BOEUN BREAD <span style="font-weight: 500;">회원가입</span></span><br>
+                <span class="description">본 빵에서 맛있는 혜택을 누려보세요</span>
+            </p>
+            <div class="field-box">
+                <div style="display: inline-block;">
+                    <p style="margin-left:48px; margin-top:45px; font-weight: 600; color:#000000">회원가입 여부 안내</p>
+                    <ul style="margin-left:60px; margin-top: 40px;">
+                        <li style="font-size: 12px; font-weight: 500; color:#000000;">
+                            기존 회원가입 정보와 일치하는 정보를 입력하셔야 회원가입 여부를 정확하게 확인<br>
+                            하실 수 있습니다.
+                        </li>
+                        <li style="margin-top:32px; font-size: 12px; font-weight: 500; color:#EF832E;">
+                            입력하신 정보는 회원가입 여부에만 사용되며 저장되지 않습니다.
+                        </li>
+                    </ul>
+                </div>
+                <div class="fields">
+                    <input type="text" name="user_name" placeholder="이름을 입력해주세요."><br>
+                    <input type="text" name="user_age"  placeholder="생년월일을 입력해주세요."><br>
+                    <input type="tel" name="user_phone" placeholder="휴대폰 번호를 입력해주세요."><br>
+                    <input type="submit" style="height:43px;background:rgb(49,51,50); color:#FAFAFA; font-size: 13px; font-weight: 600;" class="btn" value="가입여부 확인">
+
+                </div>
+            </div>
+            <div style="width:996px; height:260px; margin:0 auto;margin-top:46px; background:#F8F8F8;">
+                <p style="font-size: 20px; color:#000000; font-weight:600; margin-left:47px; padding-top: 33px;">
+                    이용안내
+                </p>
+                <ul class="info-list">
+                    <li style="margin-top: 22px;">
+                        회원이 되시면 하나의 통합된 회원 ID와 비밀번호로 BOEUN BREAD 웹 사이트의 다양한 서비스(포인트 조회,정보변경 서비스등)
+                        이용하실 수있습니다.
+                    </li>
+                    <li>
+                        BOEUN BREAD에 가입하더라도 약관 동의되지 않은 BOEUN BREAD 브랜드에는 개인정보가 제공되지 않습니다.
+                    </li>
+                    <li>
+                        BOEUN BREAD은 멤버십 서비스입니다.
+                    </li>
+                    <li>
+                        하나의 아이디(ID)로 사이트를 안전하고 편리하게 이용할수 있습니다.
+                    </li>
+                    <li>
+                        기존의 각 BOEUN BREAD 브랜드 사이트에 1개 이상 가입되어 있는 회원님은 새로운 BOEUN BREAD 아이디(ID)를 생성하신 후 
+                        가입하실 수 있습니다.
+                    </li>
+                </ul>
+            </div>
+        </div> 
+    </div>
+</body>
+</html>
