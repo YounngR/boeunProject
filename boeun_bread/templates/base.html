@@ -3,8 +3,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--나눔스퀘어-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
     <title>Main</title>
     <style>
+
+      body {
+      font-family: 'NanumSquare', sans-serif;
+
+      }
+
+      .banner_back{
+        width: 1200px;
+        height:170px;
+        background:url("./static/img/main_title_bar.jpg")
+      }
+
+      .banner_font{
+        font-weight: bold;
+        font-size:18px;
+        margin-top:140px;
+        height:18px;
+        position : absolute;
+      }
+
+
         *{margin:0; padding:0;}
         #root{
             width:1200px;
@@ -113,6 +136,7 @@
     {% endif %}
     <div id="root">
         <header>
+          <!--
             <div id="header-bar">
                 {% if request.user.username %}
                 <a href="#">{{request.user.username}}님 </a>
@@ -133,13 +157,22 @@
                <span class="header-nav-item"><a href="{% url 'boeun_bread:order' %}">주문하기</a></span>
                <span class="header-nav-item">추천 베스트</span>
             </div>
+            -->
+          <div class="banner_back">
+              <div class="banner_font" style=" margin-left:75px; width:91px; " onclick="test(2)">본빵스토리</div>
+              <div class="banner_font" style=" margin-left:233px; width:77px; ">제품안내</div>
+              <div class="banner_font" style=" margin-left:391px; width:110px;">본빵배달신청</div>
+              <div class="banner_font" style=" margin-left:549px; width:95px;">추천베스트</div>
+              <div class="banner_font" style=" margin-left:707px; width:70px;" onclick="test(3)">주문안내</div>
+          </div>
         </header>
+
         <div>
         {% block content %}
 
         {% endblock %}
         </div>
-    
+
         <footer style= "margin-top:30px;">
           <div id ="footer-bar">
             <span class="footer-bar-item">찾아오시는길</span>
@@ -163,6 +196,10 @@
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=db5bbf556c4d3f2a45c4279896d09bb6"></script>
 <script>
+
+    function test(ss){
+      alert(ss);
+    }
 		var container = document.getElementById('map');
 		var options = {
 			center: new kakao.maps.LatLng(36.48831709247809 , 127.72394185633982 ),

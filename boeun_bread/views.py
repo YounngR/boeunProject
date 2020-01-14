@@ -22,8 +22,97 @@ from django.contrib.auth.decorators import login_required
 def main(request):
     return render(request,'boeun_bread/main.html')
 
+#-----manage
+#관리자 이냐?
+def isAdmin(request):
+    profile = Profile.objects.get(user=request.user)
+    return True if profile.U_grade == 0 else False
+
+
+#관리자 main
+@login_required
+def manage(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+
+    return render(request,'manage/manage_main.html')
+
+#상품등록
+@login_required
+def create_product(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+    if request.method == "POST":
+        is_new = True if request.POST.get('is_new')=="on" else False
+
+        Product.objects.create(
+            P_img        = request.FILES.get('bread_img'),
+            P_name       = request.POST.get('bread_name'),
+            P_price      = request.POST.get('bread_price'),
+            P_newProduct = is_new
+        )
+        return redirect('/manage')
+    return render(request,'manage/create_product.html')
+#수정상품 리스트
+@login_required
+def modify_list(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+    product = Product.objects.all()
+
+    return render(request,'manage/modify_list.html',{'product':product})
+
+#상품객체 반환
+def getProduct(pk):
+    product = Product.objects.filter(id=pk)
+    if product:
+        return product[0]
+    else:
+        return redirect("/manage/modify_list")
+
+
+#상품수정
+@login_required
+def modify_product(request,pk):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+    product = getProduct(pk)
+
+    if request.method == "POST":
+        is_new = True if request.POST.get('is_new')=="on" else False
+        files = request.FILES.get('bread_img')
+        if files:
+            product.P_img = files
+        product.P_name       = request.POST.get('bread_name')
+        product.P_price      = request.POST.get('bread_price')
+        product.P_newProduct = is_new
+        product.save()
+        return redirect("/manage/modify_list")
+
+    context = {
+            'p':product,
+        }
+    return render(request,'manage/modify_product.html',context)
+
+
+#상품삭제
+@login_required
+def delete_product(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+    if request.method == "POST":
+        product = Product.objects.filter(id=request.POST.get('pk'))
+        if product:
+            product[0].delete()
+        return redirect('/manage/modify_list')
+
+
+
+#end manage
+
+#로그인
 def Login(request):
-                
+
     return render(request, 'Login/Login.html')
 
 def logout(request):
@@ -38,11 +127,11 @@ def is_signup(request):
 
 def SignUp(request):
     if request.method == "POST":
-    
+
         email_text = request.POST['email_text']
         email_select = request.POST['email_select']
         user_email = email_text+'@'+email_select
-    
+
         user = User.objects.create_user(
         username = request.POST['user_id'],
         password = request.POST['user_pwd'],
@@ -51,10 +140,10 @@ def SignUp(request):
         profile = Profile.objects.create(
             user=user,
             U_phone = request.POST['user_phone'],
-           
-        )    
+
+        )
         profile.U_is_active = False
-        current_site = get_current_site(request) 
+        current_site = get_current_site(request)
         # localhost:8000
         message = render_to_string('SignUp/user_active.html', {
                 'user': profile,
@@ -68,7 +157,7 @@ def SignUp(request):
         email.send()
         return render(request, 'SignUp/emailcheck.html')
 
-    return render(request,'SignUp/SignUp.html')    
+    return render(request,'SignUp/SignUp.html')
 
 def LoginPage(request):
     if request.method == "POST":
@@ -82,16 +171,16 @@ def LoginPage(request):
             #Profile.objects.get(user=request.user)
         else:
             context['msg'] = "로그인을 실패했습니다."
-              
+
         return render(request, 'boeun_bread/main.html',context)
-    return redirect('/')    
+    return redirect('/')
 
 
 #이메일
 def activate(request, uid64, token):
     uid = force_text(urlsafe_base64_decode(uid64))
     user = Profile.objects.get(pk=uid)
-    
+
     if user is not None and account_activation_token.check_token(user, token):
         user.U_is_active = True
         user.save()
@@ -103,7 +192,7 @@ def activate(request, uid64, token):
 def SignUpGo(request):
     return render(request, 'SignUp/signupok.html')
 
-    
+
 #-----manage
 #관리자 이냐?
 def isAdmin(request):
@@ -111,22 +200,22 @@ def isAdmin(request):
     return True if profile.U_grade == 0 else False
 
 
-#관리자 main    
+#관리자 main
 @login_required
 def manage(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'}) 
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
 
     return render(request,'manage/manage_main.html')
 
-#상품등록        
+#상품등록
 @login_required
 def create_product(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'}) 
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
     if request.method == "POST":
         is_new = True if request.POST.get('is_new')=="on" else False
-        
+
         Product.objects.create(
             P_img        = request.FILES.get('bread_img'),
             P_name       = request.POST.get('bread_name'),
@@ -137,12 +226,12 @@ def create_product(request):
     return render(request,'manage/create_product.html')
 #수정상품 리스트
 @login_required
-def modify_list(request):           
+def modify_list(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'}) 
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
     product = Product.objects.all()
 
-    return render(request,'manage/modify_list.html',{'product':product})       
+    return render(request,'manage/modify_list.html',{'product':product})
 
 #상품객체 반환
 def getProduct(pk):
@@ -153,13 +242,13 @@ def getProduct(pk):
         return redirect("/manage/modify_list")
 
 
-#상품수정    
+#상품수정
 @login_required
-def modify_product(request,pk):           
+def modify_product(request,pk):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'}) 
-    product = getProduct(pk)    
-        
+        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+    product = getProduct(pk)
+
     if request.method == "POST":
         is_new = True if request.POST.get('is_new')=="on" else False
         files = request.FILES.get('bread_img')
@@ -169,26 +258,26 @@ def modify_product(request,pk):
         product.P_price      = request.POST.get('bread_price')
         product.P_newProduct = is_new
         product.save()
-        return redirect("/manage/modify_list") 
+        return redirect("/manage/modify_list")
 
     context = {
             'p':product,
         }
     return render(request,'manage/modify_product.html',context)
-    
-     
+
+
 #상품삭제
 @login_required
 def delete_product(request):
     if not isAdmin(request):
         return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
     if request.method == "POST":
-        product = Product.objects.filter(id=request.POST.get('pk'))    
+        product = Product.objects.filter(id=request.POST.get('pk'))
         if product:
             product[0].delete()
-        return redirect('/manage/modify_list')    
+        return redirect('/manage/modify_list')
 
-     
+
 
 #end manage
 
