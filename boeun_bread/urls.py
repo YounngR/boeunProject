@@ -11,6 +11,7 @@ urlpatterns = [
     path('boeun/isSignup',views.is_signup,name="is_signup"),
     path('boeun/SignUp',views.SignUp, name="SignUp"),
     path('boeun/Login/LoginPage',views.LoginPage, name="LoginPage"),
+    path('boeun/agreement',views.agreement, name="agreement"),
 
 
     #이메일

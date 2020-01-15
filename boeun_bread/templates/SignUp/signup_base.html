@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>회원가입</title>
+    <!-- 부트스트랩 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!--제이쿼리-->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <style>
+     *{padding:0; margin:0;}
+     
+     header{
+            width:100%;
+            height: 81px;
+            background: rgb(31,33,32);
+            line-height: 81px;
+            
+        }
+        .title{
+            display: inline-block;
+            font-size: 50px;
+            font-weight: 530;
+            color: #000000;
+            margin-top:30px;
+        }
+        .description{
+            display: inline-block;
+            font-size: 15px;
+            font-weight: 500;
+            color:#888885;
+            margin-top:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="signup-root">
+        <header>
+            
+            <a style="margin-left: 109px;" href="{% url 'boeun_bread:main' %}">
+                <img src="{% static 'img/signup_logo.png' %}">
+            </a>
+        </header>
+        <div class="text-right" style="margin-top:28px; margin-right: 28px;">
+            <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+            <i class="glyphicon glyphicon-menu-right"></i>
+            <span style="font-weight: 500; position: relative; top:-1px;">회원가입</span>
+        </div>
+        <div class="text-center" style="margin-top:30pxpx;">
+            <span class="title">회원가입</span><br>
+            <span class="description">이용약관과 개인정보취급 방침을 읽으신 후 동의해 주세요.</span>
+        </div>
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    
+</body>
+</html>

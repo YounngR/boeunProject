@@ -124,6 +124,10 @@ def is_signup(request):
     if request.method == "POST":
         pass
     return render(request,'SignUp/is_signup.html')
+#약관동의
+
+def agreement(request):
+    return render(request,'SignUp/agreement.html')
 
 def SignUp(request):
     if request.method == "POST":
