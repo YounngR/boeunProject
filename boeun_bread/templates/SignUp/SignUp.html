@@ -21,13 +21,19 @@
 <div style="margin-top:15px;">
   <span style="margin-left:370px;">본인인증</span>
   <span style="margin-left:94px;">약관동의</span>
-  <span style="margin-left:79px; color:#FFCF9C;"><U>회원정보 입력</U></span>
+  <span style="margin-left:79px; color:#e47f32;"><U>회원정보 입력</U></span>
   <span style="margin-left:80px;">가입완료</span>
 </div>
 
 <hr style="margin-left:115px; margin-top:67px; color:#AAAAAA; width:968px;">
-<form name="signup" action="{% url 'boeun_bread:SignUp' %}" method="POST">
+
+<div>
+  <span style="margin-left:161px;">회원정보 입력</span>
+  <span style=""
+  <form name="signup" action="{% url 'boeun_bread:SignUp' %}" method="POST">
     {% csrf_token %}
+
+
 <!--
 <div>
     <label>이름 및 단체명</label>
@@ -74,5 +80,6 @@
 -->
 
 
-</form>
+  </form>
+</div>
 {% endblock %}
