@@ -8,6 +8,7 @@ urlpatterns = [
     path('',views.main,name="main"),
 
 
+
     #이메일
     path('activate/<uid64>/<token>', views.activate, name='activate'),
     path('boeun/SignUpGo', views.SignUpGo, name='SignUpGo'),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('logout/',views.logout, name="logout"),
 
     #회원가입
+    path('boeun/agreement',views.agreement, name="agreement"),
     path('boeun/isSignup',views.is_signup,name="is_signup"),
     path('SignUp/',views.SignUp, name="SignUp"),
     path('Login/LoginPage',views.LoginPage, name="LoginPage"),
