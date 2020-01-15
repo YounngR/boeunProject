@@ -7,8 +7,6 @@ app_name = 'boeun_bread'
 urlpatterns = [
     path('',views.main,name="main"),
 
-
-
     #이메일
     path('activate/<uid64>/<token>', views.activate, name='activate'),
     path('boeun/SignUpGo', views.SignUpGo, name='SignUpGo'),
