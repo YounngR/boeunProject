@@ -6,11 +6,6 @@ app_name = 'boeun_bread'
 
 urlpatterns = [
     path('',views.main,name="main"),
-    path('boeun/Login',views.Login, name="Login"),
-    path('boeun/logout',views.logout, name="logout"),
-    path('boeun/isSignup',views.is_signup,name="is_signup"),
-    path('boeun/SignUp',views.SignUp, name="SignUp"),
-    path('boeun/Login/LoginPage',views.LoginPage, name="LoginPage"),
 
 
     #이메일
@@ -28,8 +23,12 @@ urlpatterns = [
     path('order/',views.order,name="order"),
     #end 주문하기
     #로그인
-    path('Login',views.Login, name="Login"),
-    path('SignUp',views.SignUp, name="SignUp"),
+    path('Login/',views.Login, name="Login"),
+    path('logout/',views.logout, name="logout"),
+
+    #회원가입
+    path('boeun/isSignup',views.is_signup,name="is_signup"),
+    path('SignUp/',views.SignUp, name="SignUp"),
     path('Login/LoginPage',views.LoginPage, name="LoginPage"),
 
 
