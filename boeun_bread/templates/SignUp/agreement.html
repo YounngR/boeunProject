@@ -1,5 +1,80 @@
 {% extends 'SignUp/signup_base.html' %}
-
+{% load static %}
 {% block content %}
-
+    <style>
+        #agreement-box{
+            width:968px;
+            height: 616px;
+            border-top:2px solid #9E9E9E;
+            margin: 0 auto;
+            margin-top:65px;
+            background: #F8F8F8;
+            margin-bottom: 40px;;
+        }
+        hr{
+            border-width: 2px;
+            border-color:rgb(210,210,210);
+        }
+        .text-box{
+            overflow-y: scroll;
+            width:876px; 
+            height:121px; 
+            border:1px solid rgb(210,210,210); 
+            margin-left: 46px;
+            background: white;
+        }
+        .sign_up_icon{
+            width:40px;
+        }
+        .icon_bar{
+            margin-left:33px;
+            width:45px;
+            color:red;
+        }
+    </style>
+    <div style="width:521px; margin:0 auto; margin-top:77px;">
+    <div>
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_one.png'%}" style="">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_two_check.png'%}" style="margin-left:111px;">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_three.png'%}" style="margin-left:111px;">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_four.png'%}" style="margin-left:111px;">
+    </div>
+    <div style="margin-top: 15px;;">
+        <span style="margin-left:-8px;">본인인증</span>
+        <span style="margin-left:94px; color:#e47f32;"><U>약관동의</U></span>
+        <span style="margin-left:79px;">회원정보 입력</span>
+        <span style="margin-left:80px;">가입완료</span>
+      </div>
+    </div>
+      <!-- <hr style="margin-left:115px; margin-top:67px; color:#AAAAAA; width:968px;"> -->
+    <div id="agreement-box">
+        <p style="color:#9E9E9E; font-size: 20px; font-weight: 600; margin-left:46px; margin-top: 61px;">
+            이용약관 
+            <span style="color:#EF832E; font-size:12px; font-weight:500;">
+                보은 빵은 공정거래위원회의 전자상거래 표준약관을 준수합니다.
+            </span>
+        </p>
+        <hr>
+        <p style="font-size:14px; color:#9E9E9E; font-weight: 500; margin-left: 46px;">
+            <span style="color:#EF832E;">(필수)&nbsp</span>
+            이용약관
+        </p>
+        <hr style="margin-bottom: 9px;">
+        <div class="text-box">
+            
+        </div>
+        <hr>
+        <p style="font-size:14px; color:#9E9E9E; font-weight: 500; margin-left: 46px;">
+            <span style="color:#EF832E;">(필수)&nbsp</span>
+            이용약관
+        </p>
+        <hr style="margin-bottom: 9px;">
+        <div class="text-box">
+            
+        </div>
+        <div style="margin-left: 46px; margin-top: 12px;">
+            <input type="checkbox">
+            <span style="font-weight: 600;">모든 약관을 확인하고 동의합니다.</span>
+        </div>
+    </div>
 {% endblock %}
