@@ -10,31 +10,114 @@
     width:45px;
     color:red;
   }
+  #sign_in_box{
+      width:968px;
+      height: 545px;
+      border-top:2px solid #9E9E9E;
+      margin: 0 auto;
+      margin-top:67px;
+      background: #F8F8F8;
+  }
+
+  #b_cancle{
+    font-weight:bold;
+  }
+
+  #b_sgin_up{
+    font-weight:bold;
+    color:white;
+    background-color:black;
+  }
+
 </style>
 <div style="width:521px; margin:0 auto; margin-top:77px;">
-  <div style="margin-top:77px;">
+<div>
     <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_one.png'%}" style="">
     <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_two.png'%}" style="margin-left:111px;">
     <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_three_check.png'%}" style="margin-left:111px;">
     <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_four.png'%}" style="margin-left:111px;">
+</div>
+<div style="margin-top: 15px;;">
+    <span style="margin-left:-8px;">본인인증</span>
+    <span style="margin-left:94px;">약관동의</span>
+    <span style="margin-left:79px; color:#e47f32;"><U>회원정보 입력</U></span>
+    <span style="margin-left:80px;">가입완료</span>
   </div>
-
-<div style="margin-top:15px;">
-  <span style="margin-left:370px;">본인인증</span>
-  <span style="margin-left:94px;">약관동의</span>
-  <span style="margin-left:79px; color:#e47f32;"><U>회원정보 입력</U></span>
-  <span style="margin-left:80px;">가입완료</span>
 </div>
 
 
-<hr style="margin-left:115px; margin-top:67px; color:#AAAAAA; width:968px;">
-
-<div>
-  <span style="margin-left:161px;">회원정보 입력</span>
-  <span style=""
+<div id="sign_in_box">
   <form name="signup" action="{% url 'boeun_bread:SignUp' %}" method="POST">
     {% csrf_token %}
+    <div>
+      <div style="margin-top:55px; margin-left:161px; float:left; font-size:18px;">회원정보 입력</div>
+      <div style="margin-top:58px; margin-left:75px; color:#e47f32; float:left;">* 표시는 반드시 입력하셔야 하는 항목입니다.</div>
+    </div>
+    <div style="clear:both; padding-top:33px; margin-left:161px;" >
+      <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+      <div style="padding-top:5px; float:left; padding-left:10px;">아이디</div>
+      <div style="float:left; padding-left:132px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+      <div style="float:left; padding-left:16px; padding-top:5px;">아이디는 5~15자 내로 입력해 주세요.</div>
+    </div>
 
+    <div style="clear:both; padding-top:21px; margin-left:161px;" >
+      <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+      <div style="padding-top:5px; float:left; padding-left:10px;">비밀번호</div>
+      <div style="float:left; padding-left:117px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+      <div style="float:left; padding-left:16px; padding-top:5px;">비밀번호는 4~15자로 설정 가능합니다.</div>
+    </div>
+
+    <div style="clear:both; padding-top:21px; margin-left:161px;" >
+      <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+      <div style="padding-top:5px; float:left; padding-left:10px;">비밀번호 확인</div>
+      <div style="float:left; padding-left:85px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+      <div style="float:left; padding-left:16px; padding-top:5px;">확인을 위해 다시 한 번 입력해 주세요.</div>
+    </div>
+
+    <div style="clear:both; padding-top:21px; margin-left:161px;" >
+      <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+      <div style="padding-top:5px; float:left; padding-left:10px;">이름</div>
+      <div style="float:left; padding-left:144px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+    </div>
+
+    <div style="clear:both; padding-top:21px; margin-left:161px;" >
+      <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+      <div style="padding-top:5px; float:left; padding-left:10px;">이메일</div>
+      <div style="float:left; padding-left:130px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+      <div style="padding-top:5px; float:left; padding-left:16px;">@</div>
+
+      <div style="float:left; padding-left:16px;">
+        <input type="text" style="width:178px; height:29px;" value="직접 입력">
+      </div>
+
+      <div style="float:left; padding-left:16px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+
+    </div>
+
+    <div style="clear:both; padding-top:21px; margin-left:161px;" >
+      <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+      <div style="padding-top:5px; float:left; padding-left:10px;">휴대폰번호</div>
+      <div style="float:left; padding-left:101px;">
+        <input type="text" style="width:178px; height:29px;">
+      </div>
+    </div>
+
+    <div style="clear:both; padding-top:56px; margin-left:390px;" >
+      <input id ="b_cancle" type="button" style="width:153px; height:39px;" value="취소">
+      <input id="b_sgin_up" type="button" style="width:153px; height:39px; margin-left:38px;" value="회원가입">
+    </div>
 
 <!--
 <div>
