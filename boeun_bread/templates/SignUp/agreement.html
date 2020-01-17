@@ -4,7 +4,7 @@
     <style>
         #agreement-box{
             width:968px;
-            height: 616px;
+            height: 652px;
             border-top:2px solid #9E9E9E;
             margin: 0 auto;
             margin-top:65px;
@@ -30,6 +30,18 @@
             margin-left:33px;
             width:45px;
             color:red;
+        }
+        .button{
+            display: inline-block;
+            width:128px;
+            height: 34px;
+            background: rgb(51,51,51);
+            color:white;
+            line-height: 34px;
+            font-weight: 600;
+            margin-right: 38px;
+            margin-top: 40px;;
+            cursor: pointer;
         }
     </style>
     <div style="width:521px; margin:0 auto; margin-top:77px;">
@@ -76,5 +88,17 @@
             <input type="checkbox">
             <span style="font-weight: 600;">모든 약관을 확인하고 동의합니다.</span>
         </div>
+        <div class="text-center">
+            <div class="button" onclick="mainPage();">메인 페이지로</div>
+            <div class="button" onclick="nextPage();">다음</div>
+        </div>
     </div>
+    <script>
+        function mainPage(){
+            location.href="{% url 'boeun_bread:main' %}";
+        }
+        function nextPage(){
+          location.href="{% url 'boeun_bread:SignUp' %}";
+        }
+    </script>
 {% endblock %}
