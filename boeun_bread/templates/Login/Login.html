@@ -1,31 +1,146 @@
-{% extends 'base.html' %}
-{% block content %}
-<form name="login" action="{% url 'boeun_bread:LoginPage' %}" method="POST">
-    {% csrf_token %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css">
+<!-- bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<head>
+    <style>
+        *{padding: 0; margin: 0;}
+        body{
+            font-family: 'NanumSquareRound',sans-serif;
+            background-color: #f7f1db;
+            
+        }
 
-        </div>
-        <div class="col-md-8">
-            <label style="font-weight: 600; font-size: 33px; margin-top: 7%;">로그인</label>
-            <div class="form-group" id="id-text">
-                <label style="font-weight:150; font-size:16px;">회원아이디</label>
-                <input type="text" id="user_id" name="user_id"  maxlength="20" style="width:180px;">
-            </div>
-            <div class="form-group" id="pw-text">
-                <label style="font-weight:150; font-size:16px; margin-right:1.4%; " >비밀번호</label>
-                <input type="password" id="user_pwd" name="user_pwd"  maxlength="20" style="width:180px;">
-            </div>
-            <div class="form-group" style="font-size:12px;" style="margin-top:5%;" >
-                <label><input type="checkbox" id="id_checkbox" name="id_checkbox"  style="width:18px; height:18px; vertical-align:middle;" >아이디 저장</label>
-            </div>
-            <div>
-                <button type="submit"><a style="width: 6%;">로그인</button>
-                <button><a style="width: 6%;" href="{% url 'boeun_bread:agreement' %}">회원가입</a></button>
-            </div>
+        #content{
+            width:596px;
+            margin:0 auto;
+            margin-top:67px;
+        }
+        header{
+            width:100%;
+            margin-top:39px;
+            position: relative;
+        }
+        .header-login{
+            font-weight: 800;
+            font-size: 24px;
+            width: 82px;
+            position: absolute;
+            left:100px;
+        }
+        .header-home{
+            display: inline-block;
+            font-weight: 400;
+            width: 116px;
+            font-size:14px;
+            position: absolute;
+            right:700px;
+        }
+         .body-main{
+            width: 596px;
+            height: 310px;  
+            background: white;
+            border:15px solid white;
+            margin-left:-300px;
+            margin-top:-30px;
+        } 
+        .login-input{
+            border:black;
+            border-radius: 0px;
+        }
+        .login-button{
+            border-radius: 1px;
+            background-color: #59493f;
+            color:white;
+            width:100px;
+            height:65px;
+            font-size:18px;
+            margin-left:15px;
+            font-weight:800;
+        }
+        .id-save{
+            font-size:14px;
+            height: 20px;
+            width: 450px;
+            margin-left:90px;
+        }
+        .footer-login{
+            width: 596px;
+            height: 90px;
+            background-color: white;
+            border:15px solid white;
+
+        }
+        .signup-button{
+            border-radius: 1px;
+            background-color: #59493f;
+            color:white;
+            width:180px;
+            height:65px;
+            font-size:18px;
+            margin-left:15px;
+            font-weight:800;
+        }
+        .non-login-button{
+            border-radius: 1px;
+            background-color: #7d7d7d;
+            color:white;
+            width:180px;
+            height:65px;
+            font-size:18px;
+            margin-left:15px;
+            font-weight:800;
+        }
+    </style>
+</head>
+
+<body>
+    <form name="login" action="{% url 'boeun_bread:LoginPage' %}" method="POST">
+        {% csrf_token %}    
+    <div id="root">
+        <header>
+                <div class="header-login">
+                    로그인
+                <div style="width:5px; height:23px; background-color:black; margin-left: -11px; margin-top: -29px;"></div>    
+                </div>
+                <div class="header-home">
+                    Home>로그인
+                </div>
+        </header><br>
+        <div id="content">
+                <div class="body-main">
+                    <div style="margin-left:105px; margin-top:40px; font-weight: 800;">
+                        회원로그인
+                    </div>
+                    <div style="margin-left:105px; margin-top:10px;">
+                        보다 많은 서비스를 위해 로그인 하시기 바랍니다.<br>
+                        본빵의 더 많은 혜택과 이벤트를 누리세요!
+                    </div>
+                    <hr style="width:390px; border-color: gray; border-width: 2px; margin:0 auto; margin-top:20px; margin-right:71px;">
+                    <div class="body-input" >
+                        <div class="login-input" style="width: 596px; position: relative;" >
+                            <button type="submit" class="login-button" style="position: absolute; margin-left:390px; margin-top:23px;">로그인</button>
+                            <input type="text" style="width:275px; height:30px; margin-top:25px; margin-left: 104px;">              
+                            <input type="text" style="width:275px; height:30px; margin-top:5px; margin-left: 104px;">    
+                        </div>      
+                    </div>
+                        <div class="id-save style=width:596px;">
+                            <input type="checkbox" style="width: 17px; margin-top:20px; margin-left:12px;">
+                            <div style="margin-top:-16px; margin-left:34px;">
+                                <div style="display: inline-block; margin-right: 10px;">아이디 저장</div>
+                                <div style="display: inline-block; margin-left: 120px;">아이디 찾기</div>
+                                <div style="display: inline-block; margin-left: 15px;">비밀번호 찾기</div>
+                            </div>   
+                            
+                        </div>
+                        <div class="footer-login" style="position:relative; left:-16px; top:80px;">
+                            <a class="signup-button btn" href="{% url 'boeun_bread:SignUp' %}"style="position: absolute; margin-left:102px; margin-top:-2px; padding-top: 20px;">회원가입</a>
+                            <a class="non-login-button btn" href="#"style="position: absolute; margin-left:310px; margin-top:-2.5px; padding-top: 20px;">비회원 로그인</a>
+                        </div>
+                </div>
+     
         </div>
     </div>
-</div>
+ 
+</body> 
 </form>
-{% endblock %}
