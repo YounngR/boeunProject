@@ -85,7 +85,7 @@
 
         </div>
         <div style="margin-left: 46px; margin-top: 12px;">
-            <input type="checkbox">
+            <input type="checkbox" id="agree_check">
             <span style="font-weight: 600;">모든 약관을 확인하고 동의합니다.</span>
         </div>
         <div class="text-center">
@@ -98,7 +98,13 @@
             location.href="{% url 'boeun_bread:main' %}";
         }
         function nextPage(){
-          location.href="{% url 'boeun_bread:SignUp' %}";
+          if(document.getElementById('agree_check').checked == true){
+            location.href="{% url 'boeun_bread:SignUp' %}";
+          }
+          else{
+            alert('약관에 동의해주셔야 합니다.');
+          }
+
         }
     </script>
 {% endblock %}
