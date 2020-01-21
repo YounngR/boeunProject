@@ -23,7 +23,11 @@ urlpatterns = [
     #로그인
     path('Login/',views.Login, name="Login"),
     path('logout/',views.logout, name="logout"),
-
+    #마이페이지
+    path('mypage/',views.mypage, name="mypage"),
+    path('search_order/',views.search_order, name="search_order"),
+    #장바구니
+    path('cart/',views.cart, name="cart"),
     #회원가입
     path('agreement',views.agreement, name="agreement"),
     path('isSignup',views.is_signup,name="is_signup"),
@@ -31,10 +35,18 @@ urlpatterns = [
     path('SignUpOk/',views.SignUpOk, name="SignUpOk"),
     path('Login/LoginPage',views.LoginPage, name="LoginPage"),
     path('SignUp_idcheck', views.SignUp_idcheck, name='SignUp_idcheck'), #user id 중복 확인
-
+    path('SignUp/cert/<pk>',views.certification,name="cert"),
+    path('SignUp/sendEmail',views.send_email,name="sendEmail"),
 
     #본빵이야기
     path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),
     path('boeun_logo_story/', views.bread_logo_story, name="bread_logo_story"),
     path('boeun_jujube_story/', views.boeun_jujube_story, name="boeun_jujube_story"),
+
+    #본빵배달신청
+    path('boeun_delivery/', views.boeun_delivery, name="boeun_delivery"),
+    #추천베스트
+    path('boeun_best/', views.boeun_best, name="boeun_best"),
+    #주문안내
+    path('order_guidance/', views.order_guidance, name="order_guidance"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

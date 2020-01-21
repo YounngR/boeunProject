@@ -58,7 +58,7 @@
       <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
       <div style="padding-top:5px; float:left; padding-left:10px;">아이디</div>
       <div style="float:left; padding-left:132px;">
-        <input type="text" style="width:178px; height:29px;"id="user_id" onblur="idcheck();" maxlength="20">
+        <input type="text" style="width:178px; height:29px;" name="user_id" id="user_id" onblur="idcheck();" maxlength="20">
       </div>
       <div  id ="id_error_text" style="float:left; padding-left:16px; padding-top:5px; ">아이디는 6~20자 내로 입력해 주세요.</div>
     </div>
@@ -67,7 +67,7 @@
       <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
       <div style="padding-top:5px; float:left; padding-left:10px;">비밀번호</div>
       <div style="float:left; padding-left:117px;">
-        <input type="password" style="width:178px; height:29px;" id="pw1" maxlength="15">
+        <input type="password" style="width:178px; height:29px;" id="pw1" name="user_pwd"maxlength="15">
       </div>
       <div id="pw_error_text" style="float:left; padding-left:16px; padding-top:5px;">비밀번호는 8~15자로 설정 가능합니다.</div>
     </div>
@@ -85,7 +85,7 @@
       <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
       <div style="padding-top:5px; float:left; padding-left:10px;">이름</div>
       <div style="float:left; padding-left:144px;">
-        <input type="text" style="width:178px; height:29px;">
+        <input type="text" name="user_name" style="width:178px; height:29px;">
       </div>
     </div>
 
@@ -93,31 +93,42 @@
       <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
       <div style="padding-top:5px; float:left; padding-left:10px;">이메일</div>
       <div style="float:left; padding-left:130px;">
-        <input type="text" style="width:178px; height:29px;">
+        <input type="text" id="email_text" name="email_text"  style="width:178px; height:29px;">
       </div>
       <div style="padding-top:5px; float:left; padding-left:16px;">@</div>
 
       <div style="float:left; padding-left:16px;">
-        <input type="text" style="width:178px; height:29px;" value="직접 입력">
+        <input type="text" name="email_select" id="str_email02" style="width:178px; height:29px;" value="직접 입력">
       </div>
 
       <div style="float:left; padding-left:16px;">
-        <input type="text" style="width:178px; height:29px;">
+        <select style="width:178px; height:29px;" id="email_select">
+        <option value="1">직접 입력</option>
+        <option value="naver.com" >naver.com</option>
+        <option value="daum.net">daum.net</option>
+        <option value="nate.com">nate.com</option>
+        <option value="gmail.com">gmail.com</option>
+        <option value="hanmail.net">hanmail.net</option>
+        <option value="hotmail.com">hotmail.com</option>
+        <option value="paran.com">paran.com</option>
+        <option value="yahoo.co.kr">yahoo.co.kr</option>
+        </select>
       </div>
 
     </div>
+
 
     <div style="clear:both; padding-top:21px; margin-left:161px;" >
       <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
       <div style="padding-top:5px; float:left; padding-left:10px;">휴대폰번호</div>
       <div style="float:left; padding-left:101px;">
-        <input type="text" style="width:178px; height:29px;">
+        <input type="text" name="user_phone" style="width:178px; height:29px;">
       </div>
     </div>
 
     <div style="clear:both; padding-top:56px; margin-left:310px;" >
       <input id ="b_cancle" type="button" style="width:153px; height:39px;" value="취소" onclick="SignUP_cancel()">
-      <input id="b_sgin_up" type="button" style="width:153px; height:39px; margin-left:38px;" value="회원가입">
+      <input id="b_sgin_up" type="submit" style="width:153px; height:39px; margin-left:38px;" value="회원가입">
     </div>
 
   </form>
@@ -202,5 +213,22 @@
           }
       }
   }
+</script>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+
+$('#email_select').change(function(){
+   $("#email_select option:selected").each(function () {
+
+      if($(this).val()== '1'){ //직접입력일 경우
+          $("#str_email02").val('');                        //값 초기화
+          //$("#str_email02").attr("disabled",false); //활성화
+      }else{ //직접입력이 아닐경우
+          $("#str_email02").val($(this).text());      //선택값 입력
+          //$("#str_email02").attr("disabled",true); //비활성화
+      }
+   });
+});
 </script>
 {% endblock %}

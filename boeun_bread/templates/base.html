@@ -50,6 +50,7 @@
           margin:0 auto;
           margin-top:84px;
           background-color:rgb(31,33,32);
+          height:230px;
 
         }
         .footer_bar{
@@ -79,16 +80,20 @@
         <header>
           <div class="banner_back">
               <a href="{% url 'boeun_bread:main'%}"><img src="{% static '/img/main/title_bar.png'%}" style=" margin-left:400px; position : absolute;"></a>
-              <div class="title_u" style="margin-left:912px;" onclick="main_login()">로그인</div>
-              <div class="title_u" style="margin-left:960px;">마이페이지</div>
-              <div class="title_u" style="margin-left:1031px;">주문배송조회</div>
-              <div class="title_u" style="margin-left:1113px;">장바구니</div>
+              {% if request.user.username %}
+                <div class="title_u" style="margin-left:912px;" onclick="main_logout()">로그아웃</div>
+              {%else%}
+                <div class="title_u" style="margin-left:912px;" onclick="main_login()">로그인</div>
+              {%endif%}
+              <div class="title_u" style="margin-left:964px;" onclick="mypage()">마이페이지</div>
+              <div class="title_u" style="margin-left:1031px;" onclick="search_order()">주문배송조회</div>
+              <div class="title_u" style="margin-left:1113px;" onclick="cart()">장바구니</div>
 
               <div class="banner_font" style="margin-left:109px;" onclick="boeun_bread_story()">본빵스토리</div>
               <div class="banner_font" style="margin-left:327px;" onclick="order_product()">제품안내</div>
-              <div class="banner_font" style="margin-left:545px;">본빵배달신청</div>
-              <div class="banner_font" style="margin-left:765px;">추천베스트</div>
-              <div class="banner_font" style="margin-left:981px;">주문안내</div>
+              <div class="banner_font" style="margin-left:545px;" onclick="boeun_delivery()">본빵배달신청</div>
+              <div class="banner_font" style="margin-left:765px;" onclick="boeun_best()">추천베스트</div>
+              <div class="banner_font" style="margin-left:981px;" onclick="order_guidance()">주문안내</div>
           </div>
         </header>
 
@@ -111,7 +116,7 @@
             <hr style="width:967px; margin-left:120px; margin-top:8px; color:#777777;">
           </div>
 
-          <div style="padding-top:25px; padding-left:120px;">
+          <div style="padding-top:25px; padding-left:120px; float:left;">
             <label class="footer_info">보은군노인장애인복지관</label>
             <label class="footer_info" style="font-weight:bold; font-size:15px; color:#FFFFFF; padding-left:10px;">(주)본 빵</label>
             <br>
@@ -126,8 +131,17 @@
             <label class="footer_info">개인정보관리책임자 김명석</label>
           </div>
 
-          <div style="padding-left:700px;">
-            <label style="font-size:30px; font-weight:regular; color:#FFFFFF">043-544-5446</label>
+          <div style="padding-left:700px; padding-top:55px;">
+            <div style="float:left;">
+              <label style="font-size:30px; font-weight:regular; color:#FFFFFF">043-544-5446</label>
+            </div>
+            <div style=" float:left; margin-left:20px;">
+              <label style="font-size:10px; font-weight:regular; color:#FFFFFF">상담시간:</label>
+              <label style="font-size:10px; font-weight:regular; color:#BFBFBF">오전09:30 ~ 오후 05:00</label>
+              <br>
+              <p style="float:left; font-size:10px; font-weight:regular; color:#FFFFFF">업무휴무: </p>
+              <p style="float:left; font-size:10px; font-weight:regular; color:#BFBFBF">&nbsp토, 일, 공휴일 휴무</p>
+            </div>
           </div>
 
         </footer>
@@ -139,12 +153,42 @@
       location.href= "{% url 'boeun_bread:Login' %}";
     }
 
+    function main_logout(){
+      location.href= "{% url 'boeun_bread:logout' %}";
+    }
+
+    function mypage(){
+      location.href= "{% url 'boeun_bread:mypage' %}";
+    }
+
+    function search_order(){
+      location.href= "{% url 'boeun_bread:search_order' %}";
+    }
+
+    function cart(){
+      location.href= "{% url 'boeun_bread:cart' %}";
+    }
+
     function boeun_bread_story(){
       location.href= "{% url 'boeun_bread:Bread_Birth' %}";
     }
+
     function order_product(){
       location.href= "{% url 'boeun_bread:order' %}";
     }
+
+    function boeun_delivery(){
+      location.href= "{% url 'boeun_bread:boeun_delivery' %}";
+    }
+
+    function boeun_best(){
+      location.href= "{% url 'boeun_bread:boeun_best' %}";
+    }
+
+    function order_guidance(){
+      location.href= "{% url 'boeun_bread:order_guidance' %}";
+    }
+
 
 	</script>
 </html>
