@@ -9,7 +9,6 @@ urlpatterns = [
 
     #이메일
     path('activate/<uid64>/<token>', views.activate, name='activate'),
-    path('boeun/SignUpGo', views.SignUpGo, name='SignUpGo'),
 
     #manage
     path('manage/',views.manage,name="manage"),
@@ -26,9 +25,10 @@ urlpatterns = [
     path('logout/',views.logout, name="logout"),
 
     #회원가입
-    path('boeun/agreement',views.agreement, name="agreement"),
-    path('boeun/isSignup',views.is_signup,name="is_signup"),
+    path('agreement',views.agreement, name="agreement"),
+    path('isSignup',views.is_signup,name="is_signup"),
     path('SignUp/',views.SignUp, name="SignUp"),
+    path('SignUpOk/',views.SignUpOk, name="SignUpOk"),
     path('Login/LoginPage',views.LoginPage, name="LoginPage"),
     path('SignUp_idcheck', views.SignUp_idcheck, name='SignUp_idcheck'), #user id 중복 확인
 

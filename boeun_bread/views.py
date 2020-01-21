@@ -203,7 +203,7 @@ def activate(request, uid64, token):
         return HttpResponse('비정상적인 접근입니다.')
 
 #회원가입 완료 페이지
-def SignUpGo(request):
+def SignUpOk(request):
     return render(request, 'SignUp/signupok.html')
 
 

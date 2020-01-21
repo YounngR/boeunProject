@@ -1,1 +1,76 @@
-<h1>하이</h1>
+{% extends "SignUp/signup_base.html" %}
+{% block content %}
+{% load static %}
+
+<head>
+    <!--부트스트랩-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+ <style>
+     body{
+         width: 1200px;
+     }
+     #signup_done{
+         width: 968px;
+         height: 386px;
+         margin-left: 115px;
+         padding-bottom: 84px;
+     }
+     #complete {
+         margin-left: 332px;
+         margin-top: 103px;
+     }
+     #go_shopping {
+        margin-left: 332px;
+         margin-top: 35px;
+         margin-bottom: 108px;
+     }
+     #mainpage {
+         width: 153px;
+         height: 39px;
+         background-color:#333333;
+         color: #EEEEEE;
+         text-align: center;
+         padding-top:9px;
+     }
+     #login {
+         width: 153px;
+         height: 39px;
+         background-color:#333333;
+         color: #EEEEEE;
+         text-align: center;
+         padding-top:9px;
+     }
+     #signup_button_box{
+         width:344px;
+         margin-left: 305px;
+         margin-bottom: 49px;
+
+     }
+
+ </style>
+</head>
+
+<body>
+    <div class="container" id="signup_done">
+        <div class="row">
+            <div id="complete">
+                회원 가입이 완료되었습니다!
+            </div>
+
+            <div id="go_shopping">
+                보은 빵에서 맛있는 쇼핑을 즐겨보세요!
+            </div>
+            <div id="signup_button_box">
+                <div class="col-md-5" id="mainpage">
+                    메인페이지로
+                </div>
+                <div class="col-md-2" style="width:38px; height: 39px;"></div>
+                <div class="col-md-5" id="login">
+                    로그인
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
