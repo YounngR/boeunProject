@@ -1,0 +1,178 @@
+{% extends 'SignUp/signup_base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    *{margin:0; padding: 0;}
+    @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+    body {
+        font-family: "Noto Sans KR", sans-serif !important;
+    }
+    .sign_up_icon{
+        width:40px;
+    }
+    .icon_bar{
+        margin-left:33px;
+        width:45px;
+        color:red;
+        
+    }
+    #cert_content{
+        width:967px;
+        margin:0 auto;
+    }
+    #cert_content>div:nth-child(1){
+        height:340px; 
+        border-top:2px solid #9E9E9E; 
+        margin-top:73px; 
+        background: #F8F8F8;
+
+    }
+    #cert_content>div:nth-last-child(1){
+        height: 190px;
+        background: #F8F8F8;
+        margin-top:71px;
+        margin-bottom: 30px;
+
+    }
+    .cert-btn{
+        width:156px;
+        height: 41px;
+        background: rgb(51,51,51);
+        color:white;
+        line-height: 41px;
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 65px;
+        cursor: pointer;
+    }
+    
+     #check_step {
+         
+         font-size: 18px;
+         
+     }
+     #email_img {
+        
+
+     }
+     
+     #check_email {
+         margin-left: 350px;
+         
+         
+         font-size: 12px; 
+     }
+     #mail_resend{
+         
+         width: 153px;
+         height: 40px;
+         background-color:#333333;
+         color: #EEEEEE;
+         text-align: center;
+         
+     }
+</style>
+<!--header-->
+<div style="width:521px; margin:0 auto; margin-top:77px;">
+    <div>
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_two.png'%}" style="">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_three.png'%}" style="margin-left:111px;">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_one_check.png'%}" style="margin-left:111px;">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_four.png'%}" style="margin-left:111px;">
+    </div>
+    
+    <div style="margin-top: 15px;">
+        <span style="margin-left:-7px; margin-right:97px; color:#e47f32;">약관동의</span>
+        <span style="margin-left:-13px; margin-right:105px;">회원정보 입력</span>
+        <span style="margin-left:-33px; margin-right:97px; color:#e47f32;"><U>본인인증</U></span>
+        <span>가입완료</span>
+    </div>
+</div>
+<!--content-->
+<div id="cert_content">
+    <div>
+        <div id="email_content">
+            <p class="text-center" style="font-size: 18px; color:#9E9E9E; font-weight: 600; margin-top:45px;">
+                안전한 회원가입을 위한 본인인증단계입니다.
+            </p>
+            <p class="text-center" style="font-style: 15px; font-weight: 600; margin-top:21px; color:#9E9E9E;">
+                이메일 주소 인증
+            </p>
+            <p class="text-center" style="font-size: 15px; font-weight: 600; margin-top:69px; color:#EF832E;">
+                <span style="color: #000000;">{{email}} 고객님,</span>&nbsp
+                아래 버튼을 클릭하여 이메일을 인증을 완료해주세요.
+                
+            </p>
+            <div id="email_cert_btn" class="cert-btn">
+                이메일 인증하기
+            </div>
+        </div>
+        
+    </div>
+
+
+    <div>
+        <p style="font-size: 20px; font-weight: 600; padding-top:38px; margin-left: 47px; color:#9E9E9E;">
+
+            이용안내
+        </p>
+        <ul style="font-size: 12px; font-weight: 500; color:#9E9E9E; margin-left: 63px;">
+            <li style="margin-top: 25px;">
+                본인인증 시 제공되는 정보는 해당 인증기관에서 직접 수집하며, 인증 이외의 용도로 이용 또는 저장하지 않습니다.
+            </li>
+            <li style="margin-top: 20px;">
+                기존의 제휴 브랜드 웹사이트에 1개 이상 가입되어 있으신 회원님은 새로운 BOEUN BREAD 통합 아이디를 생성하신 후 CJ ONE 멤법십으로 가입하실 수 있습니다.
+            </li>
+
+        </ul>
+    </div>
+</div>
+<script>
+    function make_resend_page(){
+        
+        $("#email_content").empty();
+        var tag = $("<div>\
+                            <div class='text-center' style='margin-top:50px;' id='check_step' > \
+                                안전한 회원가입을 위한 본인인증단계입니다. \
+                            </div>\
+                            <div id='email_img' class='text-center' style='margin-top:16px;'>\
+                                <img  height='130px' src={% static 'img/sign_up/sign_up_email.png'%}>\
+                            </div>\
+                            <div id='check_email'>\
+                                회원가입 메일이 전송되었습니다! 메일을 확인해 주세요.\
+                            </div>\
+                            <div  id='email_recert_btn' class='cert-btn' style='margin-top:25px;'>\
+                                    인증 메일 재발송\
+                            </div>\
+                    </div>\
+                    ");
+        $("#email_content").append(tag);
+        
+    }
+    $("#email_cert_btn").click(function(){
+        make_resend_page();
+        ajax();
+        
+    });
+    
+    $(document).on("click","#email_recert_btn",function(){
+        ajax();
+    });
+    function ajax(){
+      $.ajax({
+            type : "POST",
+            url : "{% url 'boeun_bread:sendEmail' %}",
+            data : {
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'profile_pk' : "{{profile_pk}}",
+                
+            },
+            success : function(response)
+            {
+              
+                
+            },
+        });
+    }
+</script>
+{% endblock%}

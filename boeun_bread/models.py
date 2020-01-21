@@ -7,6 +7,7 @@ class Profile(models.Model):
     U_phone     = models.CharField(max_length=11)
     U_is_active = models.BooleanField(default=False) #True : 인증된 회원
     U_grade     = models.IntegerField(default=2) # 0:관리자 1:회원 2:비회원
+    U_name      = models.CharField(max_length=20)
     U_groupName = models.CharField(max_length=50, null=True, blank=True)
 
 class Product(models.Model):

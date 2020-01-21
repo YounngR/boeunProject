@@ -26,12 +26,13 @@ urlpatterns = [
     path('logout/',views.logout, name="logout"),
 
     #회원가입
-    path('boeun/agreement',views.agreement, name="agreement"),
-    path('boeun/isSignup',views.is_signup,name="is_signup"),
+    path('SignUp/agreement',views.agreement, name="agreement"),
+    path('SignUp/isSignup',views.is_signup,name="is_signup"),
     path('SignUp/',views.SignUp, name="SignUp"),
     path('Login/LoginPage',views.LoginPage, name="LoginPage"),
     path('SignUp_idcheck', views.SignUp_idcheck, name='SignUp_idcheck'), #user id 중복 확인
-
+    path('SignUp/cert/<pk>',views.certification,name="cert"),
+    path('SignUp/sendEmail',views.send_email,name="sendEmail"),
 
     #본빵이야기
     path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),
