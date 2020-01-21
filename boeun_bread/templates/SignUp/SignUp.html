@@ -32,16 +32,17 @@
 </style>
 <div style="width:521px; margin:0 auto; margin-top:77px;">
 <div>
-    <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_one.png'%}" style="">
-    <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_two.png'%}" style="margin-left:111px;">
+    <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_two.png'%}" style="">
     <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_three_check.png'%}" style="margin-left:111px;">
+    <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_one.png'%}" style="margin-left:111px;">
     <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_four.png'%}" style="margin-left:111px;">
 </div>
-<div style="margin-top: 15px;;">
-    <span style="margin-left:-8px;">본인인증</span>
-    <span style="margin-left:94px;">약관동의</span>
-    <span style="margin-left:79px; color:#e47f32;"><U>회원정보 입력</U></span>
-    <span style="margin-left:80px;">가입완료</span>
+
+<div style="margin-top: 15px;">
+    <span style="margin-left:-7px; margin-right:97px;">약관동의</span>
+    <span style="margin-left:-13px; margin-right:105px; color:#e47f32;"><U>회원정보 입력</U></span>
+    <span style="margin-left:-33px; margin-right:97px;">본인인증</span>
+    <span>가입완료</span>
   </div>
 </div>
 
@@ -119,52 +120,6 @@
       <input id="b_sgin_up" type="button" style="width:153px; height:39px; margin-left:38px;" value="회원가입">
     </div>
 
-<!--
-<div>
-    <label>이름 및 단체명</label>
-    <input type="text" id="user_name" name="user_name"  style="border-radius: 10px!important;" maxlength="20">
-</div>
-<div >
-    <label>ID</label>
-    <input type="text" id="user_id" name="user_id"style="border-radius: 10px!important;" maxlength="20">
-</div>
-<div>
-    <label>비밀번호</label>
-    <input type="password" id="user_pwd" name="user_pwd"style="border-radius: 10px!important;" maxlength="20">
-</div>
-<div>
-    <label>비밀번호 확인</label>
-    <input type="password" id="user_pwcheck" name="user_pwcheck"style="border-radius: 10px!important;" maxlength="20">
-</div>
-<div>
-    <label>이메일</label>
-    <input type="email_text" id="email_text" name="email_text" style="border-radius: 10px!important;" maxlength="20">
-    <p style="display: inline;">@</p>
-    <select id="email_select" name="email_select" onblur="emailcheck();" onchange="emailcheck();" style="display: inline;">
-        <option selected>주소 선택</option>
-        <option>naver.com</option>
-        <option>daum.net</option>
-        <option>nate.com</option>
-        <option>gmail.com</option>
-        <option>hanmail.net</option>
-        <option>hotmail.com</option>
-        <option>paran.com</option>
-        <option>yahoo.co.kr</option>
-    </select>
-</div>
-
-<div>
-    <labe>휴대폰번호</labe>
-    <input type="text" id="user_phone" name="user_phone" style="border-radius: 10px!important;" maxlength="11" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');">
-</div>
-
-<div style="margin-top:3%;">
-    <button type="reset" class="btn btn-danger" >취소</button>
-    <button type="submit" class="btn btn-primary" >가입하기</button>
-</div>
--->
-
-
   </form>
 </div>
 
@@ -206,7 +161,7 @@
                       }else{
                           alert("아이디 사용 가능합니다.");
                       }
-                      
+
                   },
               });
           }
@@ -216,19 +171,19 @@
   function passrulecheck(){
       //비밀번호 8자리 이상 15자리 이하 특수문자 영어 숫자 포함
       var passRule = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-      
-      if(!passRule.test($('#pw1').val())) 
+
+      if(!passRule.test($('#pw1').val()))
          $("#pw_error_text").css("color","red");
-         
+
       else
         $("#pw_error_text").css("color","black");
-      
-      
+
+
   }
   $("#pw1").keyup(function(){
         passrulecheck();
   });
-  
+
   $("#pw2").keyup(function() {
         pwcheck();
     });
@@ -237,7 +192,7 @@
       pw = $('#pw2').val();
       pw_check = $('#pw1').val();
       if(pw != ''){
-          
+
           if(pw != pw_check){
 
             $("#pw2_error_text").text("비밀번호가 다릅니다.").css("color","red");

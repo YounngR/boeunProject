@@ -10,67 +10,79 @@
      body{
          width: 1200px;
      }
-     #signup_done{
-         width: 968px;
-         height: 386px;
-         margin-left: 115px;
-         padding-bottom: 84px;
-     }
-     #complete {
-         margin-left: 332px;
-         margin-top: 103px;
-     }
-     #go_shopping {
-        margin-left: 332px;
-         margin-top: 35px;
-         margin-bottom: 108px;
-     }
-     #mainpage {
-         width: 153px;
-         height: 39px;
-         background-color:#333333;
-         color: #EEEEEE;
-         text-align: center;
-         padding-top:9px;
-     }
-     #login {
-         width: 153px;
-         height: 39px;
-         background-color:#333333;
-         color: #EEEEEE;
-         text-align: center;
-         padding-top:9px;
-     }
-     #signup_button_box{
-         width:344px;
-         margin-left: 305px;
-         margin-bottom: 49px;
 
+     .sign_up_icon{
+       width:40px;
      }
+     .icon_bar{
+       margin-left:33px;
+       width:45px;
+       color:red;
+     }
+     .sign_in_ok_box{
+         width:968px;
+         height: 386px;
+         border-top:2px solid #9E9E9E;
+         margin: 0 auto;
+         margin-top:67px;
+         background: #F8F8F8;
+     }
+
+    #mainpage {
+      width: 153px;
+      height: 39px;
+      background-color:#333333;
+      color: #EEEEEE;
+      border:0;
+      text-align: center;
+
+    }
+    #login {
+      width: 153px;
+      height: 39px;
+      background-color:#333333;
+      color: #EEEEEE;
+      border:0;
+      text-align: center;
+      margin-left:38px;
+    }
 
  </style>
 </head>
 
 <body>
-    <div class="container" id="signup_done">
-        <div class="row">
-            <div id="complete">
-                회원 가입이 완료되었습니다!
-            </div>
-
-            <div id="go_shopping">
-                보은 빵에서 맛있는 쇼핑을 즐겨보세요!
-            </div>
-            <div id="signup_button_box">
-                <div class="col-md-5" id="mainpage">
-                    메인페이지로
-                </div>
-                <div class="col-md-2" style="width:38px; height: 39px;"></div>
-                <div class="col-md-5" id="login">
-                    로그인
-                </div>
-            </div>
-        </div>
+  <div style="width:521px; margin:0 auto; margin-top:77px;">
+    <div>
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_two.png'%}" style="">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_three.png'%}" style="margin-left:111px;">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_one.png'%}" style="margin-left:111px;">
+        <img class="sign_up_icon" src="{% static 'img/sign_up/sign_up_four_check.png'%}" style="margin-left:111px;">
     </div>
+
+    <div style="margin-top: 15px;">
+        <span style="margin-left:-7px; margin-right:97px;">약관동의</span>
+        <span style="margin-left:-13px; margin-right:105px;">회원정보 입력</span>
+        <span style="margin-left:-33px; margin-right:97px;">본인인증</span>
+        <span style="color:#e47f32;"><U>가입완료</U></span>
+   </div>
+ </div>
+<div class="sign_in_ok_box">
+  <div style="padding-top:103px;">
+    <label style="padding-left:332px; color:rgb(92,92,100); font-size:20px; ">회원 가입이 완료되었습니다!</label>
+    <label style="padding-left:337px; padding-top:35px; color:rgb(127,126,131);">보은 빵에서 맛있는 쇼핑을 즐겨보세요!</label>
+  </div>
+  <div style="padding-top:108px; padding-left:290px; padding-bottom:49px;">
+    <input type="button" id="mainpage" value="메인 페이지로" onclick="b_main()">
+    <input type="button" id="login" value="로그인" onclick="b_login()">
+  </div>
+</div>
 </body>
+<script>
+  function b_main(){
+      location.href="{% url 'boeun_bread:main' %}";
+  }
+  function b_login(){
+      location.href="{% url 'boeun_bread:Login' %}";
+  }
+</script>
 {% endblock %}

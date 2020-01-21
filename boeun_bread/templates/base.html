@@ -1,4 +1,5 @@
 {% load static %}
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,95 +45,24 @@
             width:1200px;
             margin:0 auto;
         }
-        #header-bar{
-            text-align: right;
+
+        #footer_design{
+          margin:0 auto;
+          margin-top:84px;
+          background-color:rgb(31,33,32);
 
         }
-        .header-bar-item{
-            display: inline-block;
-            width:100px;
-            height:30px;
-            border:1px solid gray;
-            border-right:0px ;
-            margin-top:30px;
-            text-align: center;
-            line-height: 30px;
-            cursor: pointer;
+        .footer_bar{
+          padding-top:22px;
+          font-size:13px;
+          font-weight:regular;
+          color:#777777;
         }
-        .header-bar-item:nth-child(n+2){ margin-left: -5px;}
-        .header-bar-item:nth-last-child(1){border-right:1px solid gray;}
-
-        .header-nav-item{
-            display: inline-block;
-            width:290px;
-            height: 37px;
-            border: 1px solid gray;
-            border-right:0px;
-            text-align: center;
-            line-height: 37px;
-            position: relative;
-            top:0px;
-            cursor: pointer;
+        .footer_info{
+          font-size:10px;
+          font-weight:regular;
+          color:#BFBFBF;
         }
-        .header-nav-item:nth-child(1){ margin-left: 108px;}
-        .header-nav-item:nth-child(n+2){margin-left:-5px;}
-        .header-nav-item:nth-last-child(1){border-right:1px solid gray;}
-
-
-        #header-logo-box{
-            display: inline-block;
-            width:207px;
-            height:145px;
-        }
-        #header-nav{
-            display: inline-block;
-            height: 100px;
-
-        }
-
-        .footer-bar-item{
-            display: inline-block;
-            width:100px;
-            height:30px;
-            border:1px solid gray;
-            border-right:0px ;
-            margin-top:30px;
-            text-align: center;
-            line-height: 30px;
-            cursor: pointer;
-        }
-        .footer-bar-item:nth-child(n+2){ margin-left: -5px;}
-        .footer-bar-item:nth-last-child(1){border-right:1px solid gray;}
-
-        .vl {
-            border-left: 3px solid silver;
-            height: 200px;
-            float:left;
-            margin-left: 50px;
-            margin-right: 50px;
-        }
-
-
-        .birth_story_nav{
-            display: inline-block;
-            width:320px;
-            height:50px;
-            border:1px solid gray;
-            border-right:0px ;
-            margin-top:30px;
-            text-align: center;
-            line-height: 50px;
-            cursor: pointer;
-        }
-        .birth_story_nav:nth-child(n+1){ margin-left: -5px;}
-        .birth_story_nav:nth-last-child(1){border-right:1px solid gray;}
-
-        .birth_story_contents{
-          width:958px;
-          height:600px;
-          border:1px solid gray;
-        }
-
 
     </style>
     <!--부트스트랩-->
@@ -168,28 +98,41 @@
         {% endblock %}
         </div>
 
-        <footer style= "margin-top:30px;">
-          <div id ="footer-bar">
-            <span class="footer-bar-item">찾아오시는길</span>
-            <span class="footer-bar-item" src="#">고객센터</span>
-            <span class="footer-bar-item" src="#">개인정보</span>
-            <span class="footer-bar-item" src="#">이용약관</span>
+        <footer id= "footer_design">
+          <div>
+            <label class="footer_bar" style="padding-left:120px; float:left;">찾아오시는 길</label>
+            <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
+            <label class="footer_bar" style="padding-left:20px; float:left;">고객센터</label>
+            <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
+            <label class="footer_bar" style="padding-left:20px; float:left;">개인정보처리방침</label>
+            <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
+            <label class="footer_bar" style="padding-left:20px; ">이용약관</label>
+
+            <hr style="width:967px; margin-left:120px; margin-top:8px; color:#777777;">
           </div>
-          <div style="width:1200px;">
-            <div id="map" style="width:300px; height:200px; float:left;"></div>
-            <div class="vl"></div>
-            <div style="width:500px; float:left;">
-              <div style="margin:50px;">
-                <p style="font-size:25px;" align="center">010-544-5446</p>
-                <p align="center">평일 09:30 ~ 17:00</p>
-                <p align="center">주말 및 공휴일 휴무</p>
-              </div>
-            </div>
+
+          <div style="padding-top:25px; padding-left:120px;">
+            <label class="footer_info">보은군노인장애인복지관</label>
+            <label class="footer_info" style="font-weight:bold; font-size:15px; color:#FFFFFF; padding-left:10px;">(주)본 빵</label>
+            <br>
+            <label class="footer_info">주소 : (28936)충청북도 보은군 보은읍 뱃들4길 11-10, 1층</label>
+            <br>
+            <label class="footer_info">대표 : 박미선</label>
+            <br>
+            <label class="footer_info">사업자 등록번호 : 302-05-48507</label>
+            <br>
+            <label class="footer_info">이메일 boeunhappy@hanmail.net</label>
+            <br>
+            <label class="footer_info">개인정보관리책임자 김명석</label>
           </div>
+
+          <div style="padding-left:700px;">
+            <label style="font-size:30px; font-weight:regular; color:#FFFFFF">043-544-5446</label>
+          </div>
+
         </footer>
     </div>
 </body>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=db5bbf556c4d3f2a45c4279896d09bb6"></script>
 <script>
 
     function main_login(){
@@ -202,14 +145,6 @@
     function order_product(){
       location.href= "{% url 'boeun_bread:order' %}";
     }
-
-		var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(36.48831709247809 , 127.72394185633982 ),
-			level: 3
-		};
-
-		var map = new kakao.maps.Map(container, options);
 
 	</script>
 </html>
