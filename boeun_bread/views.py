@@ -179,6 +179,16 @@ def LoginPage(request):
         return render(request, 'boeun_bread/main.html',context)
     return redirect('/')
 
+#회원가입 id 중복 체크
+def SignUp_idcheck(request):
+    id_check = request.POST['idcheck']
+    UserList = User.objects.filter(username=id_check)
+    if not UserList:
+        context ={ 'msg' : '사용가능한 아이디입니다.'}
+    else:
+        context = {'msg' : '이미 사용하고 있는 아이디입니다.'}
+
+    return render(request,'SignUp/SignUp.html')
 
 #이메일
 def activate(request, uid64, token):

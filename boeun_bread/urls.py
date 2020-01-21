@@ -30,6 +30,7 @@ urlpatterns = [
     path('boeun/isSignup',views.is_signup,name="is_signup"),
     path('SignUp/',views.SignUp, name="SignUp"),
     path('Login/LoginPage',views.LoginPage, name="LoginPage"),
+    path('SignUp_idcheck', views.SignUp_idcheck, name='SignUp_idcheck'), #user id 중복 확인
 
 
     #본빵이야기
