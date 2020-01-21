@@ -147,28 +147,6 @@
     {% endif %}
     <div id="root">
         <header>
-          <!--
-            <div id="header-bar">
-                {% if request.user.username %}
-                <a href="#">{{request.user.username}}님 </a>
-                <a href="{% url 'boeun_bread:logout' %}">로그아웃</a>
-                {% else %}
-                <a href="{% url 'boeun_bread:Login' %}"><span class="header-bar-item">로그인</span></a>
-                {% endif %}
-                <span class="header-bar-item">마이페이지</span>
-                <span class="header-bar-item">주문배송조회</span>
-                <span class="header-bar-item">장바구니</span>
-            </div>
-            <div id="header-logo-box">
-                <a href="{% url 'boeun_bread:main' %}"><img width="100%" height="145"src="{% static 'img/logo.png'%}"></a>
-            </div>
-            <div id="header-nav">
-
-               <a href="{% url 'boeun_bread:Bread_Birth' %}" ><span class="header-nav-item">본빵이야기</span></a>
-               <span class="header-nav-item"><a href="{% url 'boeun_bread:order' %}">주문하기</a></span>
-               <span class="header-nav-item">추천 베스트</span>
-            </div>
-            -->
           <div class="banner_back">
               <a href="{% url 'boeun_bread:main'%}"><img src="{% static '/img/main/title_bar.png'%}" style=" margin-left:400px; position : absolute;"></a>
               <div class="title_u" style="margin-left:912px;" onclick="main_login()">로그인</div>
@@ -224,8 +202,6 @@
     function order_product(){
       location.href= "{% url 'boeun_bread:order' %}";
     }
-
-
 
 		var container = document.getElementById('map');
 		var options = {
