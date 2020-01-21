@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import *
 from django.contrib.auth.models import User # 회원가입
@@ -18,7 +18,7 @@ from .models import *
 from django.contrib.auth.models import User # 회원가입
 from django.contrib import auth #로그
 from django.contrib.auth.decorators import login_required
-
+import json
 def main(request):
     return render(request,'boeun_bread/main.html')
 
@@ -128,7 +128,7 @@ def is_signup(request):
 
 def agreement(request):
     return render(request,'SignUp/agreement.html')
-
+#회원가입
 def SignUp(request):
     if request.method == "POST":
 
@@ -137,16 +137,49 @@ def SignUp(request):
         user_email = email_text+'@'+email_select
 
         user = User.objects.create_user(
-        username = request.POST['user_id'],
-        password = request.POST['user_pwd'],
-        email = user_email
+            username = request.POST['user_id'],
+            password = request.POST['user_pwd'],
+            email = user_email
         )
         profile = Profile.objects.create(
             user=user,
             U_phone = request.POST['user_phone'],
+            U_name  = request.POST['user_name']
 
         )
         profile.U_is_active = False
+        # current_site = get_current_site(request)
+        # # localhost:8000
+        # message = render_to_string('SignUp/user_active.html', {
+        #         'user': profile,
+        #         'domain': current_site.domain,
+        #         'uid': urlsafe_base64_encode(force_bytes(profile.pk)),
+        #         'token': account_activation_token.make_token(profile),
+        # })
+        # mail_subject = "[보은] 회원가입 인증 메일입니다."
+        # email = user_email
+        # email = EmailMessage(mail_subject, message, to=[user_email])
+        # email.send()
+        
+        return redirect('/SignUp/cert/'+str(profile.pk))
+
+    return render(request,'SignUp/SignUp.html')
+#회원가입 > 본인인증
+def certification(request,pk):
+    profile = get_object_or_404(Profile,pk=pk)
+
+    if request.method == "POST":
+        pass
+    context={
+        'profile_pk':profile.pk,
+        'email':profile.user.email
+    }    
+    return render(request, 'SignUp/certification.html',context)
+#이메일 전송
+def send_email(request):
+    profile=get_object_or_404(Profile,pk=request.POST['profile_pk'])
+    if request.method == "POST":
+        
         current_site = get_current_site(request)
         # localhost:8000
         message = render_to_string('SignUp/user_active.html', {
@@ -156,12 +189,13 @@ def SignUp(request):
                 'token': account_activation_token.make_token(profile),
         })
         mail_subject = "[보은] 회원가입 인증 메일입니다."
-        email = user_email
-        email = EmailMessage(mail_subject, message, to=[user_email])
+        
+        email = EmailMessage(mail_subject, message, to=[profile.user.email])
         email.send()
-        return render(request, 'SignUp/emailcheck.html')
-
-    return render(request,'SignUp/SignUp.html')
+        context = {
+            'success':True
+        }
+        return HttpResponse(json.dumps(context), content_type="application/json")
 
 def LoginPage(request):
     if request.method == "POST":
