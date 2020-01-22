@@ -39,6 +39,17 @@
         #bread-list-box :nth-child(4n){
             margin-right: 0;
         }
+        #msg-box{
+            width:300px;
+            height: 100px;
+            opacity: 0.7;
+            background: black;
+            position: absolute;
+            color:white;
+            font-weight: 600;
+            text-align: center;
+            line-height: 100px;
+        }
     </style>
     <div id="order-header">
         <span style="background:rgb(210,210,210);">제빵</span>
@@ -52,14 +63,66 @@
                 <img width="100%" height="100%" src="/media/{{p.P_img}}">
                 <div style="margin-left:10px; position: relative;">
                     <b>{{p.P_name}}</b>
+<<<<<<< HEAD
 
                     <input type="number" value="1" style="width:50px; position: absolute; right: 0px; top:10px;"><br>
+=======
+                    
+                    <input type="number" id="count{{p.pk}}" value="1" style="width:50px; position: absolute; right: 0px; top:10px;"><br>
+>>>>>>> 047669693ba586d98cebb174fd671e18a0b41d60
                     <b>{{p.P_price|number_format}}원</b>
                 </div>
-                <div style="background: red; color:white; padding: 8px; text-align: center; cursor: pointer; ">
+                <div class="add-cart-btn" pk="{{p.pk}}" style="background: red; color:white; padding: 8px; text-align: center; cursor: pointer; ">
                     장바구니 담기
                 </div>
             </li>
          {% endfor %}
     </ul><br><br>
+    <div id="msg-box" style="display:none;">
+        <p>상품이 장바구니에 담겼습니다.</p>
+    </div>
+    <script>
+        function center(scroll_top){
+            var w = (window.innerWidth/2)-150;
+            var h = ((window.innerHeight/2)-50)+scroll_top;
+            $("#msg-box").css({
+                "left":w+"px",
+                "top":h+"px"
+            });
+        }
+        center(0);
+        $(document).scroll(function(){
+            center($(this).scrollTop());
+        });
+        function show_animation(){
+            $("#msg-box").toggle('fast',function(){
+                setTimeout(
+                    function(){
+                        $("#msg-box").hide();
+                    },
+                    1000
+                );
+            });
+        }
+        //장바구니 담기 클릭시 
+        $(".add-cart-btn").click(function(){
+            show_animation();
+            var pk    = $(this).attr("pk");
+            var count = $("#count"+pk).val();
+            var url = "/addCart/"+pk+"/"+count
+            $.ajax({
+                  type : "GET",
+                  url : url,
+                  
+                  success : function(response)
+                  {
+                      
+
+                  }
+              });
+        });
+
+
+
+    </script>
 {% endblock %}

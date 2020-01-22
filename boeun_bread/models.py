@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user        = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     cookie_id   = models.CharField(max_length=30, null=True, blank=True)
-    U_phone     = models.CharField(max_length=11)
+    U_phone     = models.CharField(max_length=11,null=True,blank=True)
     U_is_active = models.BooleanField(default=False) #True : 인증된 회원
     U_grade     = models.IntegerField(default=2) # 0:관리자 1:회원 2:비회원
-    U_name      = models.CharField(max_length=20)
+    U_name      = models.CharField(max_length=20,null=True,blank=True)
     U_groupName = models.CharField(max_length=50, null=True, blank=True)
 
 class Product(models.Model):
@@ -24,8 +24,13 @@ class Cart(models.Model):
 
 class Cart_Product(models.Model):
     Cart          = models.ForeignKey(Cart, on_delete=models.DO_NOTHING)
+    product_id    = models.IntegerField() 
+    product_img   = models.ImageField()
     product_name  = models.CharField(max_length=50)
+    product_price = models.IntegerField(default=0)
     product_count = models.IntegerField(default=0)
+    
+
 
 class Order(models.Model):
     User = User  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
