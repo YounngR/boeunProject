@@ -46,24 +46,7 @@
             margin:0 auto;
         }
 
-        #footer_design{
-          margin:0 auto;
-          margin-top:84px;
-          background-color:rgb(31,33,32);
-          height:230px;
-
-        }
-        .footer_bar{
-          padding-top:22px;
-          font-size:13px;
-          font-weight:regular;
-          color:#777777;
-        }
-        .footer_info{
-          font-size:10px;
-          font-weight:regular;
-          color:#BFBFBF;
-        }
+       
 
     </style>
     <!--부트스트랩-->
@@ -102,49 +85,8 @@
 
         {% endblock %}
         </div>
-
-        <footer id= "footer_design">
-          <div>
-            <label class="footer_bar" style="padding-left:120px; float:left;">찾아오시는 길</label>
-            <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
-            <label class="footer_bar" style="padding-left:20px; float:left;">고객센터</label>
-            <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
-            <label class="footer_bar" style="padding-left:20px; float:left;">개인정보처리방침</label>
-            <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
-            <label class="footer_bar" style="padding-left:20px; ">이용약관</label>
-
-            <hr style="width:967px; margin-left:120px; margin-top:8px; color:#777777;">
-          </div>
-
-          <div style="padding-top:25px; padding-left:120px; float:left;">
-            <label class="footer_info">보은군노인장애인복지관</label>
-            <label class="footer_info" style="font-weight:bold; font-size:15px; color:#FFFFFF; padding-left:10px;">(주)본 빵</label>
-            <br>
-            <label class="footer_info">주소 : (28936)충청북도 보은군 보은읍 뱃들4길 11-10, 1층</label>
-            <br>
-            <label class="footer_info">대표 : 박미선</label>
-            <br>
-            <label class="footer_info">사업자 등록번호 : 302-05-48507</label>
-            <br>
-            <label class="footer_info">이메일 boeunhappy@hanmail.net</label>
-            <br>
-            <label class="footer_info">개인정보관리책임자 김명석</label>
-          </div>
-
-          <div style="padding-left:700px; padding-top:55px;">
-            <div style="float:left;">
-              <label style="font-size:30px; font-weight:regular; color:#FFFFFF">043-544-5446</label>
-            </div>
-            <div style=" float:left; margin-left:20px;">
-              <label style="font-size:10px; font-weight:regular; color:#FFFFFF">상담시간:</label>
-              <label style="font-size:10px; font-weight:regular; color:#BFBFBF">오전09:30 ~ 오후 05:00</label>
-              <br>
-              <p style="float:left; font-size:10px; font-weight:regular; color:#FFFFFF">업무휴무: </p>
-              <p style="float:left; font-size:10px; font-weight:regular; color:#BFBFBF">&nbsp토, 일, 공휴일 휴무</p>
-            </div>
-          </div>
-
-        </footer>
+        <!--footer-->
+        {% include 'footer.html' %}
     </div>
 </body>
 <script>

@@ -28,6 +28,7 @@ urlpatterns = [
     path('search_order/',views.search_order, name="search_order"),
     #장바구니
     path('cart/',views.cart, name="cart"),
+    path('addCart/<pk>/<count>',views.add_cart,name='addCart'),
     #회원가입
     path('agreement',views.agreement, name="agreement"),
     path('isSignup',views.is_signup,name="is_signup"),
