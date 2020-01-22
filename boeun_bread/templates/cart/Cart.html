@@ -128,9 +128,9 @@
                     <img width="87" height="90" src="/media/{{ c.product_img }}">
                     <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px">{{ c.product_name }}</span>
                     <div class="pm-count">
-                        <i class="glyphicon glyphicon-minus minus" pk="{{c.product_id}}" style="margin-left:3px;"></i>
+                        <i class="glyphicon glyphicon-minus minus" pk="{{c.product_id}}" style="margin-left:3px; cursor:pointer;"></i>
                         <span style="margin-left:10px;" id="count{{c.product_id}}">{{ c.product_count }}</span>
-                        <i class="glyphicon glyphicon-plus plus" pk="{{c.product_id}}" style="margin-left:10px;"></i>
+                        <i class="glyphicon glyphicon-plus plus" pk="{{c.product_id}}" style="margin-left:10px; cursor:pointer;"></i>
                     </div>
                     <span style="margin-left:54px; font-size:15px;">
                         <span id="item-money{{c.product_id}}" class="item-money" pk="{{c.product_id}}" price="{{ c.product_price }}"></span> 원
@@ -222,6 +222,9 @@
     $(".minus").click(function(){
         var pk = $(this).attr("pk");
         var cur = parseInt($("#count"+pk).text()) - 1;
+          if(cur < 1){
+          cur = 1;
+        }
         var pre = parseInt($("#count"+pk).text());
         $("#count"+pk).text(cur);
         ajax(pk,cur-pre);
