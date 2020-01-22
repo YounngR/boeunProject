@@ -26,6 +26,7 @@ urlpatterns = [
     #마이페이지
     path('mypage/',views.mypage, name="mypage"),
     path('search_order/',views.search_order, name="search_order"),
+    path('order_history/', views.order_history, name="order_history"),
     #장바구니
     path('cart/',views.cart, name="cart"),
     #회원가입
@@ -37,6 +38,10 @@ urlpatterns = [
     path('SignUp_idcheck', views.SignUp_idcheck, name='SignUp_idcheck'), #user id 중복 확인
     path('SignUp/cert/<pk>',views.certification,name="cert"),
     path('SignUp/sendEmail',views.send_email,name="sendEmail"),
+
+
+    #찾아오시는 길
+    path('boeun_map/',views.boeun_map,name="boeun_map"),
 
     #본빵이야기
     path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),

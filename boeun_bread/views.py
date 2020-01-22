@@ -232,6 +232,8 @@ def mypage(request):
     return render(request, 'mypage/mypage.html')
 def search_order(request):
     return render(request, 'mypage/search_order.html')
+def order_history(request):
+    return render(request, 'mypage/order_history.html')
 
 #장바구니
 def cart(request):
@@ -357,3 +359,7 @@ def boeun_best(request):
 #주문안내
 def order_guidance(request):
     return render(request,'boeun_bread/order_guidance.html')
+
+#찾아오시는 길
+def boeun_map(request):
+    return render(request,'boeun_bread/boeun_map.html')
