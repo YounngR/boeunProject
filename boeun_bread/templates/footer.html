@@ -1,26 +1,27 @@
     <style>
-     #footer_design{
-          margin:0 auto;
-          margin-top:84px;
-          background-color:rgb(31,33,32);
-          height:230px;
+      #footer_design{
+        margin:0 auto;
+        margin-top:84px;
+        background-color:rgb(31,33,32);
+        height:230px;
 
-        }
-        .footer_bar{
-          padding-top:22px;
-          font-size:13px;
-          font-weight:regular;
-          color:#777777;
-        }
-        .footer_info{
-          font-size:10px;
-          font-weight:regular;
-          color:#BFBFBF;
-        }
+      }
+      .footer_bar{
+        padding-top:22px;
+        font-size:13px;
+        font-weight:regular;
+        cursor:pointer;
+        color:#777777;
+      }
+      .footer_info{
+        font-size:10px;
+        font-weight:regular;
+        color:#BFBFBF;
+      }
     </style>
    <footer id= "footer_design">
         <div>
-          <label class="footer_bar" style="padding-left:120px; float:left;">찾아오시는 길</label>
+          <label class="footer_bar" style="padding-left:120px; float:left;" onclick="open_map()">찾아오시는 길</label>
           <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
           <label class="footer_bar" style="padding-left:20px; float:left;">고객센터</label>
           <label class="footer_bar" style="padding-left:20px; float:left;">｜</label>
@@ -60,3 +61,8 @@
         </div>
 
       </footer>
+<script>
+  function open_map(){
+    window.open("boeun_map/","찾아오시는 길","width=670,height=450, location = no , scrollbars = no",true)
+  }
+</script>

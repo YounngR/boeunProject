@@ -13,13 +13,13 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <style>
      *{padding:0; margin:0;}
-     
+
      header{
             width:100%;
             height: 81px;
             background: rgb(31,33,32);
             line-height: 81px;
-            
+
         }
         .title{
             display: inline-block;
@@ -40,7 +40,7 @@
 <body>
     <div id="signup-root">
         <header>
-            
+
             <a style="margin-left: 109px;" href="{% url 'boeun_bread:main' %}">
                 <img src="{% static 'img/signup_logo.png' %}">
             </a>
@@ -58,6 +58,7 @@
 
         {% endblock %}
     </div>
-    
+    <!--footer-->
+    {% include 'footer.html' %}
 </body>
 </html>

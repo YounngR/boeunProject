@@ -22,8 +22,11 @@ import json
 from datetime import datetime
 from django.db.models import Sum
 
+
 def main(request):
-    
+
+
+
     return render(request,'boeun_bread/main.html')
 
 #-----manage
@@ -241,25 +244,27 @@ def order_history(request):
 
 #장바구니
 def cart(request):
-    profile =  request.user.profile
+    profile =  request.user.profile if request.user.is_authenticated else None
     if not profile:
         cookie_id = request.COOKIES.get('cookie_id')
-        profile   = Profile.objects.filter(cookie_id=cookie_id)
+        profile   = Profile.objects.filter(cookie_id=cookie_id,U_grade=2)
         profile   = profile[0] if profile else []
     cp = None
-    total = None
+    total = 0
     try:
         cart    = Cart.objects.get(User=profile)
         cp      = Cart_Product.objects.filter(Cart=cart)
     except Exception:
-        pass    
-
-    total=cp.aggregate(Sum('product_price')) 
+        pass
+    if cp is not None:
+        total=cp.aggregate(Sum('product_price'))
+        total=total['product_price__sum']
     context = {
         'cp':cp,
-        'total':total['product_price__sum']
+        'total':total
     }
     return render(request, 'cart/cart.html',context)
+
 #장바구니 담기
 def add_cart(request,pk,count):
     product = get_object_or_404(Product,pk=pk)
@@ -270,21 +275,21 @@ def add_cart(request,pk,count):
         profile = request.user.profile
     else:
         cookie_id = request.COOKIES.get('cookie_id')
-        
+
         if not cookie_id:
-            response,cookie_id = add_cookie(response)    
+            response,cookie_id = add_cookie(response)
             profile = Profile.objects.create(cookie_id=cookie_id)
         if not profile:
             profile = Profile.objects.filter(cookie_id=cookie_id)[0]
 
     cart = Cart.objects.filter(User=profile)
     if not cart:
-        cart = Cart.objects.create(User=profile)        
+        cart = Cart.objects.create(User=profile)
     else:
         cart = cart[0]
     cp = Cart_Product.objects.filter(Cart=cart,product_id=product.pk)
-    if not cp:   
-        
+    if not cp:
+
         Cart_Product.objects.create(
             Cart          = cart,
             product_id    = product.pk,
@@ -294,20 +299,20 @@ def add_cart(request,pk,count):
             product_count = count
         )
     else:
-        
+
         cnt = cp[0].product_count + int(count)
-        
+
         cp[0].product_count = cnt
-        
-        cp[0].save()    
-        
+
+        cp[0].save()
+
     return response
 def add_cookie(response):
     max_age = 365*24*60*60
     now = datetime.now()
     value = str(now.year)+str(now.month)+\
             str(now.day)+str(now.hour)+\
-            str(now.minute)+str(now.second)+str(now.microsecond)    
+            str(now.minute)+str(now.second)+str(now.microsecond)
     cookie_id = format(int(value),"#x")
     response.set_cookie('cookie_id',cookie_id,max_age)
     return response,cookie_id

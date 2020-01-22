@@ -1,4 +1,4 @@
-{% extends 'cart/Cart_base.html' %}
+{% extends 'base2.html' %}
 {% load static %}
 
 {% block cart_content %}
@@ -6,59 +6,58 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <style>
-       
+
         #cart-content{
             display:inline-block;
             width:640px;
             height: 500px;
             margin-left:95px;
             float: left;
-            
+
         }
         #receiver-info{
             display:inline-block;
             width:447px;
             height: 500px;
-            
+
         }
         .pm-count{
-            display:inline-block; 
+            display:inline-block;
             width:68px;
             height: 18px;
-            font-size: 9px; 
+            font-size: 9px;
             color:#9E9E9E;
             background: #F8F8F8;
             border-radius: 9px;
-            margin-left: 116px;
 
         }
         .trash-icon-box{
-            display:inline-block; 
-            width:25px; 
-            height:25px; 
+            display:inline-block;
+            width:25px;
+            height:25px;
             background: #F8F8F8;
             border-radius: 11px;
             text-align: center;
             line-height: 25px;
             color:#9E9E9E;
-            margin-left: 46px;  
+            margin-left: 46px;
         }
         #product-list{
-            
-            list-style: none; 
-            width:598px; 
+
+            list-style: none;
+            width:598px;
             height: 467px;
-            margin-top:48px; 
-            
+            margin-top:48px;
+
         }
         #product-list  li{
-            width:536px; 
-            height:105px; 
+            width:536px;
+            height:105px;
             border-bottom: 1pt solid #707070;
             margin-bottom: 23px;
         }
         .field-box{
-            width:341px; 
+            width:341px;
             height:34px;
             background-color: rgb(232,232,232);
             border-radius: 15px;
@@ -79,17 +78,17 @@
             font-weight: 800;
         }
        #total-box{
-            display:inline-block; 
-            width:640px; 
-            height: 103px; 
-            background: rgb(246,244,245); 
+            display:inline-block;
+            width:640px;
+            height: 103px;
+            background: rgb(246,244,245);
             margin-left: 70px;
             line-height: 103px;
        }
        #pay-btn{
-        display:inline-block; 
-        width:447px; 
-        height:103px; 
+        display:inline-block;
+        width:447px;
+        height:103px;
         line-height: 103px;;
         font-size: 28px;
         font-weight: 800;
@@ -102,7 +101,7 @@
            width:515px;
            font-size: 15px;
             color:#363636;
-        
+
        }
         ._mCS_1 .mCSB_dragger .mCSB_dragger_bar{ background-color: pink; width:10px; }
         .mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar{background-color: pink; }
@@ -121,13 +120,13 @@
             <p style="font-weight:800; font-size:30px;">
                 장바구니
             </p>
-            
+
 
             <ul id="product-list" class="content">
                 {% for c in cp %}
                  <li>
                     <img width="87" height="90" src="/media/{{ c.product_img }}">
-                    <span style="margin-left:15px; font-size: 15px;">{{ c.product_name }}</span>
+                    <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px">{{ c.product_name }}</span>
                     <div class="pm-count">
                         <i class="glyphicon glyphicon-minus minus" pk="{{c.product_id}}" style="margin-left:3px;"></i>
                         <span style="margin-left:10px;" id="count{{c.product_id}}">{{ c.product_count }}</span>
@@ -141,10 +140,10 @@
                     </div>
                  </li>
 
-                 
+
                  {% endfor %}
             </ul>
-                  
+
         </div>
         <div id ="receiver-info">
             <p style="font-size: 30px; font-weight: 800;">
@@ -183,17 +182,17 @@
                 <div id="total-money-box" class="text-right">
                     <span id="total-money">{{total}}</span> 원
                 </div>
-            </div>     
+            </div>
             <div id="pay-btn">
-                결제하기             
-            </div>       
+                결제하기
+            </div>
 
         </div>
     </div>
 </div>
 <script>
     init();
-    
+
     function init(){
         var sum = 0
         $(".item-money").each(function(index,item){
@@ -206,8 +205,8 @@
 
         $("#total-money").text(sum);
     }
-  
-    
+
+
     $(".content").mCustomScrollbar({});
     //plus 버튼 클릭시
     $(".plus").click(function(){
@@ -232,7 +231,7 @@
         $.ajax({
                 type : "GET",
                 url : url,
-                
+
                 success : function(response)
                 {
                     init();
@@ -241,6 +240,4 @@
             });
     }
 </script>
-{% endblock %}    
-
-
+{% endblock %}
