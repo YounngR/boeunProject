@@ -100,7 +100,7 @@
         }
         //장바구니 담기 클릭시
         $(".add-cart-btn").click(function(){
-            show_animation();
+            
             var pk    = $(this).attr("pk");
             var count = $("#count"+pk).val();
             var url = "/addCart/"+pk+"/"+count
@@ -110,7 +110,7 @@
 
                   success : function(response)
                   {
-
+                    show_animation();
 
                   }
               });

@@ -127,7 +127,7 @@
                 {% for c in cp %}
                  <li>
                     <img width="87" height="90" src="/media/{{ c.product_img }}">
-                    <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px;">{{ c.product_name }}ddsss</span>
+                    <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px;">{{ c.product_name }}</span>
                     <div class="pm-count">
                         <i class="glyphicon glyphicon-minus minus" pk="{{c.product_id}}" style="margin-left:3px;"></i>
                         <span style="margin-left:10px;" id="count{{c.product_id}}">{{ c.product_count }}</span>
@@ -181,7 +181,7 @@
                 </span>
                 <div id="total-money-box" class="text-right">
 
-                    <span id="total-money">{{total}}</span> 원
+                    <span id="total-money"></span> 원
                 </div>
             </div>
             <div id="pay-btn">
