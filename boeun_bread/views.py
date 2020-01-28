@@ -307,6 +307,14 @@ def add_cart(request,pk,count):
         cp[0].save()
 
     return response
+#장바구니 상품삭제
+def del_cart(request,pk):
+    print(pk)
+    cp = get_object_or_404(Cart_Product,pk=pk)
+    cp.delete()
+    return HttpResponse("success")
+
+
 def add_cookie(response):
     max_age = 365*24*60*60
     now = datetime.now()

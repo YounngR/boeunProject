@@ -81,7 +81,7 @@
       <div id="pw2_error_text" style="float:left; padding-left:16px; padding-top:5px;">확인을 위해 다시 한 번 입력해 주세요.</div>
     </div>
 
-    <div style="clear:both; padding-top:21px; margin-left:161px;" >
+    <div style="clear:both; padding-top:21px; margin-left:163px;" >
       <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
       <div style="padding-top:5px; float:left; padding-left:10px;">이름</div>
       <div style="float:left; padding-left:144px;">
@@ -151,10 +151,10 @@
       /*var id_right = document.getElementById('id_right');
       var id_passrule_error = document.getElementById('id_passrule_error');*/
       if(!idRule.test($('#user_id').val())) {
-        $("#id_error_text").css("color","red");
+        $("#id_error_text").text("영어,숫자 포함 6~20자 내로 입력해주세요.").css("color","red");
       }
       else{
-        $("#id_error_text").css("color","black");
+        $("#id_error_text").text("아이디 사용 가능합니다.").css("color","#0081ff");
           id = $('#user_id').val();
           if(id != ''){
               $.ajax({
@@ -164,16 +164,8 @@
                       'csrfmiddlewaretoken': '{{ csrf_token }}',
                       'idcheck' : id,
                   },
-                  success : function(response)
-                  {
-                      if(response.msg == '사용자가 이미 사용하고 있습니다.')
-                      {
-                          alert("사용자가 이미 사용하고 있습니다.");
-                      }else{
-                          alert("아이디 사용 가능합니다.");
-                      }
 
-                  },
+
               });
           }
       }
@@ -184,12 +176,10 @@
       var passRule = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
       if(!passRule.test($('#pw1').val()))
-         $("#pw_error_text").css("color","red");
+         $("#pw_error_text").text("특수문자, 영어, 숫자를 포함하여 8~15자 내로 입력해주세요").css("color","red");
 
       else
         $("#pw_error_text").css("color","black");
-
-
   }
   $("#pw1").keyup(function(){
         passrulecheck();
