@@ -56,4 +56,6 @@ urlpatterns = [
     path('boeun_best/', views.boeun_best, name="boeun_best"),
     #주문안내
     path('order_guidance/', views.order_guidance, name="order_guidance"),
+     #견적서
+    path('estimate',views.estimate,name='estimate'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
