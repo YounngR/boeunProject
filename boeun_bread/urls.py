@@ -24,7 +24,8 @@ urlpatterns = [
     path('Login/',views.Login, name="Login"),
     path('logout/',views.logout, name="logout"),
     #마이페이지
-    path('mypage/',views.mypage, name="mypage"),
+    path('mypage/modify/',views.modify_user, name="modify_user"),
+    path('mypage/delete/',views.delete_user, name="delete_user"),
     path('search_order/',views.search_order, name="search_order"),
     path('order_history/', views.order_history, name="order_history"),
     #장바구니

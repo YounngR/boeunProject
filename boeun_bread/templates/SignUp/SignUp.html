@@ -148,9 +148,10 @@
 <!-- iamport.payment.js -->
 <!-- <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script> -->
 <script>
+  var result = false;
   function idcheck(){
       //var idRule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
-      var result = false;
+      
       var id = $('#user_id').val();
       if(id.length < 6 ||  id.length > 20) {
         $("#id_error_text").text("6~20자 내로 입력해주세요.").css("color","red");
@@ -175,13 +176,14 @@
                       $("#id_error_text").text("아이디 사용 불가능합니다.").css("color","red");
 
                     result = response['msg']
+                    
                   },
 
 
               });
           }
       }
-      return result;
+      
   }
 
   function passrulecheck(){
@@ -237,7 +239,7 @@
       return true;  
   }
   function isVaild(){
-    if(idcheck() && passrulecheck() && pwcheck() && isEmailCheck())
+    if(result && passrulecheck() && pwcheck() && isEmailCheck())
       return true;
     else
       return false;
