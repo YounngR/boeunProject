@@ -28,6 +28,7 @@ urlpatterns = [
     path('mypage/delete/',views.delete_user, name="delete_user"),
     path('search_order/',views.search_order, name="search_order"),
     path('order_history/', views.order_history, name="order_history"),
+    path('order_lookup/',views.order_lookup, name="order_lookup"),
     #장바구니
     path('cart/',views.cart, name="cart"),
     path('addCart/<pk>/<count>',views.add_cart,name='addCart'),
