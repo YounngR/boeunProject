@@ -275,6 +275,7 @@ def delete_user(request):
     return render(request, 'mypage/delete_user.html',context)
 def search_order(request):
     return render(request, 'mypage/search_order.html')
+
 def order_history(request):
     return render(request, 'mypage/order_history.html')
 
@@ -447,7 +448,11 @@ def order(request):
         'product':product
     }
     return render(request, 'boeun_bread/order.html',context)
+#주문 detail 페이지    
+def order_detail(request,pk):
+    prod = get_object_or_404(Product,pk=pk)
 
+    return render(request, 'boeun_bread/order_detail.html',{'prod':prod})   
 
 
 #본빵이야기
