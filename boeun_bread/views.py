@@ -245,16 +245,20 @@ def SignUpOk(request):
 #회원정보수정
 @login_required
 def modify_user(request):
+    context = {}
     if request.method == "POST":
-        user    = User.objects.get(username=request.user.username)
-        profile = Profile.objects.get(user=request.user)
-        user.set_password(request.POST.get('user_pwd'))
-        profile.U_name  = request.POST.get('user_name')
-        profile.U_phone = request.POST.get('user_phone')
-        user.save()
-        profile.save()
-        return redirect('/mypage/modify/')
-    return render(request, 'mypage/modify_user.html')
+        user    = auth.authenticate(request,username=request.user.username,password=request.POST.get('c_user_pwd'))
+        if user:
+            profile = Profile.objects.get(user=request.user)
+            user.set_password(request.POST.get('n_user_pwd'))
+            profile.U_name  = request.POST.get('user_name')
+            profile.U_phone = request.POST.get('user_phone')
+            user.save()
+            profile.save()
+            return redirect('/mypage/modify/')
+        else:
+            context['msg'] = "기존 비밀번호와 일치하지 않습니다."
+    return render(request, 'mypage/modify_user.html',context)
 #회원탈퇴
 @login_required
 def delete_user(request):
@@ -271,6 +275,7 @@ def delete_user(request):
     return render(request, 'mypage/delete_user.html',context)
 def search_order(request):
     return render(request, 'mypage/search_order.html')
+
 def order_history(request):
     return render(request, 'mypage/order_history.html')
 
@@ -439,7 +444,11 @@ def order(request):
         'product':product
     }
     return render(request, 'boeun_bread/order.html',context)
+#주문 detail 페이지    
+def order_detail(request,pk):
+    prod = get_object_or_404(Product,pk=pk)
 
+    return render(request, 'boeun_bread/order_detail.html',{'prod':prod})   
 
 
 #본빵이야기

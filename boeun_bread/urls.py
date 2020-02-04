@@ -19,6 +19,7 @@ urlpatterns = [
     #end manage
     #주문하기
     path('order/',views.order,name="order"),
+    path('order/detail/<pk>/',views.order_detail,name="orderDetail"),
     #end 주문하기
     #로그인
     path('Login/',views.Login, name="Login"),
