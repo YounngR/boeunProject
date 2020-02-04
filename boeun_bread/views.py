@@ -151,13 +151,13 @@ def SignUp(request):
             user = User.objects.create_user(
                 username = request.POST.get('user_id'),
                 password = request.POST.get('user_pwd'),
-                email = user_email
+                
             )
             profile = Profile.objects.create(
-                user=user,
+                user    = user,
                 U_phone = request.POST.get('user_phone'),
-                U_name  = request.POST.get('user_name')
-
+                U_name  = request.POST.get('user_name'),
+                U_email = user_email
             )
             profile.U_is_active = False
 
@@ -172,7 +172,7 @@ def certification(request,pk):
         pass
     context={
         'profile_pk':profile.pk,
-        'email':profile.user.email
+        'email':profile.U_email
     }
     return render(request, 'SignUp/certification.html',context)
 #이메일 전송
@@ -190,7 +190,7 @@ def send_email(request):
         })
         mail_subject = "[보은] 회원가입 인증 메일입니다."
 
-        email = EmailMessage(mail_subject, message, to=[profile.user.email])
+        email = EmailMessage(mail_subject, message, to=[profile.U_email])
         email.send()
         context = {
             'success':True
@@ -242,8 +242,33 @@ def SignUpOk(request):
     return render(request, 'SignUp/signupok.html')
 
 #마이페이지
-def mypage(request):
-    return render(request, 'mypage/mypage.html')
+#회원정보수정
+@login_required
+def modify_user(request):
+    if request.method == "POST":
+        user    = User.objects.get(username=request.user.username)
+        profile = Profile.objects.get(user=request.user)
+        user.set_password(request.POST.get('user_pwd'))
+        profile.U_name  = request.POST.get('user_name')
+        profile.U_phone = request.POST.get('user_phone')
+        user.save()
+        profile.save()
+        return redirect('/mypage/modify/')
+    return render(request, 'mypage/modify_user.html')
+#회원탈퇴
+@login_required
+def delete_user(request):
+    context = {}
+    if request.method == "POST":
+        user = auth.authenticate(request,username=request.user.username,password=request.POST.get('user_pw'))
+        if user:
+            user.delete()
+            return redirect('/')
+        else:
+            context['msg'] = "비밀번호가 일치하지 않습니다."
+
+
+    return render(request, 'mypage/delete_user.html',context)
 def search_order(request):
     return render(request, 'mypage/search_order.html')
 def order_history(request):
@@ -441,3 +466,6 @@ def order_guidance(request):
 #찾아오시는 길
 def boeun_map(request):
     return render(request,'boeun_bread/boeun_map.html')
+#견적서
+def estimate(request):
+    return render(request,'Estimate/estimate.html')    
