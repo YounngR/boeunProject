@@ -150,12 +150,13 @@
         
     }
     $("#email_cert_btn").click(function(){
-        
+        make_resend_page();
         ajax();
         
     });
     
     $(document).on("click","#email_recert_btn",function(){
+        
         ajax();
     });
     function ajax(){
@@ -169,7 +170,7 @@
             },
             success : function(response)
             {
-                make_resend_page();
+                
                 
             },
         });

@@ -49,6 +49,9 @@
         cursor: pointer;
     }
  </style>
+ {% if msg %}
+    <script>alert("{{msg}}");</script>
+ {% endif %}
  <div class="text-right" style="margin-top:28px; margin-right: 78px;">
     <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
     <i class="glyphicon glyphicon-menu-right"></i>
@@ -82,12 +85,18 @@
             </div>
             <div  id ="id_error_text" style="display:none;float:left; padding-left:16px; padding-top:5px; ">아이디는 6~20자 내로 입력해 주세요.</div>
           </div>
-
           <div style="clear:both; padding-top:21px; margin-left:60px;" >
             <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
-            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">비밀번호</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">기존 비밀번호</div>
             <div style="float:left;">
-              <input type="password" style="width:178px; height:29px;" required id="pw1" name="user_pwd"maxlength="15">
+              <input type="password" style="width:178px; height:29px;" required name="c_user_pwd"maxlength="15">
+            </div>
+          </div>
+          <div style="clear:both; padding-top:21px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">새 비밀번호</div>
+            <div style="float:left;">
+              <input type="password" style="width:178px; height:29px;" required id="pw1" name="n_user_pwd"maxlength="15">
             </div>
             <div id="pw_error_text" style="display:none;float:left; padding-left:16px; padding-top:5px;">비밀번호는 8~15자로 설정 가능합니다.</div>
           </div>
@@ -117,7 +126,7 @@
             <div  id ="phome_text" style="float:left; padding-left:16px; padding-top:5px; ">- 없이 입력하세요.</div>
           </div>
 
-          <div style="clear:both; padding-top:140px; margin-left:310px;" >
+          <div style="clear:both; padding-top:90px; margin-left:310px;" >
             <input id ="b_cancle" type="button" style="width:153px; height:39px;" value="취소" onclick="cancel()">
             <input id="modify_btn" type="submit" style="width:153px; height:39px; margin-left:38px;" value="수정하기">
           </div>
