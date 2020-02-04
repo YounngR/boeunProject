@@ -151,7 +151,7 @@ def SignUp(request):
             user = User.objects.create_user(
                 username = request.POST.get('user_id'),
                 password = request.POST.get('user_pwd'),
-                
+
             )
             profile = Profile.objects.create(
                 user    = user,
@@ -280,7 +280,7 @@ def cart(request):
     if not profile:
         cookie_id = request.COOKIES.get('cookie_id')
         profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
-        
+
     cart = get_object(Cart,User=profile)
     cp   = Cart_Product.objects.filter(Cart=cart)
     return render(request, 'cart/cart.html',{'cp':cp})
@@ -308,7 +308,7 @@ def add_cart(request,pk,count):
     cart = get_object(Cart,User=profile)
     if not cart:
         cart = Cart.objects.create(User=profile)
-    
+
     cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
     if not cp:
         Cart_Product.objects.create(
@@ -453,19 +453,18 @@ def boeun_jujube_story(request):
     return render(request,'boeun_bread_story/boeun_jujube_story.html')
 
 
-#본빵 배달신청
-def boeun_delivery(request):
-    return render(request,'boeun_bread/boeun_delivery.html')
+
 #추천베스트
 def boeun_best(request):
     return render(request,'boeun_bread/boeun_best.html')
-#주문안내
-def order_guidance(request):
-    return render(request,'boeun_bread/order_guidance.html')
+
+#고객센터
+def Service_center(request):
+    return render(request,'boeun_bread/Service_center.html')
 
 #찾아오시는 길
 def boeun_map(request):
     return render(request,'boeun_bread/boeun_map.html')
 #견적서
 def estimate(request):
-    return render(request,'Estimate/estimate.html')    
+    return render(request,'Estimate/estimate.html')

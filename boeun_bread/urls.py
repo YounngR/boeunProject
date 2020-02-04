@@ -50,13 +50,12 @@ urlpatterns = [
     path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),
     path('boeun_logo_story/', views.bread_logo_story, name="bread_logo_story"),
     path('boeun_jujube_story/', views.boeun_jujube_story, name="boeun_jujube_story"),
-
-    #본빵배달신청
-    path('boeun_delivery/', views.boeun_delivery, name="boeun_delivery"),
     #추천베스트
     path('boeun_best/', views.boeun_best, name="boeun_best"),
-    #주문안내
-    path('order_guidance/', views.order_guidance, name="order_guidance"),
+    #고객센터
+    path('Service_center/', views.Service_center, name="Service_center"),
+
+
      #견적서
     path('estimate/',views.estimate,name='estimate'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
