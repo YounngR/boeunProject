@@ -441,3 +441,6 @@ def order_guidance(request):
 #찾아오시는 길
 def boeun_map(request):
     return render(request,'boeun_bread/boeun_map.html')
+#견적서
+def estimate(request):
+    return render(request,'Estimate/estimate.html')    
