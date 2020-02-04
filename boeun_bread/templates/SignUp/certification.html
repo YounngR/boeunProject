@@ -150,7 +150,7 @@
         
     }
     $("#email_cert_btn").click(function(){
-        make_resend_page();
+        
         ajax();
         
     });
@@ -169,7 +169,7 @@
             },
             success : function(response)
             {
-              
+                make_resend_page();
                 
             },
         });
