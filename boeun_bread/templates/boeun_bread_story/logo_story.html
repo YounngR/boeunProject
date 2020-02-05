@@ -1,12 +1,89 @@
 {% extends 'base.html' %}
-{% block content %}
-<div>
-    <a href="{% url 'boeun_bread:Bread_Birth' %}"><span class="birth_story_nav">본빵의 탄생</span></a>
-    <a href="{% url 'boeun_bread:bread_logo_story' %}"><span class="birth_story_nav">로고제작이야기</span></a>
-    <a href="{% url 'boeun_bread:boeun_jujube_story' %}"><span class="birth_story_nav">보은대추이야기</span></a>
-  <div class="birth_story_contents">
-    로고이야기
-  </div>
-</div>
 
+{% block content %}
+
+{% load static %}
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+  
+<style>
+
+  #header{
+    height: 1302px;
+    width: 1062px;
+    margin-left:75px;
+  }
+  #header-menu{
+    
+  }
+
+  .main{
+    margin-bottom: 125px;
+    
+  }
+
+  .birth_story_nav1{
+    width:325px;
+    height: 58px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size:18px;
+    color:#282828;
+    position: relative;
+  }
+  .birth_story_nav2{
+    width:900px;
+    height: 58px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size:18px;
+    color:#282828;
+    position: relative;
+  }
+  .birth_story_nav3{
+    width:1000px;
+    height: 58px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size:18px;
+    color:#282828;
+    position: relative;
+  }
+</style>
+
+</head>
+
+<div class="main" style="background-image: url( {%static 'img/story/story_base.jpg'%} ");>
+  <div id="header">
+        <img src="{% static 'img/story/header.png'%}" style="position:absoulte; margin-top:125px;">
+          <div id="header-menu">
+            <a href="{% url 'boeun_bread:Bread_Birth' %}">
+              <div class="birth_story_nav1">
+                  <img src="{% static 'img/story/header_select.png'%}" style="position: relative; bottom:1083px; left:0px; padding-right:46px;">
+                    <p style="position: absolute; left:117px; top:-1063px;">본빵의 탄생</p>
+              </div>
+            </a>
+            <a href="{% url 'boeun_bread:bread_logo_story' %}">
+              <div class="birth_story_nav2">
+                <img src="{% static 'img/story/header_select.png'%}" style="position: relative; bottom:1141px; left:362px; padding-right:46px;" >
+                <img src="{% static 'img/story/header_select2.png'%}" style="position: relative; bottom:1141px; left:-14px; padding-right:46px;"> 
+                  <p style="position: absolute; left:460px; top:-1120px;"> 로고제작이야기 </p>
+              </div>
+            </a>
+            <a href="{% url 'boeun_bread:boeun_jujube_story' %}">
+              <div class="birth_story_nav3">
+                <img src="{% static 'img/story/header_select.png'%}" style="position: relative; bottom:1199px; left:737px; padding-right:46px;" >
+                
+                  <p style="position: absolute; left:826px; top:-1179px;">보은대추이야기</p>
+              </div>
+            </a>
+          </div>
+        </div>
+ 
+  </div>
+
+</div>
 {% endblock %}
