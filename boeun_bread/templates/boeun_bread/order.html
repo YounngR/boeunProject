@@ -58,8 +58,8 @@
     </div>
     <ul id="bread-list-box">
         {% for p in product %}
-            <li pk="{{p.pk}}" class="prod" style="cursor: pointer;">
-                <img width="100%" height="100%" src="/media/{{p.P_img}}">
+            <li>
+                <img width="100%" height="100%" src="/media/{{p.P_img}}" pk="{{p.pk}}" class="prod" style="cursor: pointer;">
                 <div style="margin-left:10px; position: relative;">
                     <b>{{p.P_name}}</b>
 
@@ -100,7 +100,7 @@
         }
         //장바구니 담기 클릭시
         $(".add-cart-btn").click(function(){
-            
+
             var pk    = $(this).attr("pk");
             var count = $("#count"+pk).val();
             var url = "/addCart/"+pk+"/"+count
