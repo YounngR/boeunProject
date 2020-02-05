@@ -134,9 +134,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 # 메일을 호스트하는 서버
 EMAIL_PORT = 587
 # gmail과의 통신하는 포트
-EMAIL_HOST_USER = 'leedongjun181027@gmail.com'
+EMAIL_HOST_USER = 'boeunbread@gmail.com'
 # 발신할 이메일
-EMAIL_HOST_PASSWORD = 'dlehdwns3'
+EMAIL_HOST_PASSWORD = 'qhdms@0605'
 # 발신할 메일의 비밀번호
 EMAIL_USE_TLS = True
 # TLS 보안 방법

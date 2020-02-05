@@ -1,0 +1,83 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+
+<style>
+  #order_lookup_box{
+      width:983px;
+      border-top:2px solid #9E9E9E;
+      margin: 0 auto;
+      margin-top:38px;
+      background: #F8F8F8;
+
+  }
+  #order_lookup_table{
+    width:960px;
+    height:48px;
+    border-top:2px solid #91938E;
+    border-bottom:2px solid #91938E;
+    margin: 0 auto;
+    margin-top:30px;
+    margin-left:15px;
+    background: #ECEFE4;
+  }
+  .date_button{
+    background-color:#DE9562;
+    border-radius:12px;
+    border:0;
+    outline:0;
+  }
+  .search{
+    background-color:#AEAEAE;
+    border:0;
+    outline:0;
+    border-radius:4px;
+  }
+  .order_table_info{
+    margin-top:12px;
+  }
+
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+   <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+   <i class="glyphicon glyphicon-menu-right"></i>
+   <span style="font-weight: 500; position: relative; top:-1px;">배송조회</span>
+</div>
+<div style="margin-left:102px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">주문/배송 조회</p>
+</div>
+<div id="order_lookup_box">
+  <label style=" margin-left:50px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">주문/배송 조회</label>
+  <hr style="margin-left:15px; margin-top:10px; width:960px; background-color:#D8D8D8; height:1px;">
+  <div style="height:30px; margin-top:-7px;">
+    <button class="date_button" style="margin-left:308px; width:46px;">오늘</button>
+    <button class="date_button"  style="margin-left:11px; width:61px;">일주일</button>
+    <button class="date_button"  style="margin-left:11px; width:43px;">당월</button>
+    <button class="date_button"  style="margin-left:11px; width:43px;">전월</button>
+    <img src="{% static '/img/calender.jpg'%}" style="width:15px; height20px; margin-left:16px;">
+    <input type="date" style="width:84px; height:20px; font-size:9px; margin-left:4px;">
+    <label style="font-weight:200; margin-left:4px;">부터</label>
+
+    <img src="{% static '/img/calender.jpg'%}" style="width:15px; height20px; margin-left:15px;">
+    <input type="date" style="width:84px; height:20px; font-size:9px; margin-left:4px;">
+    <label style="font-weight:200; margin-left:4px;">까지</label>
+
+    <button class="search" style="margin-left:31px; width:43px;">조회</button>
+
+  </div>
+  <hr style="margin-left:15px; margin-top:2px; width:960px; background-color:#D8D8D8; height:1px;">
+
+  <div id="order_lookup_table">
+    <label class="order_table_info" style="margin-left:80px; width:60px;">주문번호</label>
+    <label class="order_table_info" style="margin-left:84px; width:50px;">주문자</label>
+    <label class="order_table_info" style="margin-left:84px; width:60px;">결제방법</label>
+    <label class="order_table_info" style="margin-left:100px; width:60px;">결제금액</label>
+    <label class="order_table_info" style="margin-left:110px; width:60px;">주문상태</label>
+    <label class="order_table_info" style="margin-left:100px; width:60px;">날짜</label>
+  </div>
+
+</div>
+
+
+{%endblock%}

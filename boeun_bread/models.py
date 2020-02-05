@@ -9,6 +9,7 @@ class Profile(models.Model):
     U_grade     = models.IntegerField(default=2) # 0:관리자 1:회원 2:비회원
     U_name      = models.CharField(max_length=20,null=True,blank=True)
     U_groupName = models.CharField(max_length=50, null=True, blank=True)
+    U_email     = models.EmailField(max_length=50)
 
 class Product(models.Model):
     P_img       = models.ImageField(upload_to="bread_img/",null=True,blank=True)

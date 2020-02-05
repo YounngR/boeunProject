@@ -1,0 +1,122 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+<style>
+    #content-box{
+        width:983px;
+        height: 472px;
+        background: #F8F8F8;
+        border-top:2px solid #9E9E9E;
+        margin: 0 auto;
+        margin-top:38px;
+    }
+    #tab-box{
+        width:983px; 
+        margin:0 auto;
+        font-size:16px; 
+        font-weight:bold;
+        margin-top:21px;
+        border:1px solid #9E9E9E;
+       }
+    #tab-box > div{
+        display:inline-block;
+        width:490px;
+        height:38px;
+        line-height: 38px;
+        text-align: center;
+        cursor: pointer;
+        }
+        hr{
+            width:963px;
+            border-width: 2px;
+            border-color:rgb(210,210,210);
+            margin:0 auto;
+        }   
+        .text-box{
+            overflow-y: scroll;
+            width:876px;
+            height:172px;
+            border:1px solid rgb(210,210,210);
+            margin-left: 46px;
+            background: white;
+        }  
+    #cancle{
+        font-weight:bold;
+    }
+
+    #submit{
+        font-weight:bold;
+        color:white;
+        background-color:black;
+    }       
+</style>
+{% if msg %}
+<script>
+    alert("{{msg}}");
+</script>
+{% endif %}
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
+</div>
+<div style="margin-left:102px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">회원탈퇴</p>
+</div>
+<div id="tab-box">
+    <div style="float:left;" onclick="modify_user()">
+        회원정보 수정
+    </div>
+    <div style="color:white; background:#e47f32;" onclick="delete_user()">
+        회원탈퇴
+    </div>
+</div>
+<div id="content-box">
+    <p style="font-size:18px; font-weight:800; color:#9E9E9E; margin-top:26px; margin-left: 56px;">
+        회원탈퇴 안내
+    </p>
+    <hr style="margin-bottom: 10px;">
+    <p style="font-size:14px; font-weight:bold; color:#9E9E9E;  margin-left: 51px;">
+        01.회원탈퇴 안내
+    </p>
+    <hr style="margin-bottom: 10px;">
+    <div class="text-box">
+
+    </div>
+    <hr style="margin-bottom: 10px; margin-top: 6px;">
+    <p style="font-size:14px; font-weight:bold; color:#9E9E9E;  margin-left: 51px;">
+        02.회원탈퇴 하기
+    </p>    
+    <hr style="margin-bottom: 18px;">
+    <div style="margin-left:51px;">
+        <form action="{% url 'boeun_bread:delete_user' %}" method="POST" onsubmit="return isValid();">
+            {% csrf_token %}
+            <label style="font-size:13px; color:#9E9E9E;">비밀번호</label>
+            <input type="password" name="user_pw" required>
+            <div class="text-center" style="margin-top:35px;">
+                <input id="cancel" type="button" style="width:153px; height:39px;" value="취소">
+                <input id="submit" type="submit" style="width:153px; height:39px; margin-left:38px;" value="탈퇴하기">
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    //회원정보 변경 클릭시
+    function modify_user(){
+        window.location.href="{% url 'boeun_bread:modify_user' %}";
+    }
+    //취소하기 클릭시
+    $("#cancel").click(function(){
+        window.location.href="/";
+    });
+    //탈퇴하기 클릭시
+    function isValid(){
+        if(confirm("회원탈퇴 하시겠습니까?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+{% endblock %}

@@ -30,6 +30,7 @@
             background: #F8F8F8;
             border-radius: 9px;
 
+
         }
         .trash-icon-box{
             display:inline-block;
@@ -126,20 +127,19 @@
                 {% for c in cp %}
                  <li>
                     <img width="87" height="90" src="/media/{{ c.product_img }}">
-                    <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px">{{ c.product_name }}</span>
+                    <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px;">{{ c.product_name }}</span>
                     <div class="pm-count">
-                        <i class="glyphicon glyphicon-minus minus" pk="{{c.product_id}}" style="margin-left:3px; cursor:pointer;"></i>
+                        <i class="glyphicon glyphicon-minus minus" pk="{{c.product_id}}" style="margin-left:3px;"></i>
                         <span style="margin-left:10px;" id="count{{c.product_id}}">{{ c.product_count }}</span>
-                        <i class="glyphicon glyphicon-plus plus" pk="{{c.product_id}}" style="margin-left:10px; cursor:pointer;"></i>
+                        <i class="glyphicon glyphicon-plus plus" pk="{{c.product_id}}" style="margin-left:10px;"></i>
                     </div>
                     <span style="margin-left:54px; font-size:15px;">
                         <span id="item-money{{c.product_id}}" class="item-money" pk="{{c.product_id}}" price="{{ c.product_price }}"></span> 원
                     </span>
                     <div class="trash-icon-box">
-                        <i class="glyphicon glyphicon-trash"></i>
+                        <i class="glyphicon glyphicon-trash del_product" pk="{{ c.pk }}" style="cursor:pointer;"></i>
                     </div>
                  </li>
-
 
                  {% endfor %}
             </ul>
@@ -180,7 +180,8 @@
                     총액
                 </span>
                 <div id="total-money-box" class="text-right">
-                    <span id="total-money">{{total}}</span> 원
+
+                    <span id="total-money"></span> 원
                 </div>
             </div>
             <div id="pay-btn">
@@ -222,12 +223,29 @@
     $(".minus").click(function(){
         var pk = $(this).attr("pk");
         var cur = parseInt($("#count"+pk).text()) - 1;
-          if(cur < 1){
-          cur = 1;
+        if (cur < 1){
+            cur = 1;
         }
         var pre = parseInt($("#count"+pk).text());
         $("#count"+pk).text(cur);
         ajax(pk,cur-pre);
+    });
+    //상품삭제
+    $(".del_product").click(function(){
+        if (confirm("삭제하시겠습니까?")){
+            $(this).closest("li").remove();
+            init();
+            $.ajax({
+                    type : "GET",
+                    url : "/delCart/"+$(this).attr('pk'),
+
+                    success : function(response)
+                    {
+
+
+                    }
+            });
+      }
     });
     function ajax(pk,count){
         var url = "/addCart/"+pk+"/"+count

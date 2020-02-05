@@ -1,0 +1,198 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+
+<style>
+        .sign_up_icon{
+          width:40px;
+        }
+        .icon_bar{
+          margin-left:33px;
+          width:45px;
+          color:red;
+        }
+        #modify_field_box{
+            width:983px;
+            height: 545px;
+            border-top:2px solid #9E9E9E;
+            margin: 0 auto;
+            margin-top:38px;
+            background: #F8F8F8;
+        }
+
+        #b_cancle{
+          font-weight:bold;
+        }
+
+        #modify_btn{
+          font-weight:bold;
+          color:white;
+          background-color:black;
+        }
+        .field_name{
+            width:154px;
+        }
+       #tab-box{
+        width:983px;
+        margin:0 auto;
+        font-size:16px;
+        font-weight:bold;
+        margin-top:21px;
+        border:1px solid #9E9E9E;
+       }
+    #tab-box > div{
+        display:inline-block;
+        width:490px;
+        height:38px;
+        line-height: 38px;
+        text-align: center;
+        cursor: pointer;
+    }
+ </style>
+ {% if msg %}
+    <script>alert("{{msg}}");</script>
+ {% endif %}
+ <div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
+</div>
+<div style="margin-left:102px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">회원정보 변경</p>
+</div>
+<div id="tab-box">
+    <div style="color:white; background:#e47f32; float:left;" onclick="modify_user()">
+        회원정보 수정
+    </div>
+    <div style="" onclick="delete_user()">
+        회원탈퇴
+    </div>
+</div>
+<div id="modify_field_box">
+        <form  action="{% url 'boeun_bread:modify_user' %}" method="POST" onsubmit="return isVaild();">
+          {% csrf_token %}
+          <div>
+            <div style="margin-top:38px; margin-left:60px; float:left; font-size:18px;">기본정보</div>
+            <div style="margin-top:38px; margin-left:101px; color:#e47f32; float:left;">* 표시는 반드시 입력하셔야 하는 항목입니다.</div>
+          </div>
+          <div style="clear:both; padding-top:33px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">아이디</div>
+            <div style="float:left;">
+              <p>{{request.user.username}}</p>
+
+            </div>
+            <div  id ="id_error_text" style="display:none;float:left; padding-left:16px; padding-top:5px; ">아이디는 6~20자 내로 입력해 주세요.</div>
+          </div>
+          <div style="clear:both; padding-top:21px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">기존 비밀번호</div>
+            <div style="float:left;">
+              <input type="password" style="width:178px; height:29px;" required name="c_user_pwd"maxlength="15">
+            </div>
+          </div>
+          <div style="clear:both; padding-top:21px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">새 비밀번호</div>
+            <div style="float:left;">
+              <input type="password" style="width:178px; height:29px;" required id="pw1" name="n_user_pwd"maxlength="15">
+            </div>
+            <div id="pw_error_text" style="display:none;float:left; padding-left:16px; padding-top:5px;">비밀번호는 8~15자로 설정 가능합니다.</div>
+          </div>
+
+          <div style="clear:both; padding-top:21px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">새 비밀번호 확인</div>
+            <div style="float:left;">
+              <input id="pw2" type="password" style="width:178px; height:29px;" required onblur="pwcheck();" maxlength="15">
+            </div>
+            <div id="pw2_error_text" style="display:none;float:left; padding-left:16px; padding-top:5px;">확인을 위해 다시 한 번 입력해 주세요.</div>
+          </div>
+
+          <div style="clear:both; padding-top:21px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">이름</div>
+            <div style="float:left;">
+              <input type="text" name="user_name" value="{{request.user.profile.U_name}}"style="width:178px; height:29px;">
+            </div>
+          </div>
+        <div style="clear:both; padding-top:21px; margin-left:60px;" >
+            <div style="padding-top:5px; color:#e47f32; float:left;">●</div>
+            <div style="padding-top:5px; float:left; padding-left:10px;" class="field_name">휴대폰번호</div>
+            <div style="float:left; ">
+              <input type="text" name="user_phone" value="{{request.user.profile.U_phone}}" required style="width:178px; height:29px;">
+            </div>
+            <div  id ="phome_text" style="float:left; padding-left:16px; padding-top:5px; ">- 없이 입력하세요.</div>
+          </div>
+
+          <div style="clear:both; padding-top:90px; margin-left:310px;" >
+            <input id ="b_cancle" type="button" style="width:153px; height:39px;" value="취소" onclick="cancel()">
+            <input id="modify_btn" type="submit" style="width:153px; height:39px; margin-left:38px;" value="수정하기">
+          </div>
+
+        </form>
+      </div>
+<script>
+
+    function passrulecheck(){
+      //비밀번호 8자리 이상 15자리 이하 특수문자 영어 숫자 포함
+      //var passRule = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&+=?]).*$/;
+
+      var passRule = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/;
+
+      if(!passRule.test($('#pw1').val())){
+         $("#pw_error_text").css("display","block");
+         $("#pw_error_text").text("특수문자, 영어, 숫자를 포함하여 8~15자 내로 입력해주세요").css("color","red");
+         return false;
+      }
+      else{
+        $("#pw_error_text").css("display","none");
+        return true;
+      }
+    }
+    $("#pw1").keyup(function(){
+            passrulecheck();
+    });
+
+    $("#pw2").keyup(function() {
+            pwcheck();
+        });
+
+    function pwcheck(){
+        pw = $('#pw2').val();
+        pw_check = $('#pw1').val();
+        if(pw != ''){
+
+            if(pw != pw_check){
+                $("#pw2_error_text").css("display","block");
+                $("#pw2_error_text").text("비밀번호가 다릅니다.").css("color","red");
+                return false;
+            }
+            else{
+                $("#pw2_error_text").css("display","none");
+                return true;
+            }
+        }
+
+    }
+  //가입하기
+  function isVaild(){
+    if(passrulecheck() && pwcheck())
+      return true;
+    else
+      return false;
+
+   }
+    //취소하기
+    function cancel(){
+        window.location.href="/";
+    }
+    //회원탈퇴 클릭시
+    function delete_user(){
+        window.location.href="{% url 'boeun_bread:delete_user' %}";
+    }
+
+
+</script>
+{% endblock %}

@@ -22,6 +22,11 @@ import json
 from datetime import datetime
 from django.db.models import Sum
 
+#객체 반환
+def get_object(model,**args):
+    query_set = model.objects.filter(**args)
+    return query_set[0] if query_set else None
+
 
 def main(request):
 
@@ -138,24 +143,25 @@ def agreement(request):
 #회원가입
 def SignUp(request):
     if request.method == "POST":
+        if not User.objects.filter(username=request.POST.get('user_id')):
+            email_text = request.POST.get('email_text')
+            email_select = request.POST.get('email_select')
+            user_email = email_text+'@'+email_select
 
-        email_text = request.POST['email_text']
-        email_select = request.POST['email_select']
-        user_email = email_text+'@'+email_select
+            user = User.objects.create_user(
+                username = request.POST.get('user_id'),
+                password = request.POST.get('user_pwd'),
 
-        user = User.objects.create_user(
-            username = request.POST['user_id'],
-            password = request.POST['user_pwd'],
-            email = user_email
-        )
-        profile = Profile.objects.create(
-            user=user,
-            U_phone = request.POST['user_phone'],
-            U_name  = request.POST['user_name']
+            )
+            profile = Profile.objects.create(
+                user    = user,
+                U_phone = request.POST.get('user_phone'),
+                U_name  = request.POST.get('user_name'),
+                U_email = user_email
+            )
+            profile.U_is_active = False
 
-        )
-        profile.U_is_active = False
-        return redirect('/SignUp/cert/'+str(profile.pk))
+            return redirect('/SignUp/cert/'+str(profile.pk))
 
     return render(request,'SignUp/SignUp.html')
 #회원가입 > 본인인증
@@ -166,7 +172,7 @@ def certification(request,pk):
         pass
     context={
         'profile_pk':profile.pk,
-        'email':profile.user.email
+        'email':profile.U_email
     }
     return render(request, 'SignUp/certification.html',context)
 #이메일 전송
@@ -184,7 +190,7 @@ def send_email(request):
         })
         mail_subject = "[보은] 회원가입 인증 메일입니다."
 
-        email = EmailMessage(mail_subject, message, to=[profile.user.email])
+        email = EmailMessage(mail_subject, message, to=[profile.U_email])
         email.send()
         context = {
             'success':True
@@ -209,14 +215,15 @@ def LoginPage(request):
 
 #회원가입 id 중복 체크
 def SignUp_idcheck(request):
-    id_check = request.POST['idcheck']
+    id_check = request.POST.get('idcheck')
     UserList = User.objects.filter(username=id_check)
+    response = {}
     if not UserList:
-        context ={ 'msg' : '사용가능한 아이디입니다.'}
+        response ={ 'msg' : True}
     else:
-        context = {'msg' : '이미 사용하고 있는 아이디입니다.'}
+        context = {'msg' : False}
 
-    return render(request,'SignUp/SignUp.html')
+    return HttpResponse(json.dumps(response), content_type="application/json")
 
 #이메일
 def activate(request, uid64, token):
@@ -235,35 +242,57 @@ def SignUpOk(request):
     return render(request, 'SignUp/signupok.html')
 
 #마이페이지
-def mypage(request):
-    return render(request, 'mypage/mypage.html')
+#회원정보수정
+@login_required
+def modify_user(request):
+    context = {}
+    if request.method == "POST":
+        user    = auth.authenticate(request,username=request.user.username,password=request.POST.get('c_user_pwd'))
+        if user:
+            profile = Profile.objects.get(user=request.user)
+            user.set_password(request.POST.get('n_user_pwd'))
+            profile.U_name  = request.POST.get('user_name')
+            profile.U_phone = request.POST.get('user_phone')
+            user.save()
+            profile.save()
+            return redirect('/mypage/modify/')
+        else:
+            context['msg'] = "기존 비밀번호와 일치하지 않습니다."
+    return render(request, 'mypage/modify_user.html',context)
+#회원탈퇴
+@login_required
+def delete_user(request):
+    context = {}
+    if request.method == "POST":
+        user = auth.authenticate(request,username=request.user.username,password=request.POST.get('user_pw'))
+        if user:
+            user.delete()
+            return redirect('/')
+        else:
+            context['msg'] = "비밀번호가 일치하지 않습니다."
+
+
+    return render(request, 'mypage/delete_user.html',context)
 def search_order(request):
     return render(request, 'mypage/search_order.html')
+
 def order_history(request):
     return render(request, 'mypage/order_history.html')
+
+#주문배송조회
+def order_lookup(request):
+    return render(request, 'mypage/order_lookup.html')
 
 #장바구니
 def cart(request):
     profile =  request.user.profile if request.user.is_authenticated else None
     if not profile:
         cookie_id = request.COOKIES.get('cookie_id')
-        profile   = Profile.objects.filter(cookie_id=cookie_id,U_grade=2)
-        profile   = profile[0] if profile else []
-    cp = None
-    total = 0
-    try:
-        cart    = Cart.objects.get(User=profile)
-        cp      = Cart_Product.objects.filter(Cart=cart)
-    except Exception:
-        pass
-    if cp is not None:
-        total=cp.aggregate(Sum('product_price'))
-        total=total['product_price__sum']
-    context = {
-        'cp':cp,
-        'total':total
-    }
-    return render(request, 'cart/cart.html',context)
+        profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
+
+    cart = get_object(Cart,User=profile)
+    cp   = Cart_Product.objects.filter(Cart=cart)
+    return render(request, 'cart/cart.html',{'cp':cp})
 
 #장바구니 담기
 def add_cart(request,pk,count):
@@ -273,23 +302,24 @@ def add_cart(request,pk,count):
     #회원일 경우
     if request.user.username:
         profile = request.user.profile
+
     else:
         cookie_id = request.COOKIES.get('cookie_id')
 
         if not cookie_id:
             response,cookie_id = add_cookie(response)
-            profile = Profile.objects.create(cookie_id=cookie_id)
-        if not profile:
-            profile = Profile.objects.filter(cookie_id=cookie_id)[0]
+        else:
+            profile = get_object(Profile, cookie_id=cookie_id)
 
-    cart = Cart.objects.filter(User=profile)
+        if not profile:
+            profile = Profile.objects.create(cookie_id=cookie_id)
+
+    cart = get_object(Cart,User=profile)
     if not cart:
         cart = Cart.objects.create(User=profile)
-    else:
-        cart = cart[0]
-    cp = Cart_Product.objects.filter(Cart=cart,product_id=product.pk)
-    if not cp:
 
+    cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
+    if not cp:
         Cart_Product.objects.create(
             Cart          = cart,
             product_id    = product.pk,
@@ -299,14 +329,18 @@ def add_cart(request,pk,count):
             product_count = count
         )
     else:
-
-        cnt = cp[0].product_count + int(count)
-
-        cp[0].product_count = cnt
-
-        cp[0].save()
-
+        cnt = cp.product_count + int(count)
+        cp.product_count = cnt
+        cp.save()
     return response
+#장바구니 상품삭제
+def del_cart(request,pk):
+    print(pk)
+    cp = get_object_or_404(Cart_Product,pk=pk)
+    cp.delete()
+    return HttpResponse("success")
+
+
 def add_cookie(response):
     max_age = 365*24*60*60
     now = datetime.now()
@@ -414,7 +448,11 @@ def order(request):
         'product':product
     }
     return render(request, 'boeun_bread/order.html',context)
+#주문 detail 페이지    
+def order_detail(request,pk):
+    prod = get_object_or_404(Product,pk=pk)
 
+    return render(request, 'boeun_bread/order_detail.html',{'prod':prod})   
 
 
 #본빵이야기
@@ -428,16 +466,18 @@ def boeun_jujube_story(request):
     return render(request,'boeun_bread_story/boeun_jujube_story.html')
 
 
-#본빵 배달신청
-def boeun_delivery(request):
-    return render(request,'boeun_bread/boeun_delivery.html')
+
 #추천베스트
 def boeun_best(request):
     return render(request,'boeun_bread/boeun_best.html')
-#주문안내
-def order_guidance(request):
-    return render(request,'boeun_bread/order_guidance.html')
+
+#고객센터
+def Service_center(request):
+    return render(request,'boeun_bread/Service_center.html')
 
 #찾아오시는 길
 def boeun_map(request):
     return render(request,'boeun_bread/boeun_map.html')
+#견적서
+def estimate(request):
+    return render(request,'Estimate/estimate.html')
