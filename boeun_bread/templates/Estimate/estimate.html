@@ -1,71 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
      <!--부트스트랩-->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+     <link rel="stylesheet" href="../../stylesheets/coloringpage.css" type="text/css" media="screen, projection" />
+     <link rel="stylesheet" href="../../stylesheets/coloringpageprint.css" type="text/css" media="print" />
+      <!--제이쿼리-->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>견적서</title>
+    <style type="text/css" media="print">
+        @page {
+            size: auto;  /* auto is the initial value */
+            margin: 0;  
+            /* this affects the margin in the printer settings */
+        }
+    
+        </style>
 </head>
+
 <body>
- <div style="width:1000px; margin:0px auto;">
+ <div id="print_section" style="width:1000px; margin:0px auto; position: relative;">
     <h3 style="border-bottom: 1px solid black; padding: 10px; padding-bottom: 0px; width: 130px; margin:0px auto;" >
         견&nbsp&nbsp&nbsp적&nbsp&nbsp&nbsp서
     </h3>
     <h5 class='text-right' style="font-size: 13px; position: relative; left: -15px;">
-        발행일: 2020년 1월 30일
+        발행일: 2020년 2월 6일
     </h5>
     <div class="row">
-     <table class="table table-bordered" style="float: left; width: 490px;">
+     <table class="table table-bordered" style="margin-left: 30px; float: left; width: 47%; height: 251px;">
         <tr>
             <td class="text-center" colspan="8">공급받는자</td>    
         </tr>
         <tr>
             <td class='text-center'>사업자<br>번호</td>
-            <td class='text-center' colspan="7">
-                <input type="text" style="border:0px;" placeholder="입력해주세요">
+            <td class='text-center write' colspan="7" >
+                <input  type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text">58498498</p>
             </td>
+         
+            
         </tr>
         <tr>
             <td class='text-center'>상호</td>
-            <td class='text-center' colspan="3">
-                <input type="text" style="border:0px;" placeholder="입력해주세요">
+            <td class='text-center write' colspan="3">
+                <input   type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
             </td>
             <td class='text-center'>대표</td>
-            <td class='text-center' colspan="3">
-                <input type="text" style="border:0px;" placeholder="입력해주세요">
-        </tr>
+            <td class='text-center write' colspan="3">
+                <input   type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
+            </td>
+
+            
         <tr>
             <td class='text-center'>주소</td>
-            <td class='text-center' colspan="7">
+            <td class='text-center write' colspan="7">
                 <input type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
             </td>
+            
         </tr>
         <tr>
             <td class="text-center">업태</td>
-            <td class='text-center' colspan="3">
-                <input type="text" style="border:0px;" placeholder="입력해주세요">
+            <td class='text-center write' colspan="3">
+                <input  type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
             </td>
             <td class="text-center"> 종목</td>
-            <td class='text-center' colspan="3">
+            <td class='text-center write' colspan="3">
                 <input type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
             </td>
         </tr>
         <tr>
             <td class="text-center">전화</td>
-            <td class='text-center' colspan="3">
-                <input type="text" style="border:0px;" placeholder="입력해주세요">
+            <td class='text-center write' colspan="3">
+                <input  type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
             </td>
             <td class="text-center"> 팩스</td>
-            <td class='text-center' colspan="3">
-                <input type="text" style="border:0px;" placeholder="입력해주세요">
+            <td class='text-center write' colspan="3">
+                <input  type="text" style="border:0px;" placeholder="입력해주세요">
+                <p class="write-text"></p>
             </td>
         </tr>
     
      </table>
-     <table class="table table-bordered" style="width:490px; position: relative;left:20px; height: 251px; ">
+     <table class="table table-bordered" style="width:45%; margin-left:52%; height: 251px; ">
         <tr>
 
             <td class="text-center" colspan="8">공급자</td>
@@ -114,7 +140,7 @@
      </table>
      
     </div>
-    <table class="table table-bordered" style="position: relative; left:-16px;">
+    <table class="table table-bordered" style="width: 97%; position: relative; left:14px;">
         <tr>
             <td class="text-center col-md-1" >번호</td>
             <td class="text-center col-md-6" >제품명</td>
@@ -138,8 +164,43 @@
     </table>
  </div>
 <div class="text-center">
-    <button style="width: 100px ; height:36px;">  인쇄하기 </button>
+    <a id="print"><button id="print-button" style="width: 100px ; height:36px; color: black">  인쇄하기 </button>
+    </a>
 </div>
- 
+ <script>
+     $(".write-text").css({
+         "display":"none",
+         "width" : "170px",
+         "height" : "22px",
+        });
+     function info_print() {
+        var initBody = document.body.innerHTML;
+        window.onbeforeprint = function () {
+        document.body.innerHTML = document.getElementById("print_section").innerHTML;
+        }
+        window.onafterprint = function () {
+            document.body.innerHTML = initBody;
+            window.location.reload();
+        }
+        window.print();
+
+}
+/*$(".write").keyup(function(){
+    
+    $(this).next("p").text($(this).val());
+});*/
+
+$("#print").click(function(){
+        $(".write").each(function(index, item){
+            var value = $(item).children("input").val();
+            if(value)
+            $(item).text(value);
+         });
+         
+     
+         $("#print").css("display","none");
+         info_print();
+     });
+ </script>
 </body>
 </html>
