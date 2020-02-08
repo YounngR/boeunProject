@@ -131,7 +131,7 @@
                             <input type="checkbox" style="width: 17px; margin-top:20px; margin-left:12px;">
                             <div style="margin-top:-16px; margin-left:34px;">
                                 <div style="display: inline-block; margin-right: 10px;">아이디 저장</div>
-                                <div style="display: inline-block; margin-left: 120px;">아이디 찾기</div>
+                                <div style="display: inline-block; margin-left: 120px; cursor: pointer;" onclick="forgetId();">아이디 찾기</div>
                                 <div style="display: inline-block; margin-left: 15px;">비밀번호 찾기</div>
                             </div>
 
@@ -144,5 +144,10 @@
 
         </div>
     </form>
-
+    <script>
+        //아이디 찾기 클릭시
+        function forgetId(){
+            location.href="{% url 'boeun_bread:forgetId' %}";
+        }
+    </script>
 </body>
