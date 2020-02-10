@@ -60,4 +60,9 @@ urlpatterns = [
 
      #견적서
     path('estimate/',views.estimate,name='estimate'),
+    #아이디 찾기
+    path('forgetId/',views.forget_id,name="forgetId"),
+    #비밀번호찾기
+    path('forgetPw/',views.forget_pw,name="forgetPw"),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

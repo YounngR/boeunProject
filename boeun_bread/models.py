@@ -25,17 +25,17 @@ class Cart(models.Model):
 
 class Cart_Product(models.Model):
     Cart          = models.ForeignKey(Cart, on_delete=models.DO_NOTHING)
-    product_id    = models.IntegerField() 
+    product_id    = models.IntegerField()
     product_img   = models.ImageField()
     product_name  = models.CharField(max_length=50)
     product_price = models.IntegerField(default=0)
     product_count = models.IntegerField(default=0)
-    
+
 
 
 class Order(models.Model):
     User = User  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    User_address = models.CharField(max_length=50)
+    User_address = models.CharField(max_length=200)
     Total_price = models.IntegerField(default=0)
     Order_date = models.DateTimeField()
 

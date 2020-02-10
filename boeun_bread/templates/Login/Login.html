@@ -198,5 +198,14 @@ function getCookie(cookieName) {
 
         </div>
     </form>
-
+    <script>
+        //아이디 찾기 클릭시
+        function forgetId(){
+            location.href="{% url 'boeun_bread:forgetId' %}";
+        }
+        //비밀번호 찾기 클릭시
+        function forgetPw(){
+          location.href="{% url 'boeun_bread:forgetPw' %}";
+        }
+    </script>
 </body>
