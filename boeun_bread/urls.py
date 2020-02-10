@@ -44,6 +44,8 @@ urlpatterns = [
     path('SignUp/cert/<pk>',views.certification,name="cert"),
     path('SignUp/sendEmail',views.send_email,name="sendEmail"),
 
+    #결제
+    path('payment_result',views.payment_result,name='payment_result'),
 
     #찾아오시는 길
     path('boeun_map/',views.boeun_map,name="boeun_map"),

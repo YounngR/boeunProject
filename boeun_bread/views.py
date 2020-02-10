@@ -276,6 +276,62 @@ def delete_user(request):
 def search_order(request):
     return render(request, 'mypage/search_order.html')
 
+#아이디 찾기
+def forget_id(request):
+    context = {}
+    if request.method == "POST":
+        user_name  = request.POST.get('user_name')
+        user_phone = request.POST.get('user_phone')
+        profile    = Profile.objects.filter(
+                        U_name  = user_name,
+                        U_phone = user_phone
+                    )
+        if profile:
+            context['user_id'] = profile[0].user.username
+
+        else:
+            context['msg']        = "이름 또는 전화번호가 존재하지 않습니다."
+            context['user_name']  = user_name
+            context['user_phone'] = user_phone
+    return render(request,'forget/forget_id.html',context)
+#비밀번호 찾기
+def forget_pw(request):
+    context = {}
+    if request.method == "POST":
+        user_id    = request.POST.get('user_id')
+        user_email = request.POST.get('user_email')
+        user       = get_object(
+                        User,
+                        username         = user_id,
+                        profile__U_email = user_email
+                     )
+        if user:
+            password = create_temp_password()
+            user.set_password(password)
+            user.save()
+            email = EmailMessage("임시비밀번호 입니다.", password, to=[user.profile.U_email])
+            email.send()
+            return redirect("/Login")
+        else:
+            context['msg']        = "아이디 또는 이메일이 존재하지 않습니다."
+            context['user_id']    = user_id
+            context['user_email'] = user_email
+
+    return render(request,'forget/forget_pw.html',context)
+from random import randint
+ #임시 비밀번호 생성
+def create_temp_password():
+    data = [
+        '0','1','2','3','4','5','6','7','8','9',
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        '?','~','!','@','#','&','(',')'
+    ]
+    password=""
+    for i in range(12):
+        password += data[randint(0,len(data)-1)]
+    return password
+
 def order_history(request):
     return render(request, 'mypage/order_history.html')
 
@@ -335,7 +391,6 @@ def add_cart(request,pk,count):
     return response
 #장바구니 상품삭제
 def del_cart(request,pk):
-    print(pk)
     cp = get_object_or_404(Cart_Product,pk=pk)
     cp.delete()
     return HttpResponse("success")
@@ -448,11 +503,54 @@ def order(request):
         'product':product
     }
     return render(request, 'boeun_bread/order.html',context)
-#주문 detail 페이지    
+#주문 detail 페이지
 def order_detail(request,pk):
     prod = get_object_or_404(Product,pk=pk)
 
-    return render(request, 'boeun_bread/order_detail.html',{'prod':prod})   
+    return render(request, 'boeun_bread/order_detail.html',{'prod':prod})
+
+def payment_result(request):
+    user = None
+
+    if request.user.is_authenticated:
+        user = request.user.profile
+    else:
+        cookie_id = request.COOKIES.get('cookie_id')
+        user = get_object(Profile, cookie_id=cookie_id)
+
+        user.U_phone = request.POST.get('phone')
+        user.U_name = request.POST.get('phone')
+        user.U_email = request.POST.get('phone')
+
+        user.save()
+
+
+    cart = get_object(Cart, User=user)
+
+    order = Order.objects.create(
+        User = user,
+        User_address = request.POST.get('address'),
+        Total_price = request.POST.get('Total_price'),
+    )
+    print("="*20)
+
+    print( request.POST.getlist('prod_pk[]'))
+    for prod_pk in request.POST.getlist('prod_pk[]'):
+        product = get_object(Product, pk=prod_pk)
+        cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
+        print(cp)
+        Order_Product.objects.create(
+            Order = order,
+            product_id = product.pk,
+            product_img = product.P_img,
+            product_name = product.P_name,
+            product_price = product.P_price,
+            product_count = cp.product_count,
+        )
+
+    Cart_Product.objects.filter(Cart=cart).delete()
+    return HttpResponse("success")
+
 
 
 #본빵이야기
@@ -481,59 +579,3 @@ def boeun_map(request):
 #견적서
 def estimate(request):
     return render(request,'Estimate/estimate.html')
-
-#아이디 찾기
-def forget_id(request):
-    context = {}
-    if request.method == "POST":
-        user_name  = request.POST.get('user_name')
-        user_phone = request.POST.get('user_phone')
-        profile    = Profile.objects.filter(
-                        U_name  = user_name,
-                        U_phone = user_phone
-                    )
-        if profile:
-            context['user_id'] = profile[0].user.username
-
-        else:
-            context['msg']        = "이름 또는 전화번호가 존재하지 않습니다."
-            context['user_name']  = user_name
-            context['user_phone'] = user_phone 
-    return render(request,'forget/forget_id.html',context)
-#비밀번호 찾기
-def forget_pw(request):
-    context = {}
-    if request.method == "POST":
-        user_id    = request.POST.get('user_id')
-        user_email = request.POST.get('user_email')
-        user       = get_object(
-                        User,
-                        username         = user_id,
-                        profile__U_email = user_email
-                     )
-        if user:
-            password = create_temp_password()
-            user.set_password(password)
-            user.save()
-            email = EmailMessage("임시비밀번호 입니다.", password, to=[user.profile.U_email])
-            email.send()
-            return redirect("/Login")
-        else:
-            context['msg']        = "아이디 또는 이메일이 존재하지 않습니다."
-            context['user_id']    = user_id
-            context['user_email'] = user_email
-               
-    return render(request,'forget/forget_pw.html',context)
-from random import randint
- #임시 비밀번호 생성
-def create_temp_password():
-    data = [
-        '0','1','2','3','4','5','6','7','8','9',
-        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-        '?','~','!','@','#','&','(',')'
-    ]   
-    password=""
-    for i in range(12):
-        password += data[randint(0,len(data)-1)]
-    return password    

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'js/jquery.mCustomScrollbar.css' %}" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
     <style>
 
         #cart-content{
@@ -125,7 +126,7 @@
 
             <ul id="product-list" class="content">
                 {% for c in cp %}
-                 <li>
+                 <li  class="item" pk="{{c.product_id}}">
                     <img width="87" height="90" src="/media/{{ c.product_img }}">
                     <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px;">{{ c.product_name }}</span>
                     <div class="pm-count">
@@ -159,17 +160,17 @@
                     <!--이메일-->
                     <div class="field-box">
                         <span>이메일 :</span>
-                        <input type="email" value="{{request.user.profile.U_email}}" >
+                        <input type="email" id="email" value="{{request.user.profile.U_email}}" >
                     </div>
                     <!--이름-->
                     <div class="field-box">
                         <span>이름 :</span>
-                        <input type="text" value="{{request.user.profile.U_name}}" >
+                        <input type="text" id="name" value="{{request.user.profile.U_name}}" >
                     </div>
                     <!--핸드폰 번호-->
                     <div class="field-box">
                         <span>핸드폰 번호 :</span>
-                        <input type="text" value="{{request.user.profile.U_phone}}">
+                        <input type="text" id="phone" value="{{request.user.profile.U_phone}}">
                     </div>
                 </form>
             </div>
@@ -184,7 +185,7 @@
                     <span id="total-money"></span> 원
                 </div>
             </div>
-            <div id="pay-btn">
+            <div id="pay-btn" onclick="payment()">
                 결제하기
             </div>
 
@@ -228,7 +229,7 @@
                     }
                     // 조합된 참고항목을 해당 필드에 넣는다.
                     //document.getElementById("sample6_extraAddress").value = extraAddr;
-                
+
                 } else {
                    // document.getElementById("sample6_extraAddress").value = '';
                 }
@@ -237,13 +238,13 @@
                 //document.getElementById('sample6_postcode').value = data.zonecode;
                 //document.getElementById("sample6_address").value = addr;
                 document.getElementById("addr").value = (addr+extraAddr);
-                
+
                 // 커서를 상세주소 필드로 이동한다.
                 //document.getElementById("sample6_detailAddress").focus();
             }
         }).open();
     }
-    
+
     // 주소 필드 클릭시 주소api 로드
     $("#addr").click(function(){
         execDaumPostcode();
@@ -266,7 +267,7 @@
 
         $("#total-money").text(sum);
     }
-   
+
     $(".content").mCustomScrollbar({});
     //plus 버튼 클릭시
     $(".plus").click(function(){
@@ -318,6 +319,67 @@
 
                 }
             });
+    }
+
+    //결제하기
+    function payment(){
+        prod_list=[];
+        $(".item").each(function(index,item){
+
+            prod_list.push($(item).attr("pk"));
+
+        });
+
+      $.ajax({
+              type : "POST",
+              url : "{% url 'boeun_bread:payment_result' %}",
+              data : {
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'address' : $("#addr").val(),
+                'name' : $("#name").val(),
+                'email' : $("#email").val(),
+                'phone' : $("#phone").val(),
+                'prod_pk':prod_list,
+                'Total_price' : $("#total-money").text(),
+              },
+
+              success : function(response)
+              {
+                location.href="/";
+              }
+          });
+
+      // var IMP = window.IMP; // 생략가능
+      // IMP.init('imp91382374'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+      //
+      // IMP.request_pay({
+      //   pg : 'inicis', // version 1.1.0부터 지원.
+      //   pay_method : 'card',
+      //   merchant_uid : 'merchant_' + new Date().getTime(),
+      //   name : '보은군',
+      //   amount : 100,//$("#total-money").text(),
+      //   buyer_email : 'iamport@siot.do',
+      //   buyer_name : '{{request.user.profile.U_name}}',
+      //   buyer_tel : '{{request.user.profile.U_phone}}',
+      //   buyer_addr : '서울특별시 강남구 삼성동',
+      //   buyer_postcode : '123-456',
+      //   m_redirect_url : 'https://www.yourdomain.com/payments/complete'
+      // }, function(rsp) {
+      // if ( rsp.success ) {
+      //   var msg = '결제가 완료되었습니다.';
+      //   msg += '고유ID : ' + rsp.imp_uid;
+      //   msg += '상점 거래ID : ' + rsp.merchant_uid;
+      //   msg += '결제 금액 : ' + rsp.paid_amount;
+      //   msg += '카드 승인번호 : ' + rsp.apply_num;
+      //   prod_list = []
+
+      //
+      // } else {
+      //   var msg = '결제에 실패하였습니다.';
+      //   msg += '에러내용 : ' + rsp.error_msg;
+      // }
+      //   alert(msg);
+      // });
     }
 </script>
 {% endblock %}
