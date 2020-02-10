@@ -1,1 +1,206 @@
-고객센터
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+<!--나눔스퀘어-->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+<style>
+    body{ font-family: 'NanumSquareRound',sans-serif;}
+    .box{
+        width:983px;
+        height: 584px;
+        border: 1px solid rgb(127,126,126);
+        margin:0 auto;
+        position: relative;
+    }
+    ul{
+        list-style: none;
+    }
+    ul > li{
+        font-size: 13px;
+        font-weight: 700;
+    }
+    #footer-box li{
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .guide{
+        margin-top:45px;
+        margin-left: 52px;
+        
+    }
+    
+    .top-line{
+        width:130px;
+        margin:18px auto; padding:0px;
+        border-color: #9E9E9E;
+
+    }
+    #btn-list-box > li{
+        width:246px;
+        margin-left:27px;
+        float: left;
+        text-align: center;
+
+    }
+    #btn-list-box img{
+        width:100px;
+        height: 103px;
+    }
+    .title{
+        font-size:20px; font-weight: bold;
+    }
+    #btn-list-box .link{
+        width:107px;
+        height: 30px;
+        background-color: rgb(218,218,218);
+        color:black;
+        margin:0 auto;
+        line-height: 30px;
+        cursor: pointer;
+    }
+   #table{
+       width:983px;
+       height: 84px;
+       margin:0 auto;
+       margin-top: 40px;
+   }
+
+   .table > thead > tr > td,
+    .table > tbody > tr > td,
+    .table > tfoot > tr > td {
+        border: 0px;
+        border-bottom:1px solid #9E9E9E;
+        
+    }
+    .table > thead{
+        background:#EBEDE2;
+    }
+   
+    #footer-box{
+        width:983px;
+        margin: 0 auto;
+    }
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
+</div>
+<div style="margin-top:14px; margin-left:99px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">고객센터</p>
+</div>
+<div class="box">
+    <div class="guide">
+        <p style="font-size: 25px; font-weight: bold;">
+            고객상담안내
+        </p>
+        <ul>
+            <li>
+                - 본 빵을 이용하시면서 문의사항이 있으시면 말씀해주세요.<br>
+                  &nbsp 더 나은 서비스를 제공하기 위해 노력하겠으며, 최선을 다해 답변 드리겠습니다.
+            
+            </li>
+            <li>
+                - 문의하신 내용에 대한 답변은 요청 시 등록하신 E-Mail로 발송되며,<br>
+                 &nbsp "온라인 상담 내역"을 통해 확인 가능합니다.
+            </li>
+        </ul>
+        <div style="position: absolute; right:119px; top:96px;">
+            <p style="font-weight: bold; font-size: 30px; text-align: center;">
+                고객상담 안내<br>
+                043-544-5446
+            </p>
+        </div>
+    </div>
+    <div class="guide">
+        <p style="font-size: 25px; font-weight: bold;">
+            고객센터 운영 안내
+        </p>
+        <ul>
+            <li>
+                - 9시 ~ 17시 (주말,공휴일 제외)
+            </li>
+        </ul>
+        <ul id="btn-list-box">
+            <li>
+                <hr class="top-line">
+                <img src="{% static 'img/service_center/FAQ.png' %}">
+                <p class="title">
+                    FAQ
+                </p>
+                <p>
+                    고객님께서 자주 문의하시는 내용에 대한<br>
+                    답변을 준비했습니다.
+                </p>
+                <div class="link" onclick="faq_click();">바로가기</div>
+            </li>
+            <li>
+                <hr class="top-line">
+                <img  src="{% static 'img/service_center/online_cnslt.png' %}">
+                <p class="title">
+                    온라인 상담
+                </p>
+                <p>
+                    홈페이지를 통해서 온라인 상담을<br>
+                    24시간 접수를 받고 있습니다.
+                </p>
+                <div class="link" onclick="online_cnstl_click();">바로가기</div>
+            </li>
+            <li>
+                <hr class="top-line">
+                <img  src="{% static 'img/service_center/online_cnslt_history.png' %}">
+                <p class="title">
+                    온라인 상담 내역
+                </p>
+                <p>
+                    홈페이지를 통해 온라인 상담한 내역을<br>
+                    확인할 수 있습니다.
+                </p>
+                <div class="link" onclick="online_cnstl_history_click();">바로가기</div>           
+            </li>
+        </ul>
+    </div>
+</div>
+
+    <table class="table" id="table">
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>피해유형</th>
+                <th>보상기준</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    식품
+                </td>
+                <td>
+                    함략, 용량부족, 부패변질, 유통기간경과, 이물혼입
+                </td>
+                <td>
+                    제품교환 또는 구입가 환불
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <div id="footer-box">
+        <p class="title" style="margin-top: 64px;">
+            접수안내
+        </p>
+        <ul>
+            <li>
+                - 로그인 후 1시간 경과 시 고객님의 개인정보 보호를 위해 자동 로그아웃 됩니다.
+            </li>
+            <li>
+                - 욕설, 광고, 타인의 명예를 훼손하는 자료 등을 올리시거나 반복적으로 비난성 글을 올리시는 회원님의 게시물은 별도 통보 없이
+                임의 삭제되거나, 답변드리지 않을 수 있습니다.
+            </li>
+            <li>
+                - 접수해 주신 내용은 공정거래위원회 고시 소비자 분쟁 해결기준에 의거하여 처리됩니다.
+            </li>
+        </ul>
+    </div>
+{% endblock %}
