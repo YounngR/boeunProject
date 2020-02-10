@@ -27,7 +27,7 @@ def get_object(model,**args):
     query_set = model.objects.filter(**args)
     return query_set[0] if query_set else None
 
-
+ 
 def main(request):
 
 
@@ -348,7 +348,7 @@ def cart(request):
 
     cart = get_object(Cart,User=profile)
     cp   = Cart_Product.objects.filter(Cart=cart)
-    return render(request, 'cart/cart.html',{'cp':cp})
+    return render(request, 'cart/cart.html',{'cp':cp,'cart':cart})
 
 #장바구니 담기
 def add_cart(request,pk,count):
@@ -519,8 +519,8 @@ def payment_result(request):
         user = get_object(Profile, cookie_id=cookie_id)
 
         user.U_phone = request.POST.get('phone')
-        user.U_name = request.POST.get('phone')
-        user.U_email = request.POST.get('phone')
+        user.U_name = request.POST.get('name')
+        user.U_email = request.POST.get('email')
 
         user.save()
 
@@ -532,13 +532,10 @@ def payment_result(request):
         User_address = request.POST.get('address'),
         Total_price = request.POST.get('Total_price'),
     )
-    print("="*20)
-
-    print( request.POST.getlist('prod_pk[]'))
     for prod_pk in request.POST.getlist('prod_pk[]'):
         product = get_object(Product, pk=prod_pk)
         cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
-        print(cp)
+    
         Order_Product.objects.create(
             Order = order,
             product_id = product.pk,
@@ -550,7 +547,19 @@ def payment_result(request):
 
     Cart_Product.objects.filter(Cart=cart).delete()
     return HttpResponse("success")
-
+#결제 금액 가제오기
+from django.http import Http404
+def get_total(request):
+    context = {
+        'total':0
+    }
+    if request.method == "POST":
+        cart = get_object(Cart,pk=request.POST.get('cart_pk'))
+        if cart:
+            context['total'] = cart.get_total()
+    else:
+        raise Http404       
+    return HttpResponse(json.dumps(context), content_type="application/json")
 
 
 #본빵이야기
