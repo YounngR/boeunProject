@@ -481,3 +481,59 @@ def boeun_map(request):
 #견적서
 def estimate(request):
     return render(request,'Estimate/estimate.html')
+
+#아이디 찾기
+def forget_id(request):
+    context = {}
+    if request.method == "POST":
+        user_name  = request.POST.get('user_name')
+        user_phone = request.POST.get('user_phone')
+        profile    = Profile.objects.filter(
+                        U_name  = user_name,
+                        U_phone = user_phone
+                    )
+        if profile:
+            context['user_id'] = profile[0].user.username
+
+        else:
+            context['msg']        = "이름 또는 전화번호가 존재하지 않습니다."
+            context['user_name']  = user_name
+            context['user_phone'] = user_phone 
+    return render(request,'forget/forget_id.html',context)
+#비밀번호 찾기
+def forget_pw(request):
+    context = {}
+    if request.method == "POST":
+        user_id    = request.POST.get('user_id')
+        user_email = request.POST.get('user_email')
+        user       = get_object(
+                        User,
+                        username         = user_id,
+                        profile__U_email = user_email
+                     )
+        if user:
+            password = create_temp_password()
+            user.set_password(password)
+            user.save()
+            email = EmailMessage("임시비밀번호 입니다.", password, to=[user.profile.U_email])
+            email.send()
+            return redirect("/Login")
+        else:
+            context['msg']        = "아이디 또는 이메일이 존재하지 않습니다."
+            context['user_id']    = user_id
+            context['user_email'] = user_email
+               
+    return render(request,'forget/forget_pw.html',context)
+from random import randint
+ #임시 비밀번호 생성
+def create_temp_password():
+    data = [
+        '0','1','2','3','4','5','6','7','8','9',
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        '?','~','!','@','#','&','(',')'
+    ]   
+    password=""
+    for i in range(12):
+        password += data[randint(0,len(data)-1)]
+    return password    
