@@ -159,17 +159,17 @@
                     <!--이메일-->
                     <div class="field-box">
                         <span>이메일 :</span>
-                        <input type="email" >
+                        <input type="email" value="{{request.user.profile.U_email}}" >
                     </div>
                     <!--이름-->
                     <div class="field-box">
                         <span>이름 :</span>
-                        <input type="text" >
+                        <input type="text" value="{{request.user.profile.U_name}}" >
                     </div>
                     <!--핸드폰 번호-->
                     <div class="field-box">
                         <span>핸드폰 번호 :</span>
-                        <input type="text" >
+                        <input type="text" value="{{request.user.profile.U_phone}}">
                     </div>
                 </form>
             </div>

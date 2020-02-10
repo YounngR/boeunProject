@@ -238,8 +238,8 @@
         $("#minus").click(function(){
             var count = parseInt($("#count").val());
             count--;
-            if(count < 0)
-                count = 0;
+            if(count < 1)
+                count = 1;
             $("#count").val(count)
             init();
         });
@@ -277,9 +277,9 @@
         });
         $("#count").keyup(function(){
             var count = parseInt($(this).val());
-            if(count < 0){
+            if(count < 1){
                 $(this).val("");
-                $(this).val(0);
+                $(this).val(1);
             }
             init();
         });
