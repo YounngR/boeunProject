@@ -22,9 +22,16 @@ class Product(models.Model):
 
 class Cart(models.Model):
     User = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    def get_total(self):
+        total = 0
+        query_set = self.CartProduct.all()
+        for obj in query_set:
+            total += (obj.product_price * obj.product_count)
+        return total
+
 
 class Cart_Product(models.Model):
-    Cart          = models.ForeignKey(Cart, on_delete=models.DO_NOTHING)
+    Cart          = models.ForeignKey(Cart, related_name='CartProduct',on_delete=models.DO_NOTHING)
     product_id    = models.IntegerField()
     product_img   = models.ImageField()
     product_name  = models.CharField(max_length=50)
@@ -36,8 +43,10 @@ class Cart_Product(models.Model):
 class Order(models.Model):
     User  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     User_address = models.CharField(max_length=200)
+    Order_Number = models.CharField(max_length=200)
     Total_price = models.IntegerField(default=0)
     Order_date = models.DateTimeField(auto_now_add=True)
+    Order_type = models.IntegerField(default=0) # 0 : 결제확인
 
 class Order_Product(models.Model):
     Order         = models.ForeignKey(Order, on_delete=models.DO_NOTHING)

@@ -66,5 +66,7 @@ urlpatterns = [
     path('forgetId/',views.forget_id,name="forgetId"),
     #비밀번호찾기
     path('forgetPw/',views.forget_pw,name="forgetPw"),
+    #총결제 금액 가져오기
+    path('total/',views.get_total,name="total"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

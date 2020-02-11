@@ -165,7 +165,7 @@
             </p>
             <div style="font-weight: bold; font-size: 14px; color:white; margin-top: 24px;">
                 <div class="footer-btn add-cart-btn"  pk="{{prod.pk}}">장바구니</div>
-                <div class="footer-btn" style="margin-left: 38px;">바로 구매하기</div>
+                <div class="footer-btn add-buy-now" style="margin-left: 38px;" b_pk="{{prod.pk}}">바로 구매하기</div>
             </div>
         </div>
         <!--tab-->
@@ -282,6 +282,22 @@
                 $(this).val(1);
             }
             init();
+        });
+
+        $(".add-buy-now").click(function buy_now(){
+          var pk    = $(this).attr("b_pk");
+          var count = $("#count").val();
+          var url = "/addCart/"+pk+"/"+count
+          $.ajax({
+                type : "GET",
+                url : url,
+
+                success : function(response)
+                {
+                  location.href="{% url 'boeun_bread:cart' %}"
+
+                }
+            });
         });
     </script>
 
