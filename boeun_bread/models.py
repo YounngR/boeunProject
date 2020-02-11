@@ -27,11 +27,8 @@ class Cart(models.Model):
         query_set = self.CartProduct.all()
         for obj in query_set:
             total += (obj.product_price * obj.product_count)
-<<<<<<< HEAD
+
         return total
-=======
-        return total    
->>>>>>> 8f8ba0eb7a7e2cb93660aef61dc0a8b3fcdf99d4
 
 
 class Cart_Product(models.Model):
