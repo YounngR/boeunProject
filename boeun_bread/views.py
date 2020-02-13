@@ -22,6 +22,7 @@ import json
 from datetime import datetime
 from django.db.models import Sum
 
+sitwch = False
 #객체 반환
 def get_object(model,**args):
     query_set = model.objects.filter(**args)
@@ -338,13 +339,48 @@ def order_history(request):
 #주문배송조회
 def order_lookup(request):
     return render(request, 'mypage/order_lookup.html')
+#상품복제
+
+def copy_product(request):
+    '''
+    비회원 장바구니를 회원 장바구니에 복제
+    '''
+    cookie_id     = request.COOKIES.get('cookie_id')
+    profile       = get_object(Profile,cookie_id=cookie_id,U_grade=2) #비회원 profile
+    non_user_cart = get_object(Cart,User=profile)#비회원 장바구니
+    if non_user_cart: # 비회원 cart object가 있으면 밑 내용 실행
+        cart = get_object(Cart,User=request.user.profile) # 회원 장바구니
+        if not cart:
+            cart = Cart.objects.create(User=request.user.profile) #회원 장바구니 없으면 생성
+        non_user_cp   = non_user_cart.CartProduct.all()#비회원 장바구니 모든 상품 가져오기 
+        for obj in non_user_cp:
+            cp = get_object(Cart_Product,Cart=cart,product_id=obj.product_id)
+            if cp: # 회원장바구니에 해당 상품 있으면 수량만 +
+                cp.product_count = cp.product_count + obj.product_count
+                cp.save()
+            else: # 회원장바구니에 해당 상품 없으면 장바구니 상품 생성   
+                Cart_Product.objects.create(
+                    Cart          = cart,
+                    product_id    = obj.product_id,
+                    product_img   = obj.product_img,
+                    product_name  = obj.product_name,
+                    product_price = obj.product_price,
+                    product_count = obj.product_count
+                )
+        non_user_cp.delete() # 비회원 장바구니 모든 상품 삭제        
+
+
+        
 
 #장바구니
 def cart(request):
+    
     profile =  request.user.profile if request.user.is_authenticated else None
     if not profile:
         cookie_id = request.COOKIES.get('cookie_id')
         profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
+    else:
+        copy_product(request)    
 
     cart = get_object(Cart,User=profile)
     cp   = Cart_Product.objects.filter(Cart=cart)
@@ -395,10 +431,11 @@ def del_cart(request,pk):
     cp.delete()
     return HttpResponse("success")
 
-
+#쿠키추가
 def add_cookie(response):
+    now     = datetime.now()
     max_age = 365*24*60*60
-    now = datetime.now()
+    
     value = str(now.year)+str(now.month)+\
             str(now.day)+str(now.hour)+\
             str(now.minute)+str(now.second)+str(now.microsecond)
@@ -537,6 +574,7 @@ def payment_result(request):
 
     order = Order.objects.create(
         User = user,
+        Order_Number = create_order_number(),
         User_address = request.POST.get('address'),
         Total_price = request.POST.get('Total_price'),
     )
@@ -568,6 +606,13 @@ def get_total(request):
     else:
         raise Http404
     return HttpResponse(json.dumps(context), content_type="application/json")
+
+#주문번호 생성
+def create_order_number():
+    now   = datetime.now()
+    date  = str(now.year)+str(now.month)+str(now.day)
+    value = str(now.hour)+str(now.minute)+str(now.second)+str(now.microsecond)
+    return date+"_"+format(int(value), 'o')
 
 
 #본빵이야기
