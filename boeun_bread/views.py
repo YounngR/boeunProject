@@ -352,13 +352,13 @@ def copy_product(request):
         cart = get_object(Cart,User=request.user.profile) # 회원 장바구니
         if not cart:
             cart = Cart.objects.create(User=request.user.profile) #회원 장바구니 없으면 생성
-        non_user_cp   = non_user_cart.CartProduct.all()#비회원 장바구니 모든 상품 가져오기 
+        non_user_cp   = non_user_cart.CartProduct.all()#비회원 장바구니 모든 상품 가져오기
         for obj in non_user_cp:
             cp = get_object(Cart_Product,Cart=cart,product_id=obj.product_id)
             if cp: # 회원장바구니에 해당 상품 있으면 수량만 +
                 cp.product_count = cp.product_count + obj.product_count
                 cp.save()
-            else: # 회원장바구니에 해당 상품 없으면 장바구니 상품 생성   
+            else: # 회원장바구니에 해당 상품 없으면 장바구니 상품 생성
                 Cart_Product.objects.create(
                     Cart          = cart,
                     product_id    = obj.product_id,
@@ -367,20 +367,20 @@ def copy_product(request):
                     product_price = obj.product_price,
                     product_count = obj.product_count
                 )
-        non_user_cp.delete() # 비회원 장바구니 모든 상품 삭제        
+        non_user_cp.delete() # 비회원 장바구니 모든 상품 삭제
 
 
-        
+
 
 #장바구니
 def cart(request):
-    
+
     profile =  request.user.profile if request.user.is_authenticated else None
     if not profile:
         cookie_id = request.COOKIES.get('cookie_id')
         profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
     else:
-        copy_product(request)    
+        copy_product(request)
 
     cart = get_object(Cart,User=profile)
     cp   = Cart_Product.objects.filter(Cart=cart)
@@ -435,7 +435,7 @@ def del_cart(request,pk):
 def add_cookie(response):
     now     = datetime.now()
     max_age = 365*24*60*60
-    
+
     value = str(now.year)+str(now.month)+\
             str(now.day)+str(now.hour)+\
             str(now.minute)+str(now.second)+str(now.microsecond)
@@ -554,6 +554,7 @@ def order_detail(request,pk):
 
     return render(request, 'boeun_bread/order_detail.html',{'prod':prod})
 
+#주문하기
 def payment_result(request):
     user = None
 
