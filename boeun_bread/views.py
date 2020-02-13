@@ -144,25 +144,29 @@ def agreement(request):
 #회원가입
 def SignUp(request):
     if request.method == "POST":
-        if not User.objects.filter(username=request.POST.get('user_id')):
-            email_text = request.POST.get('email_text')
-            email_select = request.POST.get('email_select')
-            user_email = email_text+'@'+email_select
+        if not request.POST.get('is_check'):
+            if not User.objects.filter(username=request.POST.get('user_id')):
+                email_text = request.POST.get('email_text')
+                email_select = request.POST.get('email_select')
+                user_email = email_text+'@'+email_select
 
-            user = User.objects.create_user(
-                username = request.POST.get('user_id'),
-                password = request.POST.get('user_pwd'),
+                user = User.objects.create_user(
+                    username = request.POST.get('user_id'),
+                    password = request.POST.get('user_pwd'),
 
-            )
-            profile = Profile.objects.create(
-                user    = user,
-                U_phone = request.POST.get('user_phone'),
-                U_name  = request.POST.get('user_name'),
-                U_email = user_email
-            )
-            profile.U_is_active = False
+                )
+                profile = Profile.objects.create(
+                    user    = user,
+                    U_phone = request.POST.get('user_phone'),
+                    U_name  = request.POST.get('user_name'),
+                    U_email = user_email
+                )
+                profile.U_is_active = False
 
-            return redirect('/SignUp/cert/'+str(profile.pk))
+                return redirect('/SignUp/cert/'+str(profile.pk))
+    else:
+        if not request.POST.get('is_check'):#이용약관 동의 하지 않으면 이용약관 페이지 이동
+            return redirect('/agreement')        
 
     return render(request,'SignUp/SignUp.html')
 #회원가입 > 본인인증
@@ -234,13 +238,13 @@ def activate(request, uid64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.U_is_active = True
         user.save()
-        return redirect('boeun_bread:SignUpOk')
+        return render(request, 'SignUp/signupok.html')
     else:
         return HttpResponse('비정상적인 접근입니다.')
 
 #회원가입 완료 페이지
-def SignUpOk(request):
-    return render(request, 'SignUp/signupok.html')
+# def SignUpOk(request):
+#     return render(request, 'SignUp/signupok.html')
 
 #마이페이지
 #회원정보수정
