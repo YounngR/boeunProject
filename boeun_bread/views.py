@@ -27,7 +27,7 @@ def get_object(model,**args):
     query_set = model.objects.filter(**args)
     return query_set[0] if query_set else None
 
- 
+
 def main(request):
 
 
@@ -503,6 +503,14 @@ def order(request):
         'product':product
     }
     return render(request, 'boeun_bread/order.html',context)
+
+#주문번호 생성
+def create_order_number():
+    now   = datetime.now()
+    date  = str(now.year)+str(now.month)+str(now.day)
+    value = str(now.hour)+str(now.minute)+str(now.second)+str(now.microsecond)
+    return date+"_"+format(int(value), 'o')
+
 #주문 detail 페이지
 def order_detail(request,pk):
     prod = get_object_or_404(Product,pk=pk)
@@ -535,7 +543,7 @@ def payment_result(request):
     for prod_pk in request.POST.getlist('prod_pk[]'):
         product = get_object(Product, pk=prod_pk)
         cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
-    
+
         Order_Product.objects.create(
             Order = order,
             product_id = product.pk,
@@ -558,7 +566,7 @@ def get_total(request):
         if cart:
             context['total'] = cart.get_total()
     else:
-        raise Http404       
+        raise Http404
     return HttpResponse(json.dumps(context), content_type="application/json")
 
 
@@ -585,6 +593,12 @@ def Service_center(request):
 #찾아오시는 길
 def boeun_map(request):
     return render(request,'boeun_bread/boeun_map.html')
+#이용약관
+def terms_and_conditions(request):
+    return render(request, 'mypage/terms_and_conditions.html')
+#개인정보처리방침
+def Privacy_Policy(request):
+    return render(request, 'mypage/Privacy_Policy.html')
 #견적서
 def estimate(request):
     return render(request,'Estimate/estimate.html')

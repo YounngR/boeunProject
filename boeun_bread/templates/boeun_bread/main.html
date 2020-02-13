@@ -2,10 +2,27 @@
 
 {% block content %}
 {% load static %}
+
     <style>
+
+      .main{
+        height:800px;
+        width: 1200px;
+        position: relative;
+        background:url("/static/img/main/main.jpg");
+      }
 
     </style>
 
-    <img width="1200px" height="550px" src="{% static 'img/main/main_banner.jpg'%}" style="padding-top:12px;">
-    <img width="1200px" height="755px" src="{% static 'img/main/main_sample.jpg'%}" style="padding-top:12px;">
+    <img width="1200px" height="550px" src="{% static 'img/main/main_banner.jpg'%}" >
+    <div class="main">
+      <div style="margin-left:450px; margin-top:200px; width:140px; height:140px; cursor:pointer; position:absolute;" onclick="test()"></div>
+    </div>
+
+
+    <script>
+      function test(){
+        location.href="/order/detail/1"
+      }
+    </script>
 {% endblock %}

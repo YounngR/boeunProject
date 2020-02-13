@@ -50,6 +50,13 @@ urlpatterns = [
     #찾아오시는 길
     path('boeun_map/',views.boeun_map,name="boeun_map"),
 
+    #이용약관
+    path('terms_and_conditions/',views.terms_and_conditions,name="terms_and_conditions"),
+
+    #개인정보처리방침
+    path('Privacy_Policy/',views.Privacy_Policy,name="Privacy_Policy"),
+
+
     #본빵이야기
     path('bread_birth/', views.Bread_Birth, name="Bread_Birth"),
     path('boeun_logo_story/', views.bread_logo_story, name="bread_logo_story"),
