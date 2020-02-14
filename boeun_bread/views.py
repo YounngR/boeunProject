@@ -12,15 +12,9 @@ from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 from django.utils.encoding import force_bytes, force_text
-from django.core.mail import EmailMessage
-from django.shortcuts import render,redirect
-from .models import *
-from django.contrib.auth.models import User # 회원가입
-from django.contrib import auth #로그
 from django.contrib.auth.decorators import login_required
-import json
 from datetime import datetime
-from django.db.models import Sum
+#from django.db.models import Sum
 
 sitwch = False
 #객체 반환
@@ -144,25 +138,29 @@ def agreement(request):
 #회원가입
 def SignUp(request):
     if request.method == "POST":
-        if not User.objects.filter(username=request.POST.get('user_id')):
-            email_text = request.POST.get('email_text')
-            email_select = request.POST.get('email_select')
-            user_email = email_text+'@'+email_select
+        if not request.POST.get('is_check'):
+            if not User.objects.filter(username=request.POST.get('user_id')):
+                email_text = request.POST.get('email_text')
+                email_select = request.POST.get('email_select')
+                user_email = email_text+'@'+email_select
 
-            user = User.objects.create_user(
-                username = request.POST.get('user_id'),
-                password = request.POST.get('user_pwd'),
+                user = User.objects.create_user(
+                    username = request.POST.get('user_id'),
+                    password = request.POST.get('user_pwd'),
 
-            )
-            profile = Profile.objects.create(
-                user    = user,
-                U_phone = request.POST.get('user_phone'),
-                U_name  = request.POST.get('user_name'),
-                U_email = user_email
-            )
-            profile.U_is_active = False
+                )
+                profile = Profile.objects.create(
+                    user    = user,
+                    U_phone = request.POST.get('user_phone'),
+                    U_name  = request.POST.get('user_name'),
+                    U_email = user_email
+                )
+                profile.U_is_active = False
 
-            return redirect('/SignUp/cert/'+str(profile.pk))
+                return redirect('/SignUp/cert/'+str(profile.pk))
+    else:
+        if not request.POST.get('is_check'):#이용약관 동의 하지 않으면 이용약관 페이지 이동
+            return redirect('/agreement')
 
     return render(request,'SignUp/SignUp.html')
 #회원가입 > 본인인증
@@ -211,6 +209,7 @@ def LoginPage(request):
         else:
             context['msg'] = "로그인을 실패했습니다."
 
+
         return render(request, 'boeun_bread/main.html',context)
     return redirect('/')
 
@@ -234,13 +233,9 @@ def activate(request, uid64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.U_is_active = True
         user.save()
-        return redirect('boeun_bread:SignUpOk')
+        return render(request, 'SignUp/signupok.html')
     else:
         return HttpResponse('비정상적인 접근입니다.')
-
-#회원가입 완료 페이지
-def SignUpOk(request):
-    return render(request, 'SignUp/signupok.html')
 
 #마이페이지
 #회원정보수정
@@ -338,7 +333,18 @@ def order_history(request):
 
 #주문배송조회
 def order_lookup(request):
-    return render(request, 'mypage/order_lookup.html')
+
+    profile =  request.user.profile if request.user.is_authenticated else None
+    if not profile:
+        cookie_id = request.COOKIES.get('cookie_id')
+        profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
+    else:
+        copy_product(request)
+
+    order = get_object(Order,User=profile)
+    op   = Order_Product.objects.filter(Order=order)
+
+    return render(request, 'mypage/order_lookup.html', {'order':order, 'op':op})
 #상품복제
 
 def copy_product(request):
@@ -443,94 +449,6 @@ def add_cookie(response):
     response.set_cookie('cookie_id',cookie_id,max_age)
     return response,cookie_id
 
-#-----manage
-#관리자 이냐?
-def isAdmin(request):
-    profile = Profile.objects.get(user=request.user)
-    return True if profile.U_grade == 0 else False
-
-
-#관리자 main
-@login_required
-def manage(request):
-    if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
-
-    return render(request,'manage/manage_main.html')
-
-#상품등록
-@login_required
-def create_product(request):
-    if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
-    if request.method == "POST":
-        is_new = True if request.POST.get('is_new')=="on" else False
-
-        Product.objects.create(
-            P_img        = request.FILES.get('bread_img'),
-            P_name       = request.POST.get('bread_name'),
-            P_price      = request.POST.get('bread_price'),
-            P_newProduct = is_new
-        )
-        return redirect('/manage')
-    return render(request,'manage/create_product.html')
-#수정상품 리스트
-@login_required
-def modify_list(request):
-    if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
-    product = Product.objects.all()
-
-    return render(request,'manage/modify_list.html',{'product':product})
-
-#상품객체 반환
-def getProduct(pk):
-    product = Product.objects.filter(id=pk)
-    if product:
-        return product[0]
-    else:
-        return redirect("/manage/modify_list")
-
-
-#상품수정
-@login_required
-def modify_product(request,pk):
-    if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
-    product = getProduct(pk)
-
-    if request.method == "POST":
-        is_new = True if request.POST.get('is_new')=="on" else False
-        files = request.FILES.get('bread_img')
-        if files:
-            product.P_img = files
-        product.P_name       = request.POST.get('bread_name')
-        product.P_price      = request.POST.get('bread_price')
-        product.P_newProduct = is_new
-        product.save()
-        return redirect("/manage/modify_list")
-
-    context = {
-            'p':product,
-        }
-    return render(request,'manage/modify_product.html',context)
-
-
-#상품삭제
-@login_required
-def delete_product(request):
-    if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
-    if request.method == "POST":
-        product = Product.objects.filter(id=request.POST.get('pk'))
-        if product:
-            product[0].delete()
-        return redirect('/manage/modify_list')
-
-
-
-#end manage
-
 
 
 #주문하기 페이지
@@ -540,13 +458,6 @@ def order(request):
         'product':product
     }
     return render(request, 'boeun_bread/order.html',context)
-
-#주문번호 생성
-def create_order_number():
-    now   = datetime.now()
-    date  = str(now.year)+str(now.month)+str(now.day)
-    value = str(now.hour)+str(now.minute)+str(now.second)+str(now.microsecond)
-    return date+"_"+format(int(value), 'o')
 
 #주문 detail 페이지
 def order_detail(request,pk):

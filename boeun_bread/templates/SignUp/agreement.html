@@ -343,14 +343,17 @@
 
 </pre>
         </div>
-        <div style="margin-left: 46px; margin-top: 12px;">
-            <input type="checkbox" id="agree_check">
-            <label for="agree_check" style="font-weight: 600;">모든 약관을 확인하고 동의합니다.</label>
-        </div>
-        <div class="text-center">
-            <div class="button" onclick="mainPage();">메인 페이지로</div>
-            <div class="button" onclick="nextPage();">다음</div>
-        </div>
+        <form id="agree-form" action="{% url 'boeun_bread:SignUp' %}" method="POST">
+            {% csrf_token %}
+            <div style="margin-left: 46px; margin-top: 12px;">
+                <input type="checkbox" name="is_check" id="agree_check">
+                <label for="agree_check" style="font-weight: 600;">모든 약관을 확인하고 동의합니다.</label>
+            </div>
+            <div class="text-center">
+                <div class="button" onclick="mainPage();">메인 페이지로</div>
+                <div class="button" onclick="nextPage();">다음</div>
+            </div>
+        </form>
     </div>
     <script>
         function mainPage(){
@@ -358,7 +361,7 @@
         }
         function nextPage(){
           if(document.getElementById('agree_check').checked == true){
-            location.href="{% url 'boeun_bread:SignUp' %}";
+                $("#agree-form").submit();
           }
           else{
             alert('약관에 동의해주셔야 합니다.');
