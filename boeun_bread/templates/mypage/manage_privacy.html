@@ -1,0 +1,136 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+<!--나눔스퀘어-->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+<style>
+    body{ font-family: 'NanumSquareRound',sans-serif;}
+    .box{
+        width:983px;
+        height: 486px;
+        border: 1px solid rgb(127,126,126);
+        margin:0 auto;
+        margin-bottom: 62px;
+        position: relative;
+    }
+    #manage-privacy-title{
+        font-size: 30px;
+        font-weight: 800;
+        margin-top: 43px;
+        text-align: center;
+    }
+    
+    ul{
+        list-style: none;
+    }
+    ul > li{
+        font-size: 13px;
+        font-weight: 700;
+    }
+    
+    .guide{
+        margin-top:45px;
+        margin-left: 52px;
+
+    }
+    
+    #btn-list-box > li{
+        width:246px;
+        margin-left: 39px;
+        margin-top:44px;
+        float: left;
+        text-align: center;
+
+    }
+    
+    
+    #btn-list-box img{
+        width:100px;
+        height: 103px;
+    }
+    .title{
+        font-size:20px; font-weight: bold;
+    }
+    #btn-list-box .link{
+        width:107px;
+        height: 30px;
+        background-color: rgb(218,218,218);
+        color:black;
+        margin:0 auto;
+        margin-top: 18px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+   
+
+   
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">마이페이지</span>
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">개인정보관리</span>
+</div>
+<div style="margin-top:14px; margin-left:99px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">마이페이지</p>
+</div>
+<div class="box">
+    <p id="manage-privacy-title">
+        회원님의 소중한 개인정보를 안전하게 관리하세요.
+    </p>
+    
+    <div class="guide">
+        <ul id="btn-list-box">
+            <li>
+                <img  src="{% static 'img/mypage/modify_privacy.jpg' %}">
+                <p class="title">
+                    개인정보 수정
+                </p>
+                <p>
+                    주소, 전화번호, E-MAIL 등<br>
+                    개인정보를 수정할수 있습니다.
+                </p>
+                <div class="link" onclick="modify_privacy();">바로가기</div>
+            </li>
+            <li>
+                <img  src="{% static 'img/mypage/modify_pw.jpg' %}">
+                <p class="title">
+                    비밀번호 변경
+                </p>
+                <p>
+                    안전한 개인정보보호를 위해<br>
+                    비밀번호는 주기적으로 변경해주세요.
+                </p>
+                <div class="link" onclick="modify_pw();">바로가기</div>
+            </li>
+            <li>
+                <img  src="{% static 'img/mypage/delete_user.jpg' %}">
+                <p class="title">
+                    회원탈퇴
+                </p>
+                <p>
+                    간단한 절차를 통해<br>
+                    회원탈퇴를 할 수 있습니다.
+                </p>
+                <div class="link" onclick="delete_user();">바로가기</div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    // 개인정보 변경
+    function modify_privacy(){
+        location.href = "{% url 'boeun_bread:auth_modify_user' %}";
+    }
+    //비밀번호 변경
+    function modify_pw(){
+        location.href = "{% url 'boeun_bread:modify_pw' %}";
+    }
+    //회원탈퇴 
+    function delete_user(){
+        location.href = "{% url 'boeun_bread:delete_user' %}";
+    }
+</script>
+{% endblock %}

@@ -25,7 +25,11 @@ urlpatterns = [
     path('Login/',views.Login, name="Login"),
     path('logout/',views.logout, name="logout"),
     #마이페이지
+    path('mypage/',views.mypage,name="mypage"),
+    path('mypage/managePrivacy',views.manage_privacy,name="manage_privacy"),
+    path('mypage/modifyAuth',views.auth_modify_user,name="auth_modify_user"),
     path('mypage/modify/',views.modify_user, name="modify_user"),
+    path('mypage/modifyPw/',views.modify_pw, name="modify_pw"),
     path('mypage/delete/',views.delete_user, name="delete_user"),
     path('search_order/',views.search_order, name="search_order"),
     path('order_history/', views.order_history, name="order_history"),
