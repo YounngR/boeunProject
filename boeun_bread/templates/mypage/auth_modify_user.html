@@ -1,0 +1,156 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+
+<style>
+
+        
+        #modify_field_box{
+            width:983px;
+            height: 237px;
+            border-top:2px solid #9E9E9E;
+            margin: 0 auto;
+            margin-top:38px;
+            margin-bottom: 90px;
+            background: #F8F8F8;
+        }
+        .desc{
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color:#9E9E9E;
+            margin-top: 46px;
+
+        }
+        .list{
+            list-style: none;
+            width:538px;
+            margin:0 auto;
+            margin-top: 46px;
+            
+        }
+        .item{
+            display: inline-block;
+            font-size: 16px;
+            
+        }
+        
+        .item:nth-last-child(1){
+            margin-left: 75px;
+            
+        }
+        .item > label{
+            width:70px;
+        }
+        .item > input{
+            width:260px;
+        }
+        #id_text{
+            color:#9E9E9E;
+        }
+       #tab-box{
+        width:983px;
+        margin:0 auto;
+        font-size:16px;
+        font-weight:bold;
+        margin-top:21px;
+        border:1px solid #9E9E9E;
+       }
+    #tab-box > div{
+        display:inline-block;
+        width:490px;
+        height:38px;
+        line-height: 38px;
+        text-align: center;
+        cursor: pointer;
+    }
+    .footer-btn{
+        
+        display: inline-block;
+        width:157px;
+        height: 38px;
+        text-align: center;
+        line-height: 38px;
+        margin-top:37px;
+        font-size: 15px;
+        font-weight: 800;
+        border: 1px solid #9e9e9e;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+    #cancel{
+        margin-left: 320px;
+        margin-right: 21px;
+        background: white;
+        color:black;
+        
+    }
+    #auth{
+        background: black;
+        color:white;
+    }
+    
+   
+ </style>
+ {% if messages %}
+    {% for msg in messages %}
+        <script>alert("{{msg}}");</script>
+    {% endfor %}
+ {% endif %}
+ {% if not is_auth %}
+    <script>alert("잘못된 비밀번호 입니다.");</script>
+ {% endif %}
+ <div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
+</div>
+<div style="margin-left:102px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">회원정보 변경</p>
+</div>
+<div id="tab-box">
+    <div style="color:white; background:#e47f32; float:left;" onclick="modify_user()">
+        회원정보 수정
+    </div>
+    <div style="" onclick="delete_user()">
+        회원탈퇴
+    </div>
+</div>
+<div id="modify_field_box">
+    <p class="desc">
+        회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해 주세요.
+    </p>
+    <form id="form" action="{% url 'boeun_bread:auth_modify_user' %}" method="POST">
+        {% csrf_token %}
+        
+        <ul class="list">
+            <li class="item">
+                <label>아이디</label>
+                <span id="id_text">{{request.user.username}}</span>
+            </li>
+            
+            <li class="item">
+                <label>비밀번호</label>
+                <input type="password" name="user_pw" required>
+            </li>
+        </ul>
+        <div class="footer-btn" id="cancel">
+            취소
+        </div>
+        <div class="footer-btn" id="auth">
+            인증하기
+        </div>
+    </form>
+</div>
+<script>
+    //인증하기 클릭시
+    $("#auth").click(function(){
+        $("#form").submit();
+    });
+    //취소 클릭시
+    $("#cancel").click(function(){
+        location.href="/";
+    });
+</script>
+{% endblock %}
