@@ -12,13 +12,20 @@ class Profile(models.Model):
     U_email     = models.EmailField(max_length=50)
 
 class Product(models.Model):
-    P_img       = models.ImageField(upload_to="bread_img/",null=True,blank=True)
-    P_name      = models.CharField(max_length=50)
-    P_price     = models.IntegerField(default=0)
-    P_nutrition = models.TextField(null=True, blank=True)
-    P_info = models.TextField(null=True, blank=True)
-    P_sales = models.IntegerField(default=0)
+    PRODUCT_KIND =(
+        ('1','제빵'),
+        ('2','제과'),
+        ('3','선물세트'),
+    )
+    P_img        = models.ImageField(upload_to="bread_img/",null=True,blank=True)
+    P_name       = models.CharField(max_length=50)
+    P_price      = models.IntegerField(default=0)
+    P_nutrition  = models.TextField(null=True, blank=True)
+    P_info       = models.TextField(null=True, blank=True)
+    P_sales      = models.IntegerField(default=0)
     P_newProduct = models.BooleanField(default=False) #True : 신제품
+    P_kind       = models.CharField(max_length=1,choices=PRODUCT_KIND) #상품종류
+    
 
 class Cart(models.Model):
     User = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)

@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        #tab{
+            width:1052px;
+            height: 65px;
+            margin:0 auto;
+            margin-top: 30px;
+            
+        }
+        #tab ul{
+            list-style: none;
+        }
+        #tab li{
+            width:350px;
+            height: 65px;
+            float: left;
+            text-align: center;
+            line-height: 65px;
+            background: rgb(225,225,224);
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        #tab .active{
+            background: rgb(218,146,88);
+
+        }
+        #tab .active > .count{
+            background: rgb(159,73,35);
+        }
+        #tab .count{
+            line-height: 19px;
+            display:inline-block;
+            font-size: 8px;
+            width:57px;
+            height: 19px;
+            background: rgb(53,54,54);
+            border-radius: 15px;
+            color:white;
+
+        }
+        #order-box{
+            width:1052px;
+            margin:0 auto;
+            
+        }
+        hr{
+            margin:0;
+            border-width: 2px;
+        }
+        #kind-name{
+            font-size: 16px;
+            font-weight: 800;
+            margin-top:20px;
+            margin-left: 10px;
+            
+        }
+        #bread-list-box li{
+            display: inline-block;
+            list-style: none;
+            width:210px;
+            
+            margin-top: 33px;
+            margin-left:52px;
+            
+            
+        }
+        
+        #bread-list-box li:nth-child(5n),
+        #bread-list-box li:nth-child(1){
+            margin-left:22px;
+        }
+        
+        .pm-count{
+            display:inline-block;
+            width:68px;
+            height: 18px;
+            font-size: 9px;
+            color:black;
+            
+            background: rgb(53,54,54);
+            border-radius: 10px;
+            line-height: 18px;
+
+        }
+        .add-cart-btn{
+            width:97px;
+            height:28px;
+            line-height: 28px;
+            text-align: center;
+            background: #EF832E;
+            margin:0 auto;
+            margin-top:14px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        #msg-box{
+            width:300px;
+            height: 100px;
+            opacity: 0.7;
+            background: black;
+            position: absolute;
+            color:white;
+            font-weight: 600;
+            text-align: center;
+            line-height: 100px;
+        }
+        i{
+            cursor: pointer;
+        }
+    </style>
+    <div class="text-right" style="margin-top:28px; margin-right: 78px;">
+        <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+        <i class="glyphicon glyphicon-menu-right"></i>
+        <span style="font-weight: 500; position: relative; top:-1px;">주문하기</span>
+    </div>
+    <div id="tab">
+        <ul>
+            <li class="tab-item active" onclick="baking()">
+                제빵
+                <span class="count">
+                    0
+                </span>
+            </li>
+            <li class="tab-item" onclick="confectionery()">
+                제과
+                <span class="count">
+                    0
+                </span>
+            </li>
+            <li class="tab-item" onclick="giftset()"> 
+                선물세트
+                <span class="count">
+                    0
+                </span>
+            </li>
+        </ul>
+    </div>
+
+{% block order_content %}
+{% endblock %}
+<div id="msg-box" style="display:none;">
+    <p>상품이 장바구니에 담겼습니다.</p>
+</div>
+<script>
+    //tab 아이템 활성화
+    function tabActive(){
+            
+        $(".tab-item").removeClass('active'); 
+        var num = parseInt("{{type}}")-1;
+        var item = $(".tab-item")[num];
+        $(item).addClass('active');
+        var array = "{{count}}".split(",");
+        $(".tab-item").each(function(index,item){
+            $(item).children(".count").text(array[index]);  
+        });
+    }
+    tabActive();   
+    function center(scroll_top){
+            var w = (window.innerWidth/2)-150;
+            var h = ((window.innerHeight/2)-50)+scroll_top;
+            $("#msg-box").css({
+                "left":w+"px",
+                "top":h+"px"
+            });
+        }
+        center(0);
+        $(document).scroll(function(){
+            center($(this).scrollTop());
+        });
+        function show_animation(){
+            $("#msg-box").toggle('fast',function(){
+                setTimeout(
+                    function(){
+                        $("#msg-box").hide();
+                    },
+                    1000
+                );
+            });
+        }
+    //제빵 클릭시
+    function baking(){
+        location.href="/order/baking/";
+    }
+    //제과 클릭시
+    function confectionery(){
+        location.href="/order/confectionery/";
+    }
+    function giftset(){
+        location.href="/order/giftset/";
+    }
+      
+        //장바구니 담기 클릭시
+        $(".add-cart-btn").click(function(){
+
+            var pk    = $(this).attr("pk");
+            var count = $("#count"+pk).text();
+            console.log(pk);
+            var url   = "/addCart/"+pk+"/"+count
+            $.ajax({
+                type : "GET",
+                url : url,
+
+                success : function(response)
+                {
+                    show_animation();
+
+                }
+            });
+        });
+
+        //상품클릭시
+        $(".prod").click(function(){
+        var pk = $(this).attr('pk');
+        window.location.href="/order/detail/"+pk;
+        });
+        //plus 버튼 클릭시
+    $(".plus").click(function(){
+        var pk = $(this).attr("pk");
+        var cur = parseInt($("#count"+pk).text()) + 1;
+        $("#count"+pk).text(cur);
+        
+
+    });
+    //minus 버튼 클릭시
+    $(".minus").click(function(){
+        var pk = $(this).attr("pk");
+        var cur = parseInt($("#count"+pk).text()) - 1;
+        if (cur < 1){
+            cur = 1;
+        }
+        $("#count"+pk).text(cur);
+        
+    });
+</script>
+{% endblock %}

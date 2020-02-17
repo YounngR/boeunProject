@@ -53,11 +53,11 @@ def create_product(request):
         return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
     if request.method == "POST":
         is_new = True if request.POST.get('is_new')=="on" else False
-
         Product.objects.create(
             P_img        = request.FILES.get('bread_img'),
             P_name       = request.POST.get('bread_name'),
             P_price      = request.POST.get('bread_price'),
+            P_kind       = request.POST.get('prod_name'),
             P_newProduct = is_new
         )
         return redirect('/manage')
@@ -95,6 +95,7 @@ def modify_product(request,pk):
         product.P_name       = request.POST.get('bread_name')
         product.P_price      = request.POST.get('bread_price')
         product.P_newProduct = is_new
+        product.P_kind       = request.POST.get('prod_name')
         product.save()
         return redirect("/manage/modify_list")
 
@@ -480,15 +481,42 @@ def add_cookie(response):
     response.set_cookie('cookie_id',cookie_id,max_age)
     return response,cookie_id
 
+# 각 상품종류 개수 반환
+def classfy_product_count():
+    count = ""
+    count += str(len(Product.objects.filter(P_kind='1')))+","
+    count += str(len(Product.objects.filter(P_kind='2')))+","
+    count += str(len(Product.objects.filter(P_kind='3')))   
+    return count
 
-
-#주문하기 페이지
-def order(request):
-    product = Product.objects.all()
+#주문하기
+def order(request,path):
+    '''
+     type:1 -> 제빵
+     type:2 -> 제과
+     type:3 -> 선물세트
+    '''
+    product  = None
+    type_num = None
+    if path == "baking":
+        product = Product.objects.filter(P_kind='1')
+        type_num=1
+    elif path == "confectionery":
+        product = Product.objects.filter(P_kind='2')
+        type_num=2
+    elif path == "giftset":
+        product = Product.objects.filter(P_kind='3')    
+        type_num=3
+    else:
+        raise Http404
     context={
-        'product':product
+        'product':product,
+        'type' : type_num,
+        'count':classfy_product_count()
     }
     return render(request, 'boeun_bread/order.html',context)
+
+
 
 #주문 detail 페이지
 def order_detail(request,pk):
