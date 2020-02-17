@@ -1,0 +1,123 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block cart_content %}
+<!--나눔스퀘어-->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+<style>
+    body{ font-family: 'NanumSquareRound',sans-serif;}
+    .box{
+        width:983px;
+        height: 486px;
+        border: 1px solid rgb(127,126,126);
+        margin:0 auto;
+        margin-bottom: 62px;
+        position: relative;
+    }
+    #mypage-title{
+        font-size: 30px;
+        font-weight: 800;
+        margin-top: 43px;
+        text-align: center;
+    }
+    #mypage-desc{
+        font-size: 13px;
+        font-weight: 600;
+        margin-top:27px;
+        text-align: center;
+    }
+    ul{
+        list-style: none;
+    }
+    ul > li{
+        font-size: 13px;
+        font-weight: 700;
+    }
+    
+    .guide{
+        margin-top:45px;
+        margin-left: 52px;
+
+    }
+    
+    #btn-list-box > li{
+        width:246px;
+        margin-left: 100px;
+        
+        float: left;
+        text-align: center;
+
+    }
+    #btn-list-box > li:nth-last-child(1){
+        margin-left: 172px;
+    }
+    
+    #btn-list-box img{
+        width:100px;
+        height: 103px;
+    }
+    .title{
+        font-size:20px; font-weight: bold;
+    }
+    #btn-list-box .link{
+        width:107px;
+        height: 30px;
+        background-color: rgb(218,218,218);
+        color:black;
+        margin:0 auto;
+        margin-top: 18px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+   
+
+   
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">마이페이지</span>
+</div>
+<div style="margin-top:14px; margin-left:99px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">마이페이지</p>
+</div>
+<div class="box">
+    <p id="mypage-title">
+        안녕하세요, 고객님
+    </p>
+    <p id="mypage-desc">
+        마이페이지에서는 고객님의 활동 및 정보를 확인할 수 있습니다.
+    </p>
+    <div class="guide">
+        <ul id="btn-list-box">
+            <li>
+                <img  src="{% static 'img/service_center/online_cnslt_history.jpg' %}">
+                <p class="title">
+                    온라인 상담 내역
+                </p>
+                <p>
+                    홈페이지를 통해 온라인 상담한<br>
+                    내역을 확인할 수 있습니다.
+                </p>
+                <div class="link" onclick="online_cnstl_history_click();">바로가기</div>
+            </li>
+            <li>
+                <img  src="{% static 'img/mypage/manage_privacy.jpg' %}">
+                <p class="title">
+                    개인정보관리
+                </p>
+                <p>
+                    고객님의 개인정보 수정 및<br>
+                    비밀번호를 변경할수 있습니다.
+                </p>
+                <div class="link" onclick="manage_privacy();">바로가기</div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    function manage_privacy(){
+        location.href = "{% url 'boeun_bread:manage_privacy' %}";
+    }
+</script>
+{% endblock %}

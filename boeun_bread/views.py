@@ -15,8 +15,10 @@ from django.utils.encoding import force_bytes, force_text
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 #from django.db.models import Sum
+from django.contrib import messages
 
-sitwch = False
+
+
 #객체 반환
 def get_object(model,**args):
     query_set = model.objects.filter(**args)
@@ -238,24 +240,42 @@ def activate(request, uid64, token):
         return HttpResponse('비정상적인 접근입니다.')
 
 #마이페이지
-#회원정보수정
+@login_required
+def mypage(request):
+    return render(request,'mypage/mypage.html')
+#마이페이지 > 개인정보 관리
+@login_required
+def manage_privacy(request):
+    return render(request,'mypage/manage_privacy.html')    
+
+#마이페이지 > 개인정보관리 > 회원정보 인증 요청
+@login_required
+def auth_modify_user(request):
+    context = {
+        'is_auth':True
+    }
+    if request.method == "POST":
+        user    = auth.authenticate(request,username=request.user.username,password=request.POST.get('user_pw'))
+        if user:
+            return render(request, 'mypage/modify_user.html')
+        context['is_auth'] = False
+    return render(request, 'mypage/auth_modify_user.html',context)
+
+#마이페이지 > 개인정보관리 > 회원정보수정
 @login_required
 def modify_user(request):
-    context = {}
+    '''
+        1. modify_user GET 요청 비활성화
+        2. GET 요청 활성화 하면 회원정보수정 인증하지 않고 요청가능
+    '''
     if request.method == "POST":
-        user    = auth.authenticate(request,username=request.user.username,password=request.POST.get('c_user_pwd'))
-        if user:
-            profile = Profile.objects.get(user=request.user)
-            user.set_password(request.POST.get('n_user_pwd'))
-            profile.U_name  = request.POST.get('user_name')
-            profile.U_phone = request.POST.get('user_phone')
-            user.save()
-            profile.save()
-            return redirect('/mypage/modify/')
-        else:
-            context['msg'] = "기존 비밀번호와 일치하지 않습니다."
-    return render(request, 'mypage/modify_user.html',context)
-#회원탈퇴
+        profile         = Profile.objects.get(user=request.user)
+        profile.U_name  = request.POST.get('user_name')
+        profile.U_phone = request.POST.get('user_phone')
+        profile.save()
+        messages.add_message(request, messages.INFO, '회원정보 변경 되었습니다.')
+    return redirect('/mypage/modifyAuth')
+#마이페이지 > 개인정보관리 > 회원탈퇴
 @login_required
 def delete_user(request):
     context = {}
@@ -266,9 +286,20 @@ def delete_user(request):
             return redirect('/')
         else:
             context['msg'] = "비밀번호가 일치하지 않습니다."
-
-
     return render(request, 'mypage/delete_user.html',context)
+#마이페이지 > 개인정보관리 > 비밀번호 변경
+def modify_pw(request):
+    context = {}
+    if request.method == "POST":
+        user = auth.authenticate(request,username=request.user.username,password=request.POST.get('current_pw'))
+        if user:
+            user.set_password(request.POST.get('new_pw'))
+            user.save()
+            return redirect('/Login')
+
+        context['msg'] = "잘못된 기존비밀번호 입니다."
+    return render(request, 'mypage/modify_pw.html',context)
+
 def search_order(request):
     return render(request, 'mypage/search_order.html')
 
