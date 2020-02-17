@@ -18,7 +18,7 @@ urlpatterns = [
     path('manage/delete_product/',views.delete_product,name="delete_product"),
     #end manage
     #주문하기
-    path('order/',views.order,name="order"),
+    path('order/<path>/',views.order,name="order"),
     path('order/detail/<pk>/',views.order_detail,name="orderDetail"),
     #end 주문하기
     #로그인

@@ -70,6 +70,13 @@
                 <label>빵가격</label><br>
                 <input type="number" value="{{p.P_price}}" name="bread_price" style="display:inline-block; width:270px;" class="form-control">
                 <span style="color:gray; font-size:20px;">원</span>
+                <!--상품종류-->
+                <label>상품종류</label><br>
+                <select class="form-control" name="prod_name">
+                    <option value="1" {%if p.P_kind == '1' %} selected{% endif %}>제빵</option>
+                    <option value="2" {%if p.P_kind == '2' %} selected{% endif %}>제과</option>
+                    <option value="3" {%if p.P_kind == '3' %} selected{% endif %}>선물세트</option>
+                </select>
                 <!--신제품-->
                 <label>
                     신제품
