@@ -38,6 +38,7 @@ urlpatterns = [
     path('cart/',views.cart, name="cart"),
     path('addCart/<pk>/<count>',views.add_cart,name='addCart'),
     path('delCart/<pk>',views.del_cart,name='delCart'),
+    path('recentlyInfo/',views.recently_info,name="recently_info"),
     #회원가입
     path('agreement',views.agreement, name="agreement"),
     path('isSignup',views.is_signup,name="is_signup"),
