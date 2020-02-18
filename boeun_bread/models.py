@@ -49,12 +49,15 @@ class Cart_Product(models.Model):
 
 
 class Order(models.Model):
-    User  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    User_address = models.CharField(max_length=200)
-    Order_Number = models.CharField(max_length=200)
-    Total_price = models.IntegerField(default=0)
-    Order_date = models.DateTimeField(auto_now_add=True)
-    Order_type = models.IntegerField(default=0) # 0 : 결제확인
+    User                  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    User_address          = models.CharField(max_length=200)
+    User_detail_address   = models.CharField(max_length=100) #상세 주소
+    Order_Number          = models.CharField(max_length=200)
+    Total_price           = models.IntegerField(default=0)
+    Order_date            = models.DateField(auto_now_add=True)
+    Order_type            = models.IntegerField(default=0) # 0 : 결제확인
+    Order_hope_date       = models.DateTimeField(null=True,blank=True) #배송 희망일
+    Order_request_content = models.CharField(null=True,blank=True,max_length=200) #주문시 요청사항
 
 class Order_Product(models.Model):
     Order         = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
