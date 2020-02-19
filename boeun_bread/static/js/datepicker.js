@@ -592,6 +592,7 @@
 
   var handlers = {
     click: function click(e) {
+      
       var $target = $(e.target);
       var options = this.options,
           date = this.date,
@@ -599,7 +600,6 @@
           format = this.format;
       e.stopPropagation();
       e.preventDefault();
-
       if ($target.hasClass('disabled')) {
         return;
       }
@@ -608,8 +608,9 @@
       var viewYear = viewDate.getFullYear();
       var viewMonth = viewDate.getMonth();
       var viewDay = viewDate.getDate();
-
+      
       switch (view) {
+        
         case 'years prev':
         case 'years next':
           {
