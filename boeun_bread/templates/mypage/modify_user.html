@@ -1,6 +1,6 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block cart_content %}
+{% block content %}
 
 <style>
         .sign_up_icon{
@@ -19,7 +19,7 @@
             margin-top:38px;
             background: #F8F8F8;
         }
-     
+
 
         #b_cancle{
           font-weight:bold;
@@ -50,7 +50,7 @@
         cursor: pointer;
     }
  </style>
- 
+
  {% if msg %}
     <script>alert("{{msg}}");</script>
  {% endif %}
@@ -137,7 +137,7 @@
       </div>
 <script>
 
-    
+
   //가입하기
   function isVaild(){
     return true;

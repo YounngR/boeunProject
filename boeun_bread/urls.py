@@ -34,10 +34,12 @@ urlpatterns = [
     path('search_order/',views.search_order, name="search_order"),
     path('order_history/', views.order_history, name="order_history"),
     path('order_lookup/',views.order_lookup, name="order_lookup"),
+    path('order_lookup_info', views.order_lookup_info, name="order_lookup_info"),
     #장바구니
     path('cart/',views.cart, name="cart"),
     path('addCart/<pk>/<count>',views.add_cart,name='addCart'),
     path('delCart/<pk>',views.del_cart,name='delCart'),
+    path('recentlyInfo/',views.recently_info,name="recently_info"),
     #회원가입
     path('agreement',views.agreement, name="agreement"),
     path('isSignup',views.is_signup,name="is_signup"),

@@ -1,6 +1,6 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block cart_content %}
+{% block content %}
 <style>
     .box{
         width:983px;
@@ -32,7 +32,7 @@
         height: 25px;
     }
     .footer-btn{
-        
+
         display: inline-block;
         width:157px;
         height: 38px;
@@ -50,7 +50,7 @@
         margin-right: 21px;
         background: white;
         color:black;
-        
+
     }
     #modify{
         background: black;
@@ -73,7 +73,7 @@
     <p class="desc">
         회원님의 정보를 변경하기 위해 현재 비밀번호와 바꿀 비밀번호를 입력하세요.
     </p>
-    
+
     <form id="form" action="{% url 'boeun_bread:modify_pw' %}" method="POST">
         {% csrf_token %}
         <div class="field">
@@ -86,13 +86,13 @@
         </div>
         <div class="field">
             <label>변경 할 비밀번호</label>
-            <input type="password" name="new_pw" id="pw1">
-            <div id="pw_error_text" style="display:none;float:right; margin-right: 8px; padding-top:5px;">비밀번호는 8~15자로 설정 가능합니다.</div>
+            <input type="password" name="new_pw" id="pw1"><br>
+            <div id="pw_error_text" style="display:none; padding-top:5px;">비밀번호는 8~15자로 설정 가능합니다.</div>
         </div>
         <div class="field">
             <label>비밀번호 확인</label>
-            <input type="password" id="pw2">
-            <div id="pw2_error_text" style="display:none; float: right; margin-right:220px; padding-top:5px;">확인을 위해 다시 한 번 입력해 주세요.</div>
+            <input type="password" id="pw2"><br>
+            <div id="pw2_error_text" style="display:none; padding-top:5px;">확인을 위해 다시 한 번 입력해 주세요.</div>
         </div>
         <div class="footer-btn" id="cancel">
             취소
@@ -101,7 +101,7 @@
             변경하기
         </div>
     </form>
-    
+
 </div>
 <script>
     function passrulecheck(){

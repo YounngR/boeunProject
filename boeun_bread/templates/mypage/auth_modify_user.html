@@ -1,10 +1,10 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block cart_content %}
+{% block content %}
 
 <style>
 
-        
+
         #modify_field_box{
             width:983px;
             height: 237px;
@@ -27,17 +27,17 @@
             width:538px;
             margin:0 auto;
             margin-top: 46px;
-            
+
         }
         .item{
             display: inline-block;
             font-size: 16px;
-            
+
         }
-        
+
         .item:nth-last-child(1){
             margin-left: 75px;
-            
+
         }
         .item > label{
             width:70px;
@@ -65,7 +65,7 @@
         cursor: pointer;
     }
     .footer-btn{
-        
+
         display: inline-block;
         width:157px;
         height: 38px;
@@ -83,14 +83,14 @@
         margin-right: 21px;
         background: white;
         color:black;
-        
+
     }
     #auth{
         background: black;
         color:white;
     }
-    
-   
+
+
  </style>
  {% if messages %}
     {% for msg in messages %}
@@ -123,13 +123,13 @@
     </p>
     <form id="form" action="{% url 'boeun_bread:auth_modify_user' %}" method="POST">
         {% csrf_token %}
-        
+
         <ul class="list">
             <li class="item">
                 <label>아이디</label>
                 <span id="id_text">{{request.user.username}}</span>
             </li>
-            
+
             <li class="item">
                 <label>비밀번호</label>
                 <input type="password" name="user_pw" required>

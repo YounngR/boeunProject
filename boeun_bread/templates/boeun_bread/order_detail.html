@@ -1,6 +1,7 @@
 {% extends 'base2.html' %}
 {% load extra %}
 {% block cart_content %}
+{% load static %}
     <style>
         #detail-content{
             width: 982px;
@@ -182,10 +183,10 @@
                     제품상세
                 </p>
                 <p id="content2" class="content" style="display: none;">
-                    배송
+                    <img src="{% static 'img/bread/infor2.png'%}" style="position: relative; bottom:24px; left:-1px; padding-right:46px; height: 281px; width: 945px;">
                 </p>
                 <p id="content3" class="content" style="display: none;">
-                    판매정보
+                    <img src="{% static 'img/bread/infor1.png'%}" style="position: relative; bottom:24px; left:-1px; padding-right:46px; height: 281px; width: 945px;">
                 </p>
             </div>
         </div>

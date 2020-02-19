@@ -2,10 +2,16 @@
 {% load extra %}
 {% block order_content %}
 
-    
+
     <div id="order-box">
         <p id="kind-name">
-            제빵
+            {% if type == 1 %}
+              제빵
+            {% elif type == 2 %}
+             제과
+            {%else%}
+              선물세트
+           {% endif %}
         </p>
         <hr>
         <ul id="bread-list-box">
@@ -28,14 +34,14 @@
                         장바구니 담기
                     </div>
                 </li>
-            {% endfor %} 
+            {% endfor %}
         </ul><br><br>
-        
-       
+
+
     </div>
     <script>
-       
-    
+
+
 
     </script>
 {% endblock %}

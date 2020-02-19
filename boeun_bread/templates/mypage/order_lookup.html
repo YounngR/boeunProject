@@ -1,6 +1,9 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block cart_content %}
+{% block content %}
+
+<link  href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+<script src="{% static 'js/datepicker.js'%}"></script>
 
 <style>
   #order_lookup_box{
@@ -21,8 +24,13 @@
     margin-left:15px;
     background: #ECEFE4;
   }
+  .table_info{
+    margin-top:27px;
+    color:#9E9E9E;
+  }
   .date_button{
     background-color:#DE9562;
+    color:#FFFFFF;
     border-radius:12px;
     border:0;
     outline:0;
@@ -35,6 +43,19 @@
   }
   .order_table_info{
     margin-top:12px;
+  }
+  .info_button_1{
+    width:60px;
+    height:20px;
+    background-color:#DE9562;
+    color:#FFFFFF;
+    border-radius:3px;
+    border:0;
+    font-size:10px;
+    outline:0;
+  }
+  .info_button_1:nth-child(3n-1){
+    background-color:#AEAEAE;
   }
 
 </style>
@@ -52,19 +73,19 @@
   <label style=" margin-left:50px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">주문/배송 조회</label>
   <hr style="margin-left:15px; margin-top:10px; width:960px; background-color:#D8D8D8; height:1px;">
   <div style="height:30px; margin-top:-7px;">
-    <button class="date_button" style="margin-left:308px; width:46px;">오늘</button>
-    <button class="date_button"  style="margin-left:11px; width:61px;">일주일</button>
-    <button class="date_button"  style="margin-left:11px; width:43px;">당월</button>
-    <button class="date_button"  style="margin-left:11px; width:43px;">전월</button>
+    <button class="date_button"  style="margin-left:308px; width:46px;" onclick="b_date(1)">오늘</button>
+    <button class="date_button"  style="margin-left:11px; width:61px;" onclick="b_date(2)">일주일</button>
+    <button class="date_button"  style="margin-left:11px; width:43px;" onclick="b_date(3)">당월</button>
+    <button class="date_button"  style="margin-left:11px; width:43px;" onclick="b_date(4)">전월</button>
     <img src="{% static '/img/calender.jpg'%}" style="width:15px; height20px; margin-left:16px;">
-    <input type="date" style="width:84px; height:20px; font-size:9px; margin-left:4px;">
+    <input id="before_date" type="text" style="width:84px; height:20px; font-size:9px; margin-left:4px;" placeholder=YYYY-MM-DD>
     <label style="font-weight:200; margin-left:4px;">부터</label>
 
     <img src="{% static '/img/calender.jpg'%}" style="width:15px; height20px; margin-left:15px;">
-    <input type="date" style="width:84px; height:20px; font-size:9px; margin-left:4px;">
+    <input id="after_date" type="text" style="width:84px; height:20px; font-size:9px; margin-left:4px;" placeholder=YYYY-MM-DD>
     <label style="font-weight:200; margin-left:4px;">까지</label>
 
-    <button class="search" style="margin-left:31px; width:43px;">조회</button>
+    <button class="search" style="margin-left:31px; width:43px;" onclick="b_date(5)">조회</button>
 
   </div>
   <hr style="margin-left:15px; margin-top:2px; width:960px; background-color:#D8D8D8; height:1px;">
@@ -77,8 +98,47 @@
     <label class="order_table_info" style="margin-left:110px; width:60px;">주문상태</label>
     <label class="order_table_info" style="margin-left:100px; width:60px;">날짜</label>
   </div>
+  <div id="pre_page">
+    {% include 'mypage/order_lookup_info.html' %}
+  </div>
 
 </div>
 
+<script>
+  $('#before_date').datepicker({
+        format: 'yyyy-mm-dd',
+        daysMin:['일','월',"화","수","목","금","토"],
+        months:['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+    });
+
+    $('#after_date').datepicker({
+          format: 'yyyy-mm-dd',
+          daysMin:['일','월',"화","수","목","금","토"],
+          months:['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+      });
+
+  function b_date(type){
+    console.log(type)
+      $.ajax({
+          type : "POST",
+          url : "{% url 'boeun_bread:order_lookup_info' %}",
+          data : {
+              'csrfmiddlewaretoken': '{{ csrf_token }}',
+              'type': type,
+              'befor_date':document.getElementById('before_date').value,
+              'after_date':document.getElementById('after_date').value,
+          },
+
+          success : function(response)
+          {
+            $('#pre_page').empty();
+            $('#pre_page').append(response)
+          }
+      });
+    }
+
+
+
+</script>
 
 {%endblock%}

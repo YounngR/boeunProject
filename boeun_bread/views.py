@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 #from django.db.models import Sum
 from django.contrib import messages
+from django.core import serializers
 
 
 
@@ -247,7 +248,7 @@ def mypage(request):
 #마이페이지 > 개인정보 관리
 @login_required
 def manage_privacy(request):
-    return render(request,'mypage/manage_privacy.html')    
+    return render(request,'mypage/manage_privacy.html')
 
 #마이페이지 > 개인정보관리 > 회원정보 인증 요청
 @login_required
@@ -373,10 +374,25 @@ def order_lookup(request):
     else:
         copy_product(request)
 
-    order = get_object(Order,User=profile)
-    op   = Order_Product.objects.filter(Order=order)
+    order = Order.objects.filter(User=profile)
 
-    return render(request, 'mypage/order_lookup.html', {'order':order, 'op':op})
+
+    return render(request, 'mypage/order_lookup.html', {'order':order})
+
+#주문 배송 조회 날짜 검색
+def order_lookup_info(request):
+
+    result = None;
+
+    if request.POST.get('type') == 5:
+        before_date = request.POST.get('befor_date')
+        after = request.POST.get('after_date')
+
+
+
+
+
+    return render(request, 'mypage/order_lookup_info.html', {'order':order})
 #상품복제
 
 def copy_product(request):
@@ -468,6 +484,30 @@ def del_cart(request,pk):
     cp = get_object_or_404(Cart_Product,pk=pk)
     cp.delete()
     return HttpResponse("success")
+#최근 배송지 정보 JSON 응답
+def recently_info(request):
+
+    cookie_id = request.COOKIES.get('cookie_id')
+    profile   = get_object(Profile,cookie_id=cookie_id)
+    if request.user.is_authenticated:
+        profile = request.user.profile
+    order    = Order.objects.filter(User=profile).last() #order에서 마직막 object 가져오기, 마지막 == 최근
+    response = None
+    if order:
+        response = {
+            'addr' : order.User_address,
+            'detail_addr':order.User_detail_address,
+            'request_content' : order.Order_request_content
+
+        }
+    return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+
+
+
+
+
 
 #쿠키추가
 def add_cookie(response):
@@ -486,7 +526,7 @@ def classfy_product_count():
     count = ""
     count += str(len(Product.objects.filter(P_kind='1')))+","
     count += str(len(Product.objects.filter(P_kind='2')))+","
-    count += str(len(Product.objects.filter(P_kind='3')))   
+    count += str(len(Product.objects.filter(P_kind='3')))
     return count
 
 #주문하기
@@ -505,7 +545,7 @@ def order(request,path):
         product = Product.objects.filter(P_kind='2')
         type_num=2
     elif path == "giftset":
-        product = Product.objects.filter(P_kind='3')    
+        product = Product.objects.filter(P_kind='3')
         type_num=3
     else:
         raise Http404
@@ -544,10 +584,13 @@ def payment_result(request):
     cart = get_object(Cart, User=user)
 
     order = Order.objects.create(
-        User = user,
-        Order_Number = create_order_number(),
-        User_address = request.POST.get('address'),
-        Total_price = request.POST.get('Total_price'),
+        User                  = user,
+        Order_Number          = create_order_number(),
+        User_address          = request.POST.get('address'),
+        User_detail_address   = request.POST.get('detail_addr'),
+        Total_price           = request.POST.get('Total_price'),
+        Order_hope_date       = request.POST.get('hope_date'),
+        Order_request_content = request.POST.get('request_content')
     )
     for prod_pk in request.POST.getlist('prod_pk[]'):
         product = get_object(Product, pk=prod_pk)
@@ -573,7 +616,7 @@ def get_total(request):
     if request.method == "POST":
         cart = get_object(Cart,pk=request.POST.get('cart_pk'))
         if cart:
-            context['total'] = cart.get_total()
+            context['total'] = cart.get_total() + 3000 # 배송비 3000원
     else:
         raise Http404
     return HttpResponse(json.dumps(context), content_type="application/json")

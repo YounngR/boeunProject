@@ -1,6 +1,6 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block cart_content %}
+{% block content %}
 <!--나눔스퀘어-->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
 <style>
@@ -32,17 +32,17 @@
         font-size: 13px;
         font-weight: 700;
     }
-    
+
     .guide{
         margin-top:45px;
         margin-left: 52px;
 
     }
-    
+
     #btn-list-box > li{
         width:246px;
         margin-left: 100px;
-        
+
         float: left;
         text-align: center;
 
@@ -50,7 +50,7 @@
     #btn-list-box > li:nth-last-child(1){
         margin-left: 172px;
     }
-    
+
     #btn-list-box img{
         width:100px;
         height: 103px;
@@ -68,9 +68,9 @@
         line-height: 30px;
         cursor: pointer;
     }
-   
 
-   
+
+
 </style>
 <div class="text-right" style="margin-top:28px; margin-right: 78px;">
     <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
