@@ -27,9 +27,6 @@ def get_object(model,**args):
 
 
 def main(request):
-
-
-
     return render(request,'boeun_bread/main.html')
 
 #-----manage
