@@ -22,9 +22,11 @@ class Product(models.Model):
     P_price      = models.IntegerField(default=0)
     P_nutrition  = models.TextField(null=True, blank=True)
     P_info       = models.TextField(null=True, blank=True)
-    P_sales      = models.IntegerField(default=0)
+    P_sales      = models.IntegerField(default=0) # 판매량
     P_newProduct = models.BooleanField(default=False) #True : 신제품
     P_kind       = models.CharField(max_length=1,choices=PRODUCT_KIND) #상품종류
+    def __str__(self):
+        return self.P_name
     
 
 class Cart(models.Model):

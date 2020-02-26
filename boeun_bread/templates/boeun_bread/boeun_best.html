@@ -1,1 +1,283 @@
-추천베스트
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+
+    #prod-list-box{
+        width:990px;
+        margin:0 auto;
+    }
+    #prod-kind-nav{
+        float: left;
+        width:200px;
+        height: 380px;
+        background-color: #d7d7d9;
+    
+    }
+    #best-prod-list{
+        width:750px;
+        height: 400px;
+        margin-left:240px;
+        position: relative;
+        
+    }
+    .text{
+        font-size: 13px;
+        font-weight: 800;
+        text-align: center;
+    }
+    .nav{
+        margin-top:44px;
+        cursor: pointer;
+    }
+    #big-img-box{
+        
+        width:571px;
+        position: absolute;
+        left: 0px;
+    }
+    #small-img-box{
+        width:297px;
+        margin-left: 54px;
+        position: absolute;
+        right: 0px;
+        top:36px;
+    }
+
+    .small-item{
+        list-style: none;
+        width:113px;
+        color:#6E6E6E;        
+        float: left;
+    }
+    .small-item:nth-child(2n+1){margin-right:71px;}
+    .small-item img {width:113px;height: 115px;}
+    .small-item .prod-name{ font-size: 13px; font-weight: 600; text-align: center;}
+    .small-item .prod-kind{ font-size: 8px; font-weight: 600; text-align: center;}
+
+    #big-img-box > div:nth-child(1){
+
+        width:101px;
+        height: 40px;
+        background-color: #d6dbc8;
+    }
+    #big-img-box > div:nth-child(2){
+        width:245px;
+        height: 314px;
+        margin-left:62px;
+        margin-top:20px;
+        color:#6E6E6E;
+    }
+    #general-list{
+        width:990px;
+    }
+    .general-item{
+        list-style: none;
+        width:210px;
+        height: 334px;
+        font-weight: 600;
+        background-color: #d7d7d9;
+        border-radius: 10px;
+        margin-right:50px;
+        margin-top:27px;
+        float: left;
+    }
+    .general-item:nth-child(4n){
+        margin-right:0px;
+    }
+    .general-item img{
+        width:124px;
+        height: 100px;
+        margin-left: 43px;
+        margin-top: 21px;
+
+    }   
+    .add-cart-btn{
+        width:97px;
+        height:28px;
+        line-height: 28px;
+        text-align: center;
+        background: #EF832E;
+        margin:0 auto;
+        margin-top:21px;
+        font-size: 10px;
+        font-weight: 600;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+    .prod-btn{
+        cursor: pointer;
+    }
+    #msg-box{
+            width:300px;
+            height: 100px;
+            opacity: 0.7;
+            background: black;
+            position: absolute;
+            color:white;
+            font-weight: 600;
+            text-align: center;
+            line-height: 100px;
+        }
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">구매하기</span>
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">
+        {% if kind == 0 %}
+            전체
+        {% elif kind == 1 %}
+            제빵
+        {% elif kind == 2%}
+            제과
+        {% else %}
+            선물 세트
+        {% endif %}
+    </span>
+</div>
+<div style="margin-top:14px; margin-left:99px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">
+        {% if kind == 0 %}
+            전체
+        {% elif kind == 1 %}
+            제빵
+        {% elif kind == 2%}
+            제과
+        {% else %}
+            선물 세트
+        {% endif %}
+    </p>
+</div>
+<div id="prod-list-box">
+    <!--header-->
+    <!--상품종류 nav-->
+    <div id="prod-kind-nav">
+        <p class="text-center" style="font-weight: 800; font-size: 20px; padding-top:27px; padding-bottom: 21px;">
+            BOEUN BREAD
+        </p>
+        
+        <p class="text nav" onclick="prod_kind_click(1);">전체</p>
+        <p class="text nav" onclick="prod_kind_click(2);">제빵</p>
+        <p class="text nav" onclick="prod_kind_click(3);">제과</p>
+        <p class="text nav" onclick="prod_kind_click(4);">선물 세트</p>
+    </div>
+    <div id="best-prod-list">
+        
+        <div id="big-img-box">
+            <!--상단 로고-->
+            <div>
+                <img width="15" height="15" src="{% static 'img/logo.png'%}" style="margin-left: 7px;">
+                <span style="font-size: 10px;">BOEUN BREAD</span>
+                <p class="text">추천 제품</p>
+            </div>
+            {% for prod in first_prod %}
+                <div class="prod-btn" pk="{{prod.pk}}">
+                    <img src="/media/{{prod.P_img}}" width="245" height="251">
+                    <p class="text-center" style="font-size: 25px; font-weight: 800;">{{prod.P_name}}</p>
+                    <p class="text-center" style="font-weight: 600; font-size:13px;">{{prod.get_P_kind_display}}</p>
+                </div>
+            {% endfor %}
+        </div>
+       <div id="small-img-box">
+            <ul>
+                {% for prod in second_prod_list %}
+                    <li class="small-item prod-btn" pk="{{prod.pk}}">
+                        <img src="/media/{{prod.P_img}}">
+                        <p class="prod-name">{{prod.P_name}}</p>
+                        <p class="prod-kind">{{prod.get_P_kind_display}}</p>
+                    </li>
+                {% endfor %}
+                
+            </ul>
+        </div>
+    </div>
+    <!--content-->
+    <hr style="border-color: gray;  margin-bottom: 0px;;">
+    <ul id="general-list">
+        {% for prod in third_prod_list %}
+            <li class="general-item">
+                <p style="font-size:15px; padding-top:39px;" class="text-center">
+                    {{prod.P_name}}
+                </p>
+                <p style="font-size:8px;" class="text-center">
+                    {{prod.get_P_kind_display}}
+                </p>
+                <div class="add-cart-btn" pk="{{prod.pk}}">
+                    장바구니 담기
+                </div>
+                <img src="/media/{{prod.P_img}}" class="prod-btn" pk="{{prod.pk}}"> 
+            </li>
+        {% endfor %}
+
+    </ul>
+    <div style="clear: both;"></div>
+</div>
+<div id="msg-box" style="display:none;">
+    <p>상품이 장바구니에 담겼습니다.</p>
+</div>
+<script>    
+ function center(scroll_top){
+            var w = (window.innerWidth/2)-150;
+            var h = ((window.innerHeight/2)-50)+scroll_top;
+            $("#msg-box").css({
+                "left":w+"px",
+                "top":h+"px"
+            });
+        }
+        center(0);
+        $(document).scroll(function(){
+            center($(this).scrollTop());
+        });
+        function show_animation(){
+            $("#msg-box").toggle('fast',function(){
+                setTimeout(
+                    function(){
+                        $("#msg-box").hide();
+                    },
+                    1000
+                );
+            });
+        }
+     //장바구니 담기 클릭시
+     $(".add-cart-btn").click(function(){
+
+        var pk    = $(this).attr("pk");
+        var count = 1;
+        
+        var url   = "/addCart/"+pk+"/"+count
+        $.ajax({
+            type : "GET",
+            url : url,
+
+            success : function(response)
+            {
+                show_animation();
+
+            }
+        });
+    });
+
+    //상품클릭시
+    $(".prod-btn").click(function(){
+        var pk = $(this).attr("pk");
+        window.location.href="/order/detail/"+pk;
+    });
+    function prod_kind_click(number){
+        number = parseInt(number);
+        
+        if(number == 1){ // 전체 클릭시
+            
+            location.href= "/boeun_best/all/";
+        }else if(number == 2){ // 제빵 클릭시
+            location.href= "/boeun_best/baking/";
+        }else if(number == 3){// 제과 클릭시
+            location.href= "/boeun_best/confectionery/";
+        }else{ // 선물세트 클릭시
+            location.href= "/boeun_best/giftset/";
+        }
+    }
+</script>
+{% endblock %}
