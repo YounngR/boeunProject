@@ -68,7 +68,7 @@ urlpatterns = [
     path('boeun_logo_story/', views.bread_logo_story, name="bread_logo_story"),
     path('boeun_jujube_story/', views.boeun_jujube_story, name="boeun_jujube_story"),
     #추천베스트
-    path('boeun_best/', views.boeun_best, name="boeun_best"),
+    path('boeun_best/<keyword>/', views.boeun_best, name="boeun_best"),
     #고객센터
     path('Service_center/', views.Service_center, name="Service_center"),
 

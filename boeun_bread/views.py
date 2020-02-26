@@ -379,7 +379,7 @@ def order_lookup(request):
 #주문 배송 조회 날짜 검색
 def order_lookup_info(request):
 
-    result = None;
+    result = None
 
     if request.POST.get('type') == 5:
         before_date = request.POST.get('befor_date')
@@ -639,8 +639,38 @@ def boeun_jujube_story(request):
 
 
 #추천베스트
-def boeun_best(request):
-    return render(request,'boeun_bread/boeun_best.html')
+def boeun_best(request,keyword):
+    product = None
+    kind    = None
+    if keyword == "all":
+        product = Product.objects.all()
+        kind    = 0
+    elif keyword == "baking":
+        product = Product.objects.filter(P_kind='1')
+        kind    = 1
+    elif keyword == "confectionery":
+        product = Product.objects.filter(P_kind='2')
+        kind    = 2
+    elif keyword == "giftset":
+        product = Product.objects.filter(P_kind='3')
+        kind    = 3
+    else:
+        raise Http404
+    
+    '''
+        1. 상품 판매량 기준 정렬
+        2. 판매량 동일하면 최신 등록순 정렬
+    '''
+    product = product.order_by('-P_sales','-id')
+    
+    context = {
+        'first_prod':product[0:1], # 1위 빵 object
+        'second_prod_list':product[1:5], #2-5위 빵 queryset
+        'third_prod_list':product[5:],   # 나머지 빵 queryset
+        'kind':kind
+    }
+    
+    return render(request,'boeun_bread/boeun_best.html',context)
 
 #고객센터
 def Service_center(request):
