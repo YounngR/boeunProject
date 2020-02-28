@@ -102,6 +102,7 @@
     {% include 'mypage/order_lookup_info.html' %}
   </div>
 
+
 </div>
 
 <script>
@@ -118,7 +119,6 @@
       });
 
   function b_date(type){
-    console.log(type)
       $.ajax({
           type : "POST",
           url : "{% url 'boeun_bread:order_lookup_info' %}",

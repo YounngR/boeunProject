@@ -15,4 +15,31 @@
 
 
   <hr style="margin : 0px; margin-left:15px; margin-top:25px; width:960px; background-color:#D8D8D8; height:1px;">
+
+
+
 {% endfor %}
+
+<div style="text-align:center; padding-top : 50px;">
+{% if posts.has_other_pages %}
+  {% if posts.has_previous %}
+    <a style="color:#4d4d4d; " href="?page={{ posts.previous_page_number }}"><i class="fas fa-angle-left"></i></a>
+  {% else %}
+    <i style="color:#4d4d4d" class="fas fa-angle-left"></i>
+  {% endif %}
+    <span>|<span>
+  {% for i in posts.paginator.page_range %}
+    {% if posts.number == i %}
+      <span style="color:#0081ff">{{ i }} <span class="sr-only">(current)</span></span>
+    {% else %}
+      <a style="color:#4d4d4d" href="?page={{ i }}">{{ i }}</a>
+    {% endif %}
+      <span>|<span>
+  {% endfor %}
+  {% if posts.has_next %}
+    <a style="color:#4d4d4d" href="?page={{ posts.next_page_number }}"><i class="fas fa-angle-right"></i></a>
+  {% else %}
+    <span style="color:#4d4d4d"><i class="fas fa-angle-right"></i></span>
+  {% endif %}
+{% endif %}
+</div>

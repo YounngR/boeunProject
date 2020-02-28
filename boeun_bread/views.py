@@ -17,6 +17,8 @@ from datetime import datetime
 #from django.db.models import Sum
 from django.contrib import messages
 from django.core import serializers
+from django.core.paginator import Paginator
+import pandas
 
 
 
@@ -25,11 +27,10 @@ def get_object(model,**args):
     query_set = model.objects.filter(**args)
     return query_set[0] if query_set else None
 
+#날짜 계산(일주일)
+
 
 def main(request):
-
-
-
     return render(request,'boeun_bread/main.html')
 
 #-----manage
@@ -376,23 +377,64 @@ def order_lookup(request):
 
     order = Order.objects.filter(User=profile)
 
+    #Pagination
+    page = request.GET.get('page',1)
+    paginator = Paginator(order,5)
+    posts = paginator.get_page(page)
 
-    return render(request, 'mypage/order_lookup.html', {'order':order})
+    return render(request, 'mypage/order_lookup.html', {'order':posts, 'posts':posts})
 
 #주문 배송 조회 날짜 검색
 def order_lookup_info(request):
 
     result = None;
 
-    if request.POST.get('type') == 5:
-        before_date = request.POST.get('befor_date')
-        after = request.POST.get('after_date')
+    profile =  request.user.profile if request.user.is_authenticated else None
+    if not profile:
+        cookie_id = request.COOKIES.get('cookie_id')
+        profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
+    else:
+        copy_product(request)
+
+    if request.POST.get('type') == "1":
+        today = datetime.today()
+        result = Order.objects.filter(User=profile,Order_date__year=today.year, Order_date__month=today.month, Order_date__day=today.day)
+
+    elif request.POST.get('type') == "2":
+        day = datetime.today().day - datetime.today().weekday()
+
+        befor_day = str(datetime.today().year) + "-" + str(datetime.today().month) + "-" + str(day)
+
+        today =  str(datetime.today().year) + "-" + str(datetime.today().month) + "-" + str( datetime.today().day)
+
+        result = Order.objects.filter(User=profile,Order_date__range=[befor_day,today])
+
+    elif request.POST.get('type') == "3":
+        today = datetime.today()
+        result = Order.objects.filter(User=profile,Order_date__year=today.year, Order_date__month=today.month)
+
+    elif request.POST.get('type') == "4":
+        today = datetime.today()
+        month = today.month
+        if today.month == 1:
+            month = 12
+        else:
+            month = (today.month-1)
+            result = Order.objects.filter(User=profile,Order_date__year=today.year, Order_date__month=month)
+
+    elif request.POST.get('type') == "5":
+        b_date = request.POST.get('befor_date')
+        a_date = request.POST.get('after_date')
+
+        result = Order.objects.filter(User=profile,Order_date__range=[b_date,a_date])
 
 
+    #Pagination
+    page = request.GET.get('page',1)
+    paginator = Paginator(result,5)
+    posts = paginator.get_page(page)
 
-
-
-    return render(request, 'mypage/order_lookup_info.html', {'order':order})
+    return render(request, 'mypage/order_lookup_info.html', {'order':posts, 'posts':posts})
 #상품복제
 
 def copy_product(request):
@@ -501,11 +543,6 @@ def recently_info(request):
 
         }
     return HttpResponse(json.dumps(response), content_type="application/json")
-
-
-
-
-
 
 
 
