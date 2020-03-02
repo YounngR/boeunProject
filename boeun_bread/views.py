@@ -18,6 +18,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.core import serializers
 from django.core.paginator import Paginator
+from django.db.models import F
 import pandas
 
 
@@ -119,6 +120,21 @@ def delete_product(request):
         return redirect('/manage/modify_list')
 
 
+#매출 현황
+@login_required
+def manage_Sales_Status(request):
+
+    prod = Product.objects.all()
+
+
+    return render(request, 'manage/manage_Sales_Status.html',{'prod':prod})
+
+@login_required
+def manage_Sales_Status_table(request):
+
+
+
+    render(request, 'mypage/manage_Sales_Status_table.html', {'prod':prod})
 
 #end manage
 
@@ -632,6 +648,10 @@ def payment_result(request):
     for prod_pk in request.POST.getlist('prod_pk[]'):
         product = get_object(Product, pk=prod_pk)
         cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
+
+        Product.objects.filter(pk=prod_pk).update(
+            P_sales=F('P_sales')+ cp.product_count
+        )
 
         Order_Product.objects.create(
             Order = order,

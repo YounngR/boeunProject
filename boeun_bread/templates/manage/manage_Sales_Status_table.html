@@ -1,0 +1,36 @@
+<style>
+
+  table {
+   width: 100%;
+   border-top: 1px solid #444444;
+   border-collapse: collapse;
+ }
+ th, td {
+   border-bottom: 1px solid #444444;
+   padding: 10px;
+ }
+
+</style>
+<div style="padding-top:30px;">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="{% url 'boeun_bread:manage' %}">관리자페이지</a>
+    </li>
+    <li class="breadcrumb-item active">매출현황</li>
+</ol>
+
+<div style="text-align:center;">
+<table>
+  <tr>
+    <th>상품명</th>
+    <th>총 판매량</th>
+  </tr>
+  {% for prod in prod %}
+  <tr>
+    <td>{{prod.P_name}}</td>
+    <td>{{prod.P_sales}}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+</div>

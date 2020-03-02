@@ -58,7 +58,7 @@
             background: #EF832E;
             border-radius: 15px;
             text-align: center;
-            line-height: 40px;;
+            line-height: 40px;
             display: inline-block;
             cursor: pointer;
         }
@@ -70,7 +70,7 @@
             margin: 0 auto;
             position: relative;
             top:176px;
-            background: white;;
+            background: white;
             border: 1px solid #9E9E9E;
         }
         #tab-header{
@@ -180,7 +180,7 @@
             <!--tab content-->
             <div id="tab-content">
                 <p id="content1" class="content">
-                    제품상세
+                    <img  id="p_info" style="position: relative; bottom:24px; left:-1px; padding-right:46px; height: 281px; width: 945px;">
                 </p>
                 <p id="content2" class="content" style="display: none;">
                     <img src="{% static 'img/bread/infor2.png'%}" style="position: relative; bottom:24px; left:-1px; padding-right:46px; height: 281px; width: 945px;">
@@ -196,6 +196,10 @@
         <p>상품이 장바구니에 담겼습니다.</p>
     </div>
     <script>
+      $(document).ready(function(){
+        src = "/static/img/bread/" +{{prod.pk}}+".jpg"
+        var img = document.getElementById('p_info').setAttribute("src",src);
+      })
           function center(scroll_top){
             var w = (window.innerWidth/2)-150;
             var h = ((window.innerHeight/2)-50)+scroll_top;
