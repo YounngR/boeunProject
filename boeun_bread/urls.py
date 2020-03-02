@@ -16,6 +16,7 @@ urlpatterns = [
     path('manage/modify_list/',views.modify_list,name="modify_list"),
     path('manage/modify_product/<pk>/',views.modify_product,name="modify_product"),
     path('manage/delete_product/',views.delete_product,name="delete_product"),
+    path('manage/writeBoard/',views.write_board,name="write_board"),#공지사항 작성
     #end manage
     #주문하기
     path('order/<path>/',views.order,name="order"),

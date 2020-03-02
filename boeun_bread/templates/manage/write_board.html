@@ -1,0 +1,106 @@
+{% extends 'manage/manage_base.html'%}
+
+{% block manage_content %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <style>
+        #write-container{
+            margin:0 auto;
+        }
+        #file{
+            display: none;
+        }
+        #file-label{
+            width:100px;
+            height: 30px;
+            background: rgb(233,236,239);
+            color:rgb(108,117,125);
+            text-align: center;
+            line-height: 30px;
+            border-radius: 15px;
+        }
+        #filename-list{
+            
+            list-style: none;
+            margin-left: 10px;
+        }
+        .remove-icon{
+            font-size: 14px;
+            font-weight: bold;
+            color: red;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        #submit-btn{
+            width:100px;
+            height: 30px;
+            margin:30px auto;
+            background: rgb(233,236,239);
+            color:rgb(108,117,125);
+            text-align: center;
+            line-height: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+    </style>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'boeun_bread:manage' %}">관리자페이지</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'boeun_bread:manage' %}">공지사항</a>
+        </li>
+        <li class="breadcrumb-item active">공지사항작성</li>
+    </ol>
+    <div id="write-container" class="col-md-7">
+        <form action="{% url 'boeun_bread:write_board'%}" method="POST" enctype="multipart/form-data" id="form">
+            {% csrf_token %}
+            <!--제목-->
+            <label>제목</label><br>
+            <input type="text" class="form-control"  name="title" placeholder="제목"><br>
+            <!--첨부파일-->
+            <input type="hidden" name="exclude_file" id="exclude-file">
+            <label for="file" id="file-label">첨부파일</label>
+            <input type="file" id="file" name="file" multiple="multiple"><br>
+            <ul id="filename-list"></ul>
+            <!--내용-->
+            <div id="summernote"></div>
+            <input type="hidden" name="content" id="content">
+
+            <div id="submit-btn">작성하기</div>
+        </form>
+    </div>
+    <script>
+        var exclude_file = []; //파일 객체 배열
+        var file      = document.getElementById('file');
+        //summernote 활성화
+        $('#summernote').summernote({
+            height: 300
+        });
+        // 파일선택 상태가 변경되면 호출
+        file.onchange = function(e) {
+            var files = e.target.files; // FileList 객체
+            var len   = $("#filename-list").children("li").length;
+            for(var i=0; i<files.length; i++){
+                
+                var tag = $("<li><span class='remove-icon' idx="+(len+i)+">X</span>"+files[i].name+"</li>");
+                $("#filename-list").append(tag);
+            }
+            
+        }
+        //첨부파일 삭제 아이콘 클릭시
+        $(document).on("click",".remove-icon",function(){
+            var file_index = parseInt($(this).attr("idx"));
+            exclude_file.push(file_index);
+            $(this).parent("li").remove();
+            
+        });
+        //작성하기 
+        $("#submit-btn").click(function(){
+            $("#exclude-file").val(exclude_file);
+            $("#content").val($('#summernote').summernote('code'));
+            $("#form").submit();
+        });
+    </script>
+{% endblock %}

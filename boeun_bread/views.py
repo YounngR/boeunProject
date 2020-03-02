@@ -44,7 +44,7 @@ def isAdmin(request):
 @login_required
 def manage(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
 
     return render(request,'manage/manage_main.html')
 
@@ -52,7 +52,7 @@ def manage(request):
 @login_required
 def create_product(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
     if request.method == "POST":
         is_new = True if request.POST.get('is_new')=="on" else False
         Product.objects.create(
@@ -68,7 +68,7 @@ def create_product(request):
 @login_required
 def modify_list(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
     product = Product.objects.all()
 
     return render(request,'manage/modify_list.html',{'product':product})
@@ -86,7 +86,7 @@ def getProduct(pk):
 @login_required
 def modify_product(request,pk):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
     product = getProduct(pk)
 
     if request.method == "POST":
@@ -111,14 +111,41 @@ def modify_product(request,pk):
 @login_required
 def delete_product(request):
     if not isAdmin(request):
-        return render(request,'boeun_bread/main.html',{'msg':'권한 없습니다.'})
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
     if request.method == "POST":
         product = Product.objects.filter(id=request.POST.get('pk'))
         if product:
             product[0].delete()
         return redirect('/manage/modify_list')
 
-
+#공지사항 작성
+@login_required
+def write_board(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
+    if request.method == "POST":
+        files = request.FILES.getlist('file')
+        '''
+            client 삭제된 리스트로
+            client 삭제된 파일 제외 
+        '''
+        for index in request.POST.getlist('exclude_file'):
+            try:     
+                del files[int(index)]
+            except ValueError:    
+                pass
+        board = Board.objects.create(
+                    user    = request.user.profile,
+                    title   = request.POST.get('title'),
+                    content = request.POST.get('content')
+                )
+        for f in files:
+            BoardFile.objects.create(
+                board = board,
+                file  = f
+            )
+        return redirect('/manage')    
+    return render(request,'manage/write_board.html')
 
 #end manage
 
@@ -682,6 +709,7 @@ def boeun_jujube_story(request):
 def boeun_best(request,keyword):
     product = None
     kind    = None
+    
     if keyword == "all":
         product = Product.objects.all()
         kind    = 0
