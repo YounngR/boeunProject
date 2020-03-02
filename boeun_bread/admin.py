@@ -10,3 +10,5 @@ admin.site.register(Cart)
 admin.site.register(Cart_Product)
 admin.site.register(Order)
 admin.site.register(Order_Product)
+admin.site.register((Board,BoardFile,QNA))
+
