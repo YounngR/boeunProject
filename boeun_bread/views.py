@@ -171,7 +171,16 @@ def Login(request):
     return render(request, 'Login/Login.html')
 
 def non_login(request):
-    
+
+    if request.method == "POST":
+        context={}
+        user = Profile.objects.filter(U_name=request.POST.get('user_id'), U_phone=request.POST.get('phone'))
+        if user:
+            return render(request, 'Login/non_login.html',context)
+
+        else:
+            context['msg'] = "주문내역이 존재하지않습니다."
+            return render(request, 'Login/non_login.html',context)
     return render(request, 'Login/non_login.html')
 
 def logout(request):
@@ -262,7 +271,7 @@ def LoginPage(request):
             context['msg'] = "로그인을 실패했습니다."
 
 
-        return render(request, 'boeun_bread/main.html',context)
+        return render(request, 'Login/Login.html',context)
     return redirect('/')
 
 #회원가입 id 중복 체크
@@ -791,9 +800,17 @@ def notice_list(request):
     board = Board.objects.all()
 
     return render(request,'boeun_bread/notice_list.html',{'board':board})
+
 def notice_detail(request,page):
     board = get_object_or_404(Board,pk=page)
-    return render(request,'boeun_bread/notice_detail.html',{'board':board})    
+    board.hit = board.hit + 1
+    board.save()
+    files = board.boardfile_set.all()
+    context = {
+        'board':board,
+        'files':files
+    }
+    return render(request,'boeun_bread/notice_detail.html',context)
 
 #찾아오시는 길
 def boeun_map(request):

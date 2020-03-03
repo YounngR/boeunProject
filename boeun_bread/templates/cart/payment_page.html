@@ -2,6 +2,16 @@
 {% load static %}
 
 {% block content %}
+<style>
+  #payment_table{
+      width:983px;
+      border-top:2px solid #9E9E9E;
+      margin: 0 auto;
+      margin-top:38px;
+      background: #F8F8F8;
+
+  }
+</style>
 
 <div class="text-right" style="margin-top:28px; margin-right: 78px;">
    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
@@ -11,6 +21,10 @@
 <div style="margin-left:102px;">
     <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
     <p style="margin-left:11px;font-size:20px; font-weight:800;">결재 정보</p>
+</div>
+
+<div id="payment_table">
+  <label style=" margin-left:50px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">결재정보</label>
 </div>
 
 

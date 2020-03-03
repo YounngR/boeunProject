@@ -8,9 +8,16 @@
             font-weight: bold;
 
         }
+        .container{
+            border: 1px solid #9E9E9E;
+            margin-top:30px;
+        }
+        hr{
+            border-color:rgb(233,233,233);
+        }
     </style>
     <div class="container">
-        <h4>{{board.title}}</h4>
+        <h4 style="margin-left: 30px; margin-top: 30px;">{{board.title}}</h4>
         <hr>
         <div id="board-info">
             <span class="key">작성자</span>
@@ -21,15 +28,17 @@
             <span>|</span>
             <span class="key">조회수</span>
             <span class="value">{{board.hit}}</span>
-        </div>    
+        </div>
         <hr>
+        {% if files %}
         <div style="margin-left: 30px;">
             <p>첨부파일</p>
-            {% for f in board.boardfile_set.all%}
+            {% for f in files %}
             <a href="{{f.file}}" download>{{f.file}}</a><br>
             {% endfor %}
         </div>
         <hr>
+        {% endif %}
         <div style="margin-left: 30px;">
             {{board.content|safe}}
         </div>

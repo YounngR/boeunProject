@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,23 +16,17 @@
 <style>
     *{margin: 0; padding: 0;}
 
-    
+
     body{
         height: 100%;
-        background-color: #f7f1db;
+
     }
-    header{
-        width:1010px;
-        height:40px;
-        margin:0 auto;
-        margin-top: 40px;
-        position: relative;
-    }
+
     .header-item{
         font-weight: 800;
         position: absolute;
     }
-    
+
     .header-item:nth-last-child(1){
         right:0px;
     }
@@ -40,8 +36,8 @@
         background: white;
         margin: 0 auto;
         margin-top:5%;
-       
-        
+
+
     }
     .field{
         width:275px;
@@ -50,51 +46,49 @@
     }
     .field[type="submit"]{
         height: 35px;
-        background:#59493f;
+        background:black;
         color:white;
     }
     form{ text-align: center;}
     hr{
-        width:275px; 
-        border-color: gray; 
+        width:275px;
+        border-color: gray;
         border-width: 2px;
         margin:0 auto;
         margin-top:10px;
     }
-    
+
 </style>
 <body>
+<div>
     {% if msg %}
         <script>alert("{{msg}}");</script>
     {% endif %}
    <header>
         <div class="header-item">
-            <div style="width:5px; height:23px; background-color:black; float: left;"></div>
-            <p style="margin-left: 10px; font-size: 18px;">비밀번호 찾기</p>
+            <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; left:-450px; top:-19px;">
+            <i class="glyphicon glyphicon-menu-right"  style="position: relative;left:-445px; top:-15px;"></i>
+            <span style="font-weight: 500; position: relative; left:-440px; top:-16px;" >비밀번호 찾기</span>
         </div>
-        <div class="header-item">
-            <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
-            <i class="glyphicon glyphicon-menu-right"></i>
-            <span style="font-weight: 500;">비밀번호 찾기</span>
-        </div>
-   </header> 
-   
-        
-    <div id="field-box">  
-        <p style="font-weight: 800; margin-left:159px; padding-top:50px;">
+   </header>
+
+
+    <div id="field-box">
+        <p style="font-weight: 800; font-size:30px; margin-left:159px; padding-top:50px;">
             비밀번호 찾기
         </p>
-        <hr>  
+        <hr>
         <form action="{% url 'boeun_bread:forgetPw' %}"  method="POST">
         {% csrf_token %}
             <input  class="field" name="user_id" type="text" placeholder="아이디" value="{{user_id}}" required><br>
             <input  class="field" name="user_email" type="email" placeholder="이메일" value="{{user_email}}" required><br>
             <input  class="field" type="submit" value="비밀번호 찾기">
-        </form> 
-        
+        </form>
+
      </div>
 </body>
 <script>
-    
+
 </script>
 </html>
+{% endblock %}

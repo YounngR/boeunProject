@@ -1,4 +1,4 @@
- 
+
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
@@ -12,6 +12,8 @@ class Profile(models.Model):
     U_name      = models.CharField(max_length=20,null=True,blank=True)
     U_groupName = models.CharField(max_length=50, null=True, blank=True)
     U_email     = models.EmailField(max_length=50)
+    U_delete    = models.BooleanField(default=False) #True = 탈퇴
+    U_Reason    = models.IntegerField(default=0)
 
 class Product(models.Model):
     PRODUCT_KIND =(
@@ -29,7 +31,7 @@ class Product(models.Model):
     P_kind       = models.CharField(max_length=1,choices=PRODUCT_KIND) #상품종류
     def __str__(self):
         return self.P_name
-    
+
 
 class Cart(models.Model):
     User = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
@@ -72,30 +74,22 @@ class Order_Product(models.Model):
     product_count = models.IntegerField(default=0)
 
 class Board(models.Model):
-    user    = models.ForeignKey(Profile, on_delete=models.CASCADE) 
+    user    = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title   = models.CharField(max_length=200) #공지사항 제목
     content = models.TextField() #공지사항 내용
     hit     = models.IntegerField(default=0) #조회수
     date    = models.DateField(auto_now_add=True) # 작성날짜
 
 class BoardFile(models.Model):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE) 
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
     file  = models.FileField(upload_to="board/") #첨부파일
 
 class QNA(models.Model):
     QUESTION_KIND =(
         ('1','배달기준'),
-        
+
     )
-    user          = models.ForeignKey(Profile, on_delete=models.CASCADE) 
+    user          = models.ForeignKey(Profile, on_delete=models.CASCADE)
     question      = models.CharField(max_length=200) #질문
     answer        = models.TextField() #내용
     question_kind = models.CharField(max_length=1,choices=QUESTION_KIND) #질문유형
-
-
-   
-
-
-
-
-

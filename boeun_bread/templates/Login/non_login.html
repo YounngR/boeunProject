@@ -3,14 +3,6 @@
 {% load static %}
 
 <title>로그인</title>
-<!-- bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<!--나눔스퀘어-->
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
-<!--제이쿼리-->
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <head>
     <style>
         *{padding: 0; margin: 0;}
@@ -96,73 +88,19 @@
         }
     </style>
 </head>
-<script>
-    $(document).ready(function(){
-    var userInputId = getCookie("userInputId");//저장된 쿠기값 가져오기
-    $("input[name='user_id']").val(userInputId);
 
-    if($("input[name='user_id']").val() != ""){ // 그 전에 ID를 저장해서 처음 페이지 로딩
-                                           // 아이디 저장하기 체크되어있을 시,
-        $("#id_checkbox").attr("checked", true); // ID 저장하기를 체크 상태로 두기.
-    }
-
-    $("#id_checkbox").change(function(){ // 체크박스에 변화가 발생시
-        if($("#id_checkbox").is(":checked")){ // ID 저장하기 체크했을 때,
-            var userInputId = $("input[name='user_id']").val();
-            setCookie("userInputId", userInputId, 7); // 7일 동안 쿠키 보관
-        }else{ // ID 저장하기 체크 해제 시,
-            deleteCookie("userInputId");
-        }
-    });
-
-    // ID 저장하기를 체크한 상태에서 ID를 입력하는 경우, 이럴 때도 쿠키 저장.
-    $("input[name='user_id']").keyup(function(){ // ID 입력 칸에 ID를 입력할 때,
-        if($("#id_checkbox").is(":checked")){ // ID 저장하기를 체크한 상태라면,
-            var userInputId = $("input[name='user_id']").val();
-            setCookie("userInputId", userInputId, 7); // 7일 동안 쿠키 보관
-        }
-    });
-});
-
-function setCookie(cookieName, value, exdays){
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
-    document.cookie = cookieName + "=" + cookieValue;
-}
-
-function deleteCookie(cookieName){
-    var expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() - 1);
-    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
-}
-
-function getCookie(cookieName) {
-    cookieName = cookieName + '=';
-    var cookieData = document.cookie;
-    var start = cookieData.indexOf(cookieName);
-    var cookieValue = '';
-    if(start != -1){
-        start += cookieName.length;
-        var end = cookieData.indexOf(';', start);
-        if(end == -1)end = cookieData.length;
-        cookieValue = cookieData.substring(start, end);
-    }
-    return unescape(cookieValue);
-}
-</script>
 <body>
 <div style="padding-bottom:100px;">
-    <div class="home-right" style="margin-top:40px; margin-right: 78px; ">
+    <div class="home-right" style="margin-top:40px; margin-right: 10px; ">
         <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
         <i class="glyphicon glyphicon-menu-right"></i>
-        <span style="font-weight: 500; position: relative; top:-1px; ">로그인</span>
+        <span style="font-weight: 500; position: relative; top:-1px; ">비회원 주문조회</span>
     </div>
 
 
     <div class="home-left">
         <div style=" margin-top:2px; width:5px; height:23px; background-color:#d7935d; float:left; "></div>
-        <p style="margin-left:12px;">로그인</p>
+        <p style="margin-left:12px;">비회원 주문조회</p>
     </div>
 
     <div id="home-box">
@@ -181,14 +119,16 @@ function getCookie(cookieName) {
             <div style="font-weight: 100;">
                 이름과 핸드폰 번호 입력을 통해 주문 조회를 하시기 바랍니다. 회원가입 하여 본빵의 더 많은 혜택과 이벤트를 누리세요!
             </div>
+          <form name="login" action="{% url 'boeun_bread:non_login' %}" method="POST">
+            {% csrf_token %}
             <div id="box_id">
                 <label>이름</label>
-                <input type="text" id="user_id" name="user_id" style="width:331px; margin-left:53px;">
+                <input type="text" id="user_id" name="user_id" style="width:331px; margin-left:56px;">
             </div>
 
             <div id="box_password">
                 <label>핸드폰번호</label>
-                <input type="text" id="password" name="password" style="width:331px; margin-left:14px; margin-top:9px;">
+                <input type="text" id="phone" name="phone" style="width:331px; margin-left:14px; margin-top:9px;">
             </div>
             <button type="submit" class="login-button" style="position: absolute; margin-left:440px; margin-top:-64px;">주문 조회</button>
 
@@ -198,28 +138,17 @@ function getCookie(cookieName) {
                     </div>
 
                 </div>
-            </div>
+            </form>
+          </div>
 
 
     </div>
 </div>
 
     <script>
-        //아이디 찾기 클릭시
-        function forgetId(){
-            location.href="{% url 'boeun_bread:forgetId' %}";
-        }
-        //비밀번호 찾기 클릭시
-        function forgetPw(){
-          location.href="{% url 'boeun_bread:forgetPw' %}";
-        }
-        //회원로그인
+        //비회원 주문조회
         function modify_user(){
             location.href="/Login/"
-        }
-
-        function delete_user(){
-            window.location.href="{% url 'boeun_bread:non_login' %}";
         }
 
     </script>

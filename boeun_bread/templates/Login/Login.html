@@ -3,14 +3,6 @@
 {% load static %}
 
 <title>로그인</title>
-<!-- bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<!--나눔스퀘어-->
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
-<!--제이쿼리-->
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <head>
     <style>
         *{padding: 0; margin: 0;}
@@ -152,7 +144,14 @@ function getCookie(cookieName) {
 }
 </script>
 <body>
+  {% if msg %}
+    <script>alert("{{msg}}")</script>
+  {% endif %}
+
 <div style="padding-bottom:100px;">
+    <form name="login" action="{% url 'boeun_bread:LoginPage' %}" method="POST">
+        {% csrf_token %}
+
     <div class="home-right" style="margin-top:40px; margin-right: 78px; ">
         <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
         <i class="glyphicon glyphicon-menu-right"></i>
@@ -184,12 +183,12 @@ function getCookie(cookieName) {
             </div>
             <div id="box_id">
                 <label>아이디</label>
-                <input type="text" id="user_id" name="user_id" style="width:351px; margin-left:27px;">
+                <input type="text" id="user_id" name="user_id" style="width:351px; margin-left:28px;">
             </div>
 
             <div id="box_password">
                 <label>비밀번호</label>
-                <input type="password" id="password" name="password" style="width:351px; margin-left:14px; margin-top:9px;">
+                <input type="password" id="user_pwd" name="user_pwd" style="width:351px; margin-left:14px; margin-top:9px;">
             </div>
             <button type="submit" class="login-button" style="position: absolute; margin-left:440px; margin-top:-64px;">로그인</button>
 
@@ -205,6 +204,7 @@ function getCookie(cookieName) {
                 </div>
             </div>
     </div>
+  </form>
 </div>
 
     <script>
