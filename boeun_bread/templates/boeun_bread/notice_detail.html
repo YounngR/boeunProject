@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+    <style>
+        #board-info > span{
+            margin-left: 30px;
+        }
+        #board-info .key{
+            font-weight: bold;
+
+        }
+    </style>
+    <div class="container">
+        <h4>{{board.title}}</h4>
+        <hr>
+        <div id="board-info">
+            <span class="key">작성자</span>
+            <span class="value">관리자</span>
+            <span>|</span>
+            <span class="key">작성일</span>
+            <span class="value">{{board.date|date:"Y-m-d"}}</span>
+            <span>|</span>
+            <span class="key">조회수</span>
+            <span class="value">{{board.hit}}</span>
+        </div>    
+        <hr>
+        <div style="margin-left: 30px;">
+            <p>첨부파일</p>
+            {% for f in board.boardfile_set.all%}
+            <a href="{{f.file}}" download>{{f.file}}</a><br>
+            {% endfor %}
+        </div>
+        <hr>
+        <div style="margin-left: 30px;">
+            {{board.content|safe}}
+        </div>
+    </div>
+{% endblock %}

@@ -25,6 +25,7 @@ urlpatterns = [
     path('order/detail/<pk>/',views.order_detail,name="orderDetail"),
     path('payment_page',views.payment_page,name="payment_page"),
     #end 주문하기
+
     #로그인
     path('Login/',views.Login, name="Login"),
     path('non_login/',views.non_login, name="non_login"),
@@ -40,6 +41,7 @@ urlpatterns = [
     path('order_history/', views.order_history, name="order_history"),
     path('order_lookup/',views.order_lookup, name="order_lookup"),
     path('order_lookup_info', views.order_lookup_info, name="order_lookup_info"),
+
     #장바구니
     path('cart/',views.cart, name="cart"),
     path('addCart/<pk>/<count>',views.add_cart,name='addCart'),
@@ -76,8 +78,8 @@ urlpatterns = [
     path('boeun_best/<keyword>/', views.boeun_best, name="boeun_best"),
     #고객센터
     path('Service_center/', views.Service_center, name="Service_center"),
-
-
+    path('Service_center/NoticeList/', views.notice_list, name="notice_list"),#공지사항 리스트
+    path('Service_center/NoticeDetail/<page>/', views.notice_detail, name="notice_detail"),#공지사항 리스트
      #견적서
     path('estimate/',views.estimate,name='estimate'),
     #아이디 찾기

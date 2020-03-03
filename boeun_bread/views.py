@@ -786,6 +786,15 @@ def boeun_best(request,keyword):
 def Service_center(request):
     return render(request,'boeun_bread/Service_center.html')
 
+#공지사항 리스트
+def notice_list(request):
+    board = Board.objects.all()
+
+    return render(request,'boeun_bread/notice_list.html',{'board':board})
+def notice_detail(request,page):
+    board = get_object_or_404(Board,pk=page)
+    return render(request,'boeun_bread/notice_detail.html',{'board':board})    
+
 #찾아오시는 길
 def boeun_map(request):
     return render(request,'boeun_bread/boeun_map.html')
