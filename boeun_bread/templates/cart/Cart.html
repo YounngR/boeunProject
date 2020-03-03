@@ -138,7 +138,7 @@
             color:red;
             font-weight: bold;
         }
-        
+
         .datepicker-panel > ul > li.disabled,
         .datepicker-panel > ul > li.disabled:hover{
                 color:red;
@@ -316,19 +316,19 @@
 </script>
 <script>
     init();
-    
-        
+
+
     $('#hope-day').datepicker({
         format: 'yyyy-mm-dd',
         daysMin:['일','월',"화","수","목","금","토"],
         months:['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        filter : function (date ,  view )  { 
+        filter : function (date ,  view )  {
             if ((date.getDay() === 0 || date.getDay() === 6 ) && view === 'day') {
-                return false; 
+                return false;
             }
-        } 
+        }
     });
-    
+
     //배송희망일 값 change 이벤트
     $("#hope-day").change(function(){
         var input_date = new Date($(this).val()) //사용자 선택 date
@@ -337,16 +337,16 @@
         if(input_date.getDay() == 0 || input_date.getDay() == 6){
             alert("토요일,일요일은 주문 불가능 합니다.");
             $(this).val("");
-        }    
+        }
         else if(now >= input_date) {
             alert("2일후부터 주문가능합니다.");
             $(this).val("");
-        }    
+        }
     });
-    
-    
+
+
     function init(){
-        
+
         var sum = 0
         $(".item-money").each(function(index,item){
             var pk    = $(item).attr("pk");
@@ -412,6 +412,7 @@
                 }
             });
     }
+
     //총결제금액 가져오기
     function get_total(){
         var total = 0;
@@ -488,6 +489,7 @@
 
             success : function(response)
             {
+                alert("결제완료되었습니다.");
                 location.href="/";
 
             }
@@ -501,6 +503,11 @@
          alert(msg);
        });
     }
+    /*
+    function payment(){
+      location.href= "{% url 'boeun_bread:payment_page' %}";
+    }
+    */
     //  최근 배송지 정보로 입력 체크시
     $("#input-recently-info").change(function(){
         if($(this).is(":checked")){

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+   <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+   <i class="glyphicon glyphicon-menu-right"></i>
+   <span style="font-weight: 500; position: relative; top:-1px;">결재정보</span>
+</div>
+<div style="margin-left:102px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">결재 정보</p>
+</div>
+
+
+<script>
+  function get_total(){
+      var total = 0;
+      $.ajax({
+            type : "POST",
+            url : "{% url 'boeun_bread:total' %}",
+            async:false,
+            data : {
+              'csrfmiddlewaretoken': '{{ csrf_token }}',
+              'cart_pk':"{{cart.pk}}",
+            },
+
+            success : function(response)
+            {
+              total = response['total'];
+            }
+        });
+      return total;
+  }
+</script>
+{% endblock %}

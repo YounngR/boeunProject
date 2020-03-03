@@ -23,9 +23,11 @@ urlpatterns = [
     #주문하기
     path('order/<path>/',views.order,name="order"),
     path('order/detail/<pk>/',views.order_detail,name="orderDetail"),
+    path('payment_page',views.payment_page,name="payment_page"),
     #end 주문하기
     #로그인
     path('Login/',views.Login, name="Login"),
+    path('non_login/',views.non_login, name="non_login"),
     path('logout/',views.logout, name="logout"),
     #마이페이지
     path('mypage/',views.mypage,name="mypage"),

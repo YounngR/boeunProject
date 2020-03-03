@@ -118,7 +118,7 @@ def delete_product(request):
         if product:
             product[0].delete()
         return redirect('/manage/modify_list')
-        
+
 @login_required
 def manage_Sales_Status(request):
 
@@ -169,6 +169,10 @@ def write_board(request):
 def Login(request):
 
     return render(request, 'Login/Login.html')
+
+def non_login(request):
+    
+    return render(request, 'Login/non_login.html')
 
 def logout(request):
     auth.logout(request)
@@ -409,6 +413,7 @@ def order_history(request):
     return render(request, 'mypage/order_history.html')
 
 #주문배송조회
+@login_required
 def order_lookup(request):
 
     profile =  request.user.profile if request.user.is_authenticated else None
@@ -704,6 +709,23 @@ def get_total(request):
     else:
         raise Http404
     return HttpResponse(json.dumps(context), content_type="application/json")
+
+#결제 최종페이지
+def payment_page(request):
+
+    profile =  request.user.profile if request.user.is_authenticated else None
+    if not profile:
+        cookie_id = request.COOKIES.get('cookie_id')
+        profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
+    else:
+        copy_product(request)
+
+    cart = get_object(Cart,User=profile)
+
+    cp   = Cart_Product.objects.filter(Cart=cart)
+
+
+    return render(request,'cart/payment_page.html',{'cp':cp,'cart':cart})
 
 #주문번호 생성
 def create_order_number():
