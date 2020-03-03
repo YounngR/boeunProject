@@ -1,0 +1,28 @@
+{% extends 'boeun_bread/service_centerbase.html' %}
+{% load extra %}
+{% block service_content %}
+    <table class="table"id="table">
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>내용</th>
+                <th>작성날짜</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in board %}
+            <tr>
+                <td>공지</td>
+                <td page="{{obj.pk}}" class="detail">{{obj.title|get_text}}</td>
+                <td>{{obj.date|date:'Y-m-d'}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        $(".detail").click(function(){
+            var page = $(this).attr("page");
+            location.href="/Service_center/NoticeDetail/"+page;
+        });
+    </script>
+{% endblock %}

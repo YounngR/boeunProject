@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    
+    .box{
+        width:983px;
+        
+        border: 1px solid rgb(127,126,126);
+        margin:0 auto;
+        position: relative;
+    }
+    ul{
+        list-style: none;
+    }
+    ul > li{
+        font-size: 13px;
+        font-weight: 700;
+    }
+    #footer-box li{
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .guide{
+        margin-top:45px;
+        margin-left: 52px;
+
+    }
+
+    .top-line{
+        width:130px;
+        margin:18px auto; padding:0px;
+        border-color: #9E9E9E;
+
+    }
+    #btn-list-box > li{
+        width:246px;
+        margin-left:27px;
+        float: left;
+        text-align: center;
+
+    }
+    #btn-list-box img{
+        width:100px;
+        height: 103px;
+    }
+    .title{
+        font-size:20px; font-weight: bold;
+    }
+    #btn-list-box .link{
+        width:107px;
+        height: 30px;
+        background-color: rgb(218,218,218);
+        color:black;
+        margin:0 auto;
+        line-height: 30px;
+        cursor: pointer;
+    }
+  
+    #tab{
+        width:983px;
+        height: 37px;
+        border-top:1px solid #9E9E9E;
+        border-bottom:1px solid #9E9E9E;
+        margin-top: 42px;
+    }
+    #tab > div{
+        display: inline-block;
+        width:489px;
+        height:37px;
+        text-align: center;
+        line-height: 37px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .tab-active{
+        background: #e47f32;
+        color:white;
+    }
+
+    hr{
+        border-color:#9E9E9E;
+    }
+    #search-text{
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 11px;
+
+    }
+    #search-btn{
+        
+        width:94px;
+        height: 32px;;
+        font-size: 14px;
+        font-weight: bold;
+        background: #e47f32;
+        color:white;
+        padding:9px 34px;
+    }
+    #search-field{
+        width:474px;
+        height: 32px;
+    }
+    #table{
+        width:915px;
+        margin:0 auto;
+        margin-bottom: 30px;
+        font-size: 16px;
+    }
+    #table td{
+        width:305px;
+    }
+    #table tr{
+        margin-top: 46px;
+    }
+    #table td:nth-last-child(2){
+        width:700px;
+    }
+    #table td:nth-last-child(1),
+    #table th:nth-last-child(1),
+    #table td:nth-last-child(3),
+    #table th:nth-last-child(3){
+        text-align: center;
+        
+    }
+    .table > thead > tr > td,
+    .table > tbody > tr > td,
+    .table > tfoot > tr > td {
+        border: 0px;
+        
+
+    }
+    .table > thead{
+       
+        background:rgb(181,179,180);
+    }
+
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
+</div>
+<div style="margin-top:14px; margin-left:99px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">고객센터</p>
+</div>
+<div class="box">
+    <div class="guide">
+        <p style="font-size: 25px; font-weight: bold;">
+            고객상담안내
+        </p>
+        <ul>
+            <li>
+                - 본 빵을 이용하시면서 문의사항이 있으시면 말씀해주세요.<br>
+                  &nbsp 더 나은 서비스를 제공하기 위해 노력하겠으며, 최선을 다해 답변 드리겠습니다.
+
+            </li>
+            <li>
+                - 문의하신 내용에 대한 답변은 요청 시 등록하신 E-Mail로 발송되며,<br>
+                 &nbsp "온라인 상담 내역"을 통해 확인 가능합니다.
+            </li>
+        </ul>
+        <div style="position: absolute; right:119px; top:96px;">
+            <p style="font-weight: bold; font-size: 30px; text-align: center;">
+                고객상담 안내<br>
+                043-544-5446
+            </p>
+        </div>
+    </div>
+    <div class="guide">
+        <p style="font-size: 25px; font-weight: bold;">
+            고객센터 운영 안내
+        </p>
+        <ul>
+            <li>
+                - 9시 ~ 17시 (주말,공휴일 제외)
+            </li>
+        </ul>
+        
+    </div>
+    <div id="tab">
+        <div class="tab-active">공지사항</div>
+        <div>QnA</div>
+    </div>
+    <hr>
+    <div class="text-center">
+        
+        <form>
+            <label id="search-text">공지사항검색</label>
+            <input id="search-field">
+            <span id="search-btn">검색</span>
+        </form>
+    </div>
+    <hr>
+    {% block service_content %}
+    {% endblock %}
+</div>
+
+
+{% endblock %}

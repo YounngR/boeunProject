@@ -8,3 +8,9 @@ def number_format(number):
 @register.filter
 def get_total(pk):
     pass
+@register.filter
+def get_text(text):
+    if len(text) > 74:
+        return text[:75]+"..."
+    return text    
+
