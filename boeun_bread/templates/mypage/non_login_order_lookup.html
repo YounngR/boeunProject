@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  #order_lookup_box{
+      width:983px;
+      border-top:2px solid #9E9E9E;
+      margin: 0 auto;
+      margin-top:38px;
+      background: #F8F8F8;
+
+  }
+  #order_lookup_table{
+    width:960px;
+    height:48px;
+    border-top:2px solid #91938E;
+    border-bottom:2px solid #91938E;
+    margin: 0 auto;
+    margin-top:30px;
+    margin-left:15px;
+    background: #ECEFE4;
+  }
+  .table_info{
+    margin-top:27px;
+    color:#9E9E9E;
+  }
+  .order_table_info{
+    margin-top:12px;
+  }
+  .info_button_1{
+    width:60px;
+    height:20px;
+    background-color:#DE9562;
+    color:#FFFFFF;
+    border-radius:3px;
+    border:0;
+    font-size:10px;
+    outline:0;
+  }
+  .info_button_1:nth-child(3n-1){
+    background-color:#AEAEAE;
+  }
+
+</style>
+
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+   <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+   <i class="glyphicon glyphicon-menu-right"></i>
+   <span style="font-weight: 500; position: relative; top:-1px;">배송조회</span>
+</div>
+<div style="margin-left:102px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">주문/배송 조회</p>
+</div>
+<div id="order_lookup_box">
+  <label style=" margin-left:50px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">주문/배송 조회</label>
+  <hr style="margin-left:15px; margin-top:2px; width:960px; background-color:#D8D8D8; height:1px;">
+
+  <div id="order_lookup_table">
+    <label class="order_table_info" style="margin-left:80px; width:60px;">주문번호</label>
+    <label class="order_table_info" style="margin-left:84px; width:50px;">주문자</label>
+    <label class="order_table_info" style="margin-left:84px; width:60px;">결제방법</label>
+    <label class="order_table_info" style="margin-left:100px; width:60px;">결제금액</label>
+    <label class="order_table_info" style="margin-left:110px; width:60px;">주문상태</label>
+    <label class="order_table_info" style="margin-left:100px; width:60px;">날짜</label>
+  </div>
+  <div id="pre_page">
+    {% for order in order %}
+      <div style="float:left; margin-top:17px;">
+        <label style = "margin-left:40px; width:80px; color:#9E9E9E; text-align:center;"> {{order.Order_Number}} </label>
+        <br>
+        <button class="info_button_1" style="margin-left:25px;">납품서</button>
+        <button class="info_button_1">카드 영수증</button>
+        <button class="info_button_1">배송 조회</button>
+      </div>
+      <label class="table_info" style = "margin-left:10px; width:80px; text-align:center;"> {{order.User.U_name}}</label>
+      <label class="table_info" style = "margin-left:60px; width:80px; text-align:center;"> 결제방법 </label>
+      <label class="table_info" style = "margin-left:80px; width:80px; text-align:center;"> {{order.Total_price}}</label>
+      <label class="table_info" style = "margin-left:92px; width:80px; text-align:center;"> 결제확인 </label>
+      <label class="table_info" style = "margin-left:50px; width:120px; text-align:center;"> {{order.Order_date}}</label>
+
+      <hr style="margin : 0px; margin-left:15px; margin-top:25px; width:960px; background-color:#D8D8D8; height:1px;">
+
+
+
+    {% endfor %}
+  </div>
+
+</div>
+
+{%endblock%}

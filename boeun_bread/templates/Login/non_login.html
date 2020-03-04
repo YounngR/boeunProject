@@ -90,6 +90,9 @@
 </head>
 
 <body>
+  {% if msg %}
+    <script>alert("{{msg}}")</script>
+  {% endif %}
 <div style="padding-bottom:100px;">
     <div class="home-right" style="margin-top:40px; margin-right: 10px; ">
         <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">

@@ -13,7 +13,7 @@ from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 from django.utils.encoding import force_bytes, force_text
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 #from django.db.models import Sum
 from django.contrib import messages
 from django.core import serializers
@@ -168,16 +168,18 @@ def write_board(request):
 #로그인
 def Login(request):
 
+
     return render(request, 'Login/Login.html')
 
+#비회원 주문조회
 def non_login(request):
 
     if request.method == "POST":
         context={}
-        user = Profile.objects.filter(U_name=request.POST.get('user_id'), U_phone=request.POST.get('phone'))
+        user = Profile.objects.get(U_name=request.POST.get('user_id'), U_phone=request.POST.get('phone'))
         if user:
-            return render(request, 'Login/non_login.html',context)
-
+            order = Order.objects.filter(User=user)
+            return render(request, 'mypage/non_login_order_lookup.html', {'order':order})
         else:
             context['msg'] = "주문내역이 존재하지않습니다."
             return render(request, 'Login/non_login.html',context)
@@ -268,10 +270,11 @@ def LoginPage(request):
                 auth.login(request,user)
             #Profile.objects.get(user=request.user)
         else:
-            context['msg'] = "로그인을 실패했습니다."
+            context['msg'] = "아이디, 비밀번호가 맞지 않습니다."
+            return render(request, 'Login/Login.html',context)
 
 
-        return render(request, 'Login/Login.html',context)
+        return render(request, 'boeun_bread/main.html',context)
     return redirect('/')
 
 #회원가입 id 중복 체크
@@ -425,14 +428,7 @@ def order_history(request):
 @login_required
 def order_lookup(request):
 
-    profile =  request.user.profile if request.user.is_authenticated else None
-    if not profile:
-        cookie_id = request.COOKIES.get('cookie_id')
-        profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
-    else:
-        copy_product(request)
-
-    order = Order.objects.filter(User=profile)
+    order = Order.objects.filter(User=request.user.profile)
 
     #Pagination
     page = request.GET.get('page',1)
@@ -458,13 +454,12 @@ def order_lookup_info(request):
         result = Order.objects.filter(User=profile,Order_date__year=today.year, Order_date__month=today.month, Order_date__day=today.day)
 
     elif request.POST.get('type') == "2":
-        day = datetime.today().day - datetime.today().weekday()
 
-        befor_day = str(datetime.today().year) + "-" + str(datetime.today().month) + "-" + str(day)
+        before_day = datetime.now() + timedelta(days=-7)
 
         today =  str(datetime.today().year) + "-" + str(datetime.today().month) + "-" + str( datetime.today().day)
 
-        result = Order.objects.filter(User=profile,Order_date__range=[befor_day,today])
+        result = Order.objects.filter(User=profile,Order_date__range=[before_day,today])
 
     elif request.POST.get('type') == "3":
         today = datetime.today()
