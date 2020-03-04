@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <style>
+        #container{
+            width:983px;
+            margin:0 auto;
+            margin-top:30px;
+        }
+        #table td{
+            border: 1px solid #dfdfdf;
+            padding: 16px 30px;
+        }
+        .tk{
+            width:135px;
+            
+        }
+        .tv{
+            width:848px;
+        }
+        #answer-box{
+            margin-top:30px;
+            
+        }
+        hr{
+            border-color:#dfdfdf;
+        }
+    </style>
+    <div id="container">
+        <table id="table">
+            <tr>
+                <td class="tk" style="border-left: 0px;">질문유형</td>
+                <td class="tv" style="border-right: 0px;">{{qna.get_question_kind_display}}</td>
+            </tr>
+            <tr>
+                <td class="tk" style="border-left: 0px;">질문제목</td>
+                <td class="tv" style="border-right: 0px;">{{qna.question_title}}</td>
+            </tr>
+            <tr>
+                <td class="tk" style="border-left: 0px;">질문내용</td>
+                <td class="tv" style="border-right: 0px;">{{qna.question_content|safe}}</td>
+            </tr>
+            <tr>
+                <td class="tk" style="border-left: 0px;">질문날짜</td>
+                <td class="tv" style="border-right: 0px;">{{qna.question_date|date:"Y-m-d"}}</td>
+            </tr>
+            
+        </table>
+        <div id="answer-box">
+            <div style="margin-left: 30px;">
+                {% if qna.question_status %}<!--답변이 있으면-->
+                    <div id="answer-text"> 
+                        {{qna.answer.answer|safe}}
+                    </div>    
+                   
+                {% endif %}
+                
+                {% if request.user.profile.U_grade == 0 %}
+                    <div id="answer-field" {%if qna.question_status%} style="display: none;"{% endif %}>
+                        <form action="{% url 'boeun_bread:write_answer' %}" method="POST" onsubmit="return isVaild()">
+                            {% csrf_token %}
+                            <div id="summernote"></div>
+                            <input type="hidden" name="qna_pk" value="{{qna.pk}}">
+                            <input type="hidden" name="answer" id="answer"><br>
+                            {%if qna.question_status%}
+                                <input class="btn btn-default" type="submit" value="수정하기">
+                            {% else %}
+                                <input class="btn btn-default" type="submit" value="답변하기">
+                            {% endif %}    
+                        </form>
+                    </div>
+                    {% if qna.question_status%}
+                        <div class="text-right">  
+                            <a class="btn btn-default" id="answer-mod-btn">답변수정</a>
+                        </div>
+                    {% endif %}
+                {% elif not qna.question_status %}
+                    <h3 class="text-center">답변이 존재하지 않습니다.</h3>
+                
+                {% endif %}
+
+                
+            </div>
+            <hr style="margin-top:20px;">
+            {% if qna.user == request.user.profile %}
+                {% if not qna.question_status %}
+                    <a class="btn btn-default" style="margin-left:30px;" href="/Service_center/ModifyQna/{{qna.pk}}/">QNA수정</a>
+                {% endif %}
+                <a class="btn btn-danger delete-btn" style="margin-left:30px;">QnA삭제</a><br><br>
+            {% endif %}
+            <a class="btn btn-default" style="margin-left:30px;" href="{% url 'boeun_bread:qna_list'%}">목록</a>
+        </div>
+
+    </div>
+    <script>
+        //summernote 활성화
+        $('#summernote').summernote({
+            height: 150
+        });
+     $(".delete-btn").click(function(){
+        if(confirm("삭제하시겠습니까?")){
+            location.href="/Service_center/DeleteQna/{{qna.pk}}/";
+        }
+     }); 
+     $("#answer-mod-btn").click(function(){
+        
+        $('#summernote').summernote('code', $("#answer-text").text());
+        $("#answer-text").css("display","none");
+        $(this).css("display","none");
+        $("#answer-field").css("display","block");
+     });
+     function isVaild(){
+        $("#answer").val($('#summernote').summernote('code'));
+        return true;
+     }   
+    </script>
+{% endblock %}

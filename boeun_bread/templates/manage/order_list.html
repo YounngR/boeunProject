@@ -1,0 +1,58 @@
+{% extends 'manage/manage_base.html'%}
+{% block manage_content %}
+    <table class="table table-hover">
+        <tr>
+            <th>주문번호</th>
+            <th>송장번호</th>
+            <th>택배회사</th>
+            <th>배송상태</th>
+            <th></th>
+        </tr>
+        
+            {% for order in orders %}
+            {% if not order.delivery.delivery_status == '3'%}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="order_pk" value="{{order.pk}}">
+                <tr>
+                    <td class="popup-btn" style="cursor: pointer;" index="{{order.pk}}">{{order.Order_Number}}</td>
+                    <!--송장번호-->
+                    <td>
+                        <input type="text" name="number" value="{{order.delivery.delivery_number}}" class="form-control">
+                        
+                    </td>
+                    <!--택배회사-->
+                    <td>
+                        <input type="text" name="company" value="{{order.delivery.delivery_company}}" class="form-control">
+                    </td>
+                    <!--배송상태-->
+                    <td>
+                        <select class="form-control" name="status">
+                            
+                            <option value="1" 
+                            {% if order.delivery.delivery_status == '1'%}selected{%endif%}>상품준비중</option>
+                            <option value="2"
+                            {% if order.delivery.delivery_status == '2'%}selected{%endif%}>배송중</option>
+                            <option value="3"
+                            {% if order.delivery.delivery_status == '3'%}selected{%endif%}>배송완료</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="submit" value="저장" class="btn btn-default">
+                    </td>
+                </tr>
+            </form>    
+            {% endif %}
+            {% endfor %}    
+        
+    </table>
+    <script>
+        $(".popup-btn").click(function(){
+            var page = $(this).attr("index");
+            var url  = "/manage/PopupOrderList/"+page;
+            var left = (window.screen.width/2)-(700/2);
+            var top  = (window.screen.height/2)-(500/2);
+            window.open(url,'window','width=700,height=500,left='+left+',top='+top);
+        });
+    </script>
+{% endblock %}

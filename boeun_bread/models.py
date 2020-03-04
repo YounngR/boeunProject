@@ -56,15 +56,25 @@ class Cart_Product(models.Model):
 
 class Order(models.Model):
     User                  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    User_address          = models.CharField(max_length=200)
+    User_address          = models.CharField(max_length=200) #주소
     User_detail_address   = models.CharField(max_length=100) #상세 주소
-    Order_Number          = models.CharField(max_length=200)
-    Total_price           = models.IntegerField(default=0)
-    Order_date            = models.DateField(auto_now_add=True)
+    Order_Number          = models.CharField(max_length=200)#주문번호
+    Total_price           = models.IntegerField(default=0) # 주문 총금액
+    Order_date            = models.DateField(auto_now_add=True) #주문 날짜
     Order_type            = models.IntegerField(default=0) # 0 : 결제확인
     Order_hope_date       = models.DateTimeField(null=True,blank=True) #배송 희망일
     Order_request_content = models.CharField(null=True,blank=True,max_length=200) #주문시 요청사항
-
+class Delivery(models.Model):
+    DELIVERY_STATUS = (
+        ('1','상품준비중'),
+        ('2','배송중'),
+        ('3','배송완료')
+    )
+    order            = models.OneToOneField(Order,on_delete=models.CASCADE,null=True,blank=True)    
+    delivery_number  = models.CharField(max_length=30) #송장번호
+    delivery_company = models.CharField(max_length=20) #택배회사
+    #배송상태
+    delivery_status  = models.CharField(max_length=1,choices=DELIVERY_STATUS,default='1')
 class Order_Product(models.Model):
     Order         = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     product_id    = models.IntegerField()
@@ -89,7 +99,18 @@ class QNA(models.Model):
         ('1','배달기준'),
 
     )
-    user          = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    question      = models.CharField(max_length=200) #질문
-    answer        = models.TextField() #내용
-    question_kind = models.CharField(max_length=1,choices=QUESTION_KIND) #질문유형
+    user             = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    question_title   = models.CharField(max_length=200) #질문제목
+    question_content = models.TextField()#질문내용
+    question_kind    = models.CharField(max_length=1,choices=QUESTION_KIND) #질문유형
+    '''
+        true: 답변완료
+        false: 답변 없음
+    '''
+    question_status  = models.BooleanField(default=False) 
+    question_date    = models.DateField(auto_now_add=True) #질문 날짜
+class Answer(models.Model):
+    qna           = models.OneToOneField(QNA,on_delete=models.CASCADE)    
+    answer        = models.TextField() #답변내용
+    question_date = models.DateField(auto_now_add=True) #답변 날짜
+

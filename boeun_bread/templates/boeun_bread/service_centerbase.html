@@ -108,22 +108,7 @@
         margin-bottom: 30px;
         font-size: 16px;
     }
-    #table td{
-        width:305px;
-    }
-    #table tr{
-        margin-top: 46px;
-    }
-    #table td:nth-last-child(2){
-        width:700px;
-    }
-    #table td:nth-last-child(1),
-    #table th:nth-last-child(1),
-    #table td:nth-last-child(3),
-    #table th:nth-last-child(3){
-        text-align: center;
-        
-    }
+   
     .table > thead > tr > td,
     .table > tbody > tr > td,
     .table > tfoot > tr > td {
@@ -181,22 +166,50 @@
         
     </div>
     <div id="tab">
-        <div class="tab-active">공지사항</div>
-        <div>QnA</div>
+        
+        <div id="notice">공지사항</div>
+        <div id="qna">QnA</div>
     </div>
     <hr>
     <div class="text-center">
         
-        <form>
-            <label id="search-text">공지사항검색</label>
-            <input id="search-field">
+        <form id="search-form" action="{% url 'boeun_bread:search_result'%}" method="GET">
+            <label id="search-text">
+                
+                {% if type == '1' %}
+                    공지사항검색
+                {% else %}
+                    QNA검색
+                {% endif %}
+            </label>
+            <input type="hidden" name="type" value="{{type}}">
+            <input id="search-field" name="query" value="{{query}}">
             <span id="search-btn">검색</span>
         </form>
     </div>
     <hr>
+
     {% block service_content %}
     {% endblock %}
 </div>
-
+<script>
+    if("{{type}}" == 1){
+        $("#notice").addClass("tab-active");
+    }else{
+        $("#qna").addClass("tab-active");
+    }
+    //qna 탭 클릭시
+    $("#qna").click(function(){
+        location.href="/Service_center/QnaList/";
+    });
+    //공지사항 탭 클릭시
+    $("#notice").click(function(){
+        location.href="{% url 'boeun_bread:notice_list'%}";
+    });
+    //검색 버튼 클릭시
+    $("#search-btn").click(function(){
+        $("#search-form").submit();
+    });
+</script>
 
 {% endblock %}
