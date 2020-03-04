@@ -42,5 +42,21 @@
         <div style="margin-left: 30px;">
             {{board.content|safe}}
         </div>
+        <hr style="margin-top: 30px;">
+        {% if board.user == request.user.profile %}
+            <div style="margin-left: 30px;">
+                <a class="btn btn-default" href="/Service_center/ModifyNotice/{{board.id}}/">수정</a>
+                <a class="btn btn-danger delete-btn">삭제</a>
+            </div>
+        {% endif %}
+        <a style="margin-left:30px;margin-top:30px;" href="/Service_center/NoticeList/" class="btn btn-default">목록</a>
+        <div style="margin-bottom: 30px;"></div>
     </div>
+    <script>
+        $(".delete-btn").click(function(){
+            if(confirm("삭제하시겠습니까?")){
+                location.href="/Service_center/DeleteNotice/{{board.id}}/";
+            }
+        });
+    </script>
 {% endblock %}

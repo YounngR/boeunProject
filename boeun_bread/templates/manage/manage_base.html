@@ -103,9 +103,11 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
-          <span>QNA</span>
+          <span>주문</span>
         </a>
-
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{% url 'boeun_bread:order_list' %}">주문목록</a>
+        </div>
       </li>
     </ul>
 

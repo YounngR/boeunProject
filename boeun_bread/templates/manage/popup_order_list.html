@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <style>
+        .container{
+            margin-top:30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="table table-bordered">
+            <tr>
+                <td>주문번호</td>
+                <td>{{order.Order_Number}}</td>
+            </tr>
+        
+            <tr>
+                <td>희망배송일</td>
+                <td>{{order.Order_hope_date|date:"Y-m-d"}}</td>
+            </tr>
+            <tr>
+                <td>주문날짜</td>
+                <td>{{order.Order_date|date:"Y-m-d"}}</td>
+            </tr>
+        </table>
+        <table class="table table-bordered">
+            <tr>
+                <td>구매자 이름</td>
+                <td>{{order.User.U_name}}</td>
+            </tr>
+            <tr>
+                <td>구매자 전화번호</td>
+                <td>{{order.User.U_phone}}</td>
+            </tr>
+            <tr>
+                <td>배송 주소</td>
+                <td>{{order.User_address}}&nbsp{{order.User_detail_address}}</td>
+            </tr>
+        </table>
+        <table class="table table-hover">
+            <tr>
+                <th>상품명</th>
+                <th>상품개수</th>
+            </tr>
+            {% for prod in order_product %}
+            <tr>
+                <td>{{prod.product_name}}</td>
+                <td>{{prod.product_count}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>   
+</body>
+</html>
