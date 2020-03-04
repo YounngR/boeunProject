@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+<style>
+    #container{
+        width:983px;
+        
+        border: 1px solid rgb(127,126,126);
+        margin:0 auto;
+        
+    }
+    #form-box{
+        width:700px;
+        margin:30px auto;
+        
+    }
+    #submit-btn{
+        width:100px;
+        height:37px;
+        margin-left:600px;
+        margin-top:30px;
+        background: #7d7d7d;
+        color:white;
+        text-align: center;
+        line-height: 37px;
+        cursor: pointer;
+    }
+</style>
+<div class="text-right" style="margin-top:28px; margin-right: 78px;">
+    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
+    <i class="glyphicon glyphicon-menu-right"></i>
+    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
+</div>
+<div style="margin-top:14px; margin-left:99px;">
+    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
+    <p style="margin-left:11px;font-size:20px; font-weight:800;">고객센터</p>
+</div>
+<div id="container">
+    <div id="form-box">
+        <form id="form" method="POST">
+            {% csrf_token %}
+            <label>질문유형</label>
+            <select class="form-control" name="kind">
+                <option value="1">배송기준</option>
+            </select><br>
+            <label>질문제목</label>
+            <input type="text" name="title" class="form-control"><br>
+            <label>질문내용</label>
+            <div id="summernote"></div>
+            <input type="hidden" id="content" name="content">
+            <div id="submit-btn">작성하기</div>
+        </form>
+    </div>
+</div>
+<script>
+    //summernote 활성화
+    $('#summernote').summernote({
+            height: 150
+        });
+    //submit 버튼클릭시
+    $("#submit-btn").click(function(){
+        $("#content").val($('#summernote').summernote('code'));
+        $("#form").submit();
+    });
+
+</script>
+{% endblock %}

@@ -20,6 +20,7 @@ from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import F
 import pandas
+from django.db.models import Q
 
 
 
@@ -65,6 +66,43 @@ def create_product(request):
         )
         return redirect('/manage')
     return render(request,'manage/create_product.html')
+#주문 목록
+@login_required
+def order_list(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
+    if request.method == "POST":
+        order = get_object(Order,id=request.POST.get('order_pk')) 
+        if order.delivery:
+            delivery = get_object(Delivery,order=order)
+            delivery.delivery_status = request.POST.get('status')
+            delivery.save()
+        else:    
+            Delivery.objects.create(
+                order            = order,
+                delivery_number  = request.POST.get('number'),
+                delivery_company = request.POST.get('company'),
+                delivery_status  = request.POST.get('status')
+            )   
+        
+    orders = Order.objects.all()
+    context = {
+        'orders':orders
+    }
+    return render(request,'manage/order_list.html',context) 
+#주문목록 팝업으로 보기
+@login_required
+def popup_order_list(request,page):
+    order = get_object_or_404(Order,id=page)
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
+    order_product = Order_Product.objects.filter(Order=order)    
+    context = {
+        'order':order,
+        'order_product':order_product
+    }    
+    return render(request,'manage/popup_order_list.html',context)     
+
 #수정상품 리스트
 @login_required
 def modify_list(request):
@@ -268,6 +306,7 @@ def LoginPage(request):
                 context['msg']="이메일 인증이 완료되지 않았습니다."
             else:
                 auth.login(request,user)
+                return redirect('/')
             #Profile.objects.get(user=request.user)
         else:
             context['msg'] = "아이디, 비밀번호가 맞지 않습니다."
@@ -792,10 +831,23 @@ def Service_center(request):
 
 #공지사항 리스트
 def notice_list(request):
-    board = Board.objects.all()
-
-    return render(request,'boeun_bread/notice_list.html',{'board':board})
-
+    board = Board.objects.all().order_by('-id')
+    #Pagination
+        
+    page      = request.GET.get('page',1)
+    paginator = Paginator(board,10)
+    posts     = paginator.get_page(page)
+    '''
+    type:1 -> 공지사항
+    type:2 -> qna
+    '''
+    context = {
+        'board':posts,
+        'posts':posts,
+        'type':'1'
+    }
+    return render(request,'boeun_bread/notice_list.html',context)
+#공지사항 상세
 def notice_detail(request,page):
     board = get_object_or_404(Board,pk=page)
     board.hit = board.hit + 1
@@ -804,8 +856,168 @@ def notice_detail(request,page):
     context = {
         'board':board,
         'files':files
+
     }
     return render(request,'boeun_bread/notice_detail.html',context)
+#공지사항 수정
+def modify_notice(request,page):
+    board = get_object_or_404(Board,id=page)
+    if request.method == "POST":
+        if board.user == request.user.profile:
+            board.title   = request.POST.get('title')
+            board.content = request.POST.get('content')
+            board.save()
+        return redirect('/Service_center/NoticeDetail/'+page)
+    context = {
+        'board':board
+    }
+    return render(request,'boeun_bread/modify_notice.html',context)    
+#공지사항 삭제    
+def delete_notice(request,page):
+    
+    board = get_object_or_404(Board,id=page)
+    if board.user == request.user.profile:
+        board.delete()
+    return redirect('/Service_center/NoticeList/')    
+#qna리스트
+def qna_list(request):
+    myQna = request.GET.get('myQna')
+    qna   = None
+    if myQna == '1':
+        if request.user.is_authenticated:
+            qna = QNA.objects.filter(user=request.user.profile)
+        else:
+            return redirect('/mypage/')
+    elif not myQna :
+        qna = QNA.objects.all().order_by('-id')
+    else:
+        raise Http404    
+
+    #Pagination
+    page = request.GET.get('page',1)
+    paginator = Paginator(qna,10)
+    posts = paginator.get_page(page)
+    '''
+    type:1 -> 공지사항
+    type:2 -> qna
+    '''
+    context={
+        'qna' :posts,
+        'posts':posts,
+        'type':'2'
+    }
+    return render(request,'boeun_bread/qna_list.html',context)
+    
+#qna쓰기
+@login_required
+def qna_write(request):
+    if request.method == "POST":
+        QNA.objects.create(
+            user           = request.user.profile,
+            question_title = request.POST.get('title'),
+            question_content = request.POST.get('content'),
+            question_kind  = request.POST.get('kind')
+        )
+        return redirect('/Service_center/QnaList/')
+    return render(request,'boeun_bread/write_qna.html')
+#qna 수정    
+@login_required
+def qna_modify(request,page):
+    qna = get_object_or_404(QNA,id=page)
+    if qna.user == request.user.profile:
+        if request.method == "POST":
+            
+            qna.question_title   = request.POST.get('title')
+            qna.question_content = request.POST.get('content')
+            qna.question_kind        = request.POST.get('kind')
+            qna.save()
+            return redirect('/Service_center/QnaList/')
+        return render(request,'boeun_bread/modify_qna.html',{'qna':qna})
+
+    return redirect('/Service_center/QnaDetail/'+qna_pk)        
+    
+#qna상세
+def qna_detail(request,page):
+    qna = get_object_or_404(QNA,pk=page)
+    context = {
+        'qna':qna
+    }
+    return render(request,'boeun_bread/detail_qna.html',context)
+#qna 삭제
+@login_required
+def delete_qna(request,page):
+    qna = get_object_or_404(QNA,id=page)
+    if qna.user == request.user.profile:
+        qna.delete()
+        
+    return redirect("/Service_center/QnaList/")    
+
+#qna 답변 작성
+@login_required
+def write_answer(request):
+    
+    if request.method == "POST":
+        if isAdmin(request):# 관리자만 답변 작성가능
+            qna_pk = request.POST.get('qna_pk')
+            qna    = get_object(QNA,id=qna_pk)
+
+            if qna:
+                if not qna.question_status: #최초 답변 작성할때
+                    Answer.objects.create(
+                        qna = qna,
+                        answer=request.POST.get('answer')
+                    )
+                    qna.question_status=True
+                    qna.save()
+                else: # 작성한 답변 수정할때
+                    answer = get_object(Answer,qna=qna)
+                    answer.answer = request.POST.get('answer')
+                    answer.save()
+
+            return redirect('/Service_center/QnaDetail/'+qna_pk)    
+    raise Http404
+#공지 및 qna 검색
+def search_result(request):
+    type1 = request.GET.get('type')
+    query = request.GET.get('query')
+    if type1 == '1':
+        query_set = Board.objects.filter(
+                        Q(title__icontains=query) |
+                        Q(content__icontains=query) |
+                        Q(user__U_name__icontains=query) 
+                    )
+        page      = request.GET.get('page',1)
+        paginator = Paginator(query_set,2)
+        posts     = paginator.get_page(page)
+        context   = {
+            'board' :posts,
+            'posts':posts,
+            'type':'1',
+            'query':query,
+        }             
+        return render(request,'boeun_bread/notice_list.html',context)
+    elif type1 == '2':
+        query_set = QNA.objects.filter(
+                        Q(question_title__icontains=query) |
+                        Q(question_content__icontains=query) |
+                        Q(user__U_name__icontains=query) 
+                    ).order_by('-id')
+
+        #Pagination
+        
+        page      = request.GET.get('page',1)
+        paginator = Paginator(query_set,2)
+        posts     = paginator.get_page(page)
+        context   = {
+            'qna' :posts,
+            'posts':posts,
+            'type':'2',
+            'query':query,
+            
+        } 
+        return render(request,'boeun_bread/qna_list.html',context)
+    else:
+        raise Http404
 
 #찾아오시는 길
 def boeun_map(request):

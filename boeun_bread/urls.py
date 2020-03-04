@@ -12,6 +12,8 @@ urlpatterns = [
 
     #manage
     path('manage/',views.manage,name="manage"),
+    path('manage/OrderList/',views.order_list,name="order_list"),
+    path('manage/PopupOrderList/<page>/',views.popup_order_list,name="popup_order_list"),
     path('manage/create_product/',views.create_product,name="create_product"),
     path('manage/modify_list/',views.modify_list,name="modify_list"),
     path('manage/modify_product/<pk>/',views.modify_product,name="modify_product"),
@@ -79,8 +81,17 @@ urlpatterns = [
     #고객센터
     path('Service_center/', views.Service_center, name="Service_center"),
     path('Service_center/NoticeList/', views.notice_list, name="notice_list"),#공지사항 리스트
-    path('Service_center/NoticeDetail/<page>/', views.notice_detail, name="notice_detail"),#공지사항 리스트
-     #견적서
+    path('Service_center/NoticeDetail/<page>/', views.notice_detail, name="notice_detail"),#공지사항 상세
+    path('Service_center/ModifyNotice/<page>/', views.modify_notice, name="modify_notice"),#공지사항 수정
+    path('Service_center/DeleteNotice/<page>/', views.delete_notice, name="delete_notice"),#공지사항 삭제
+    path('Service_center/QnaList/', views.qna_list, name="qna_list"),#qna 리스트
+    path('Service_center/WriteQna/', views.qna_write, name="qna_write"),#qna 쓰기
+    path('Service_center/ModifyQna/<page>/', views.qna_modify, name="qna_modify"),#qna 수정
+    path('Service_center/QnaDetail/<page>/', views.qna_detail, name="qna_detail"),#qna 상세
+    path('Service_center/DeleteQna/<page>/', views.delete_qna, name="delete_qna"), #qna 삭제
+    path('Service_center/WriteAnswer/', views.write_answer, name="write_answer"),#qna 답변 작성
+    path('Service_center/SearchResult/', views.search_result, name="search_result"),#qna 공지 검색
+    #견적서
     path('estimate/',views.estimate,name='estimate'),
     #아이디 찾기
     path('forgetId/',views.forget_id,name="forgetId"),

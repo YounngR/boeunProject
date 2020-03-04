@@ -1,0 +1,110 @@
+{% extends 'boeun_bread/service_centerbase.html' %}
+{% load extra %}
+{% block service_content %}
+    <style>
+        #write-qna-btn{
+            width:100px;
+            height:37px;
+            background: #e47f32;
+            color:white;
+            border-radius: 15px;;
+            margin-left:853px;
+            text-align: center;
+            line-height: 37px;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+        #qna-table{
+            width:915px;
+            margin:0 auto;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .detail{
+            cursor: pointer;
+        }
+    </style>
+    
+    <div id="write-qna-btn">QnA작성하기</div>
+    
+    <table class="table" id="qna-table">
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>질문유형</th>
+                <th class="text-center">내용</th>
+                <th>작성자</th>
+                <th>날짜</th>
+                <th>답변상태</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in qna %}
+            <tr>
+                <td>질문</td>
+                <td>{{obj.get_question_kind_display}}</td>
+                <td page="{{obj.pk}}" class="detail col-md-6">{{obj.question_title}}</td>
+                <td>{{obj.user.U_name}}</td>
+                <td>{{obj.question_date|date:"Y-m-d"}}</td>
+                
+                    {% if obj.question_status %}
+                        <td>답변완료</td>
+                    {% else %}
+                        <td>답변중</td>
+                    {% endif %}
+                
+                
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align:center; padding-top : 50px;">
+{% if posts.has_other_pages %}
+  {% if posts.has_previous %}
+    {% if query %}
+        <a style="color:#4d4d4d; " href="?page={{ posts.previous_page_number }}&type={{type}}&query={{query}}"><i class="fas fa-angle-left"></i></a>
+    {% else %}    
+        <a style="color:#4d4d4d; " href="?page={{ posts.previous_page_number }}"><i class="fas fa-angle-left"></i></a>
+    {% endif %}    
+  {% else %}
+    <i style="color:#4d4d4d" class="fas fa-angle-left"></i>
+  {% endif %}
+    <span>|<span>
+  {% for i in posts.paginator.page_range %}
+    {% if posts.number == i %}
+        
+      <span style="color:#0081ff">{{ i }} <span class="sr-only">(current)</span></span>
+    {% else %}
+      {% if query %}
+        <a style="color:#4d4d4d" href="?page={{ i }}&type={{type}}&query={{query}}">{{ i }}</a>
+      {% else %}
+        <a style="color:#4d4d4d" href="?page={{ i }}">{{ i }}</a>
+      {% endif %}
+    {% endif %}
+      <span>|<span>
+  {% endfor %}
+  {% if posts.has_next %}
+    {% if query %}
+    <a style="color:#4d4d4d" href="?page={{ posts.next_page_number }}&type={{type}}&query={{query}}"><i class="fas fa-angle-right"></i></a>
+    {% else %}
+        <a style="color:#4d4d4d" href="?page={{ posts.next_page_number }}"><i class="fas fa-angle-right"></i></a>
+    {% endif %}
+
+  {% else %}
+    <span style="color:#4d4d4d"><i class="fas fa-angle-right"></i></span>
+  {% endif %}
+{% endif %}
+</div>
+    <script>
+        $(".detail").click(function(){
+            var page = $(this).attr("page");
+            location.href="/Service_center/QnaDetail/"+page;
+        });
+        //qna 작성하기 클릭시
+        $("#write-qna-btn").click(function(){
+            location.href="{%url 'boeun_bread:qna_write'%}";
+        });
+    </script>
+{% endblock %}

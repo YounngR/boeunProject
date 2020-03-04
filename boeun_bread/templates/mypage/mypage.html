@@ -99,6 +99,7 @@
                     홈페이지를 통해 온라인 상담한<br>
                     내역을 확인할 수 있습니다.
                 </p>
+                
                 <div class="link" onclick="online_cnstl_history_click();">바로가기</div>
             </li>
             <li>
@@ -118,6 +119,9 @@
 <script>
     function manage_privacy(){
         location.href = "{% url 'boeun_bread:manage_privacy' %}";
+    }
+    function online_cnstl_history_click(){
+        location.href = "/Service_center/QnaList?myQna=1";
     }
 </script>
 {% endblock %}
