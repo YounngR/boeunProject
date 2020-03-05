@@ -13,6 +13,7 @@ class Profile(models.Model):
     U_groupName = models.CharField(max_length=50, null=True, blank=True)
     U_email     = models.EmailField(max_length=50)
     U_delete    = models.BooleanField(default=False) #True = 탈퇴
+    U_Reason    = models.IntegerField(default=0)
 
 class Product(models.Model):
     PRODUCT_KIND =(
