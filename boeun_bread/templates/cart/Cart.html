@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="{% static 'js/jquery.mCustomScrollbar.css' %}" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
-    <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
     <link  href="{% static 'css/datepicker.css' %}" rel="stylesheet">
     <script src="{% static 'js/datepicker.js'%}"></script>
     <style>
@@ -144,7 +143,7 @@
                 color:red;
         }
     </style>
-
+<div>
     <div class="text-right" style="margin-top:28px; margin-right: 78px;">
         <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
         <i class="glyphicon glyphicon-menu-right"></i>
@@ -156,9 +155,11 @@
                 장바구니
             </p>
 
-
+        <form id="b_payment" action="{% url 'boeun_bread:Before_payment'%}" method="POST">
+            {% csrf_token %}
             <ul id="product-list" class="content">
                 {% for c in cp %}
+                <input type="hidden" name="prod_pk" value="{{c.product_id}}">
                  <li  class="item" pk="{{c.product_id}}">
                     <img width="87" height="90" src="/media/{{ c.product_img }}">
                     <span style="display:inline-block;width:152px; margin-left:15px; font-size: 15px;">{{ c.product_name }}</span>
@@ -184,13 +185,13 @@
                 배송지 정보
             </p>
             <div>
-                <form>
+
                     <!--주소-->
                     <div class="field-box">
                         <span>주소 :</span>
-                        <input type="text"  class="field" id="addr">
+                        <input type="text"  class="field" id="addr" name="addr">
                         <div class="detail-addr-field">
-                            <input type="text" class="field" id="detail-addr" placeholder="상세주소">
+                            <input type="text" class="field" id="detail-addr" name="detail-addr" placeholder="상세주소">
                         </div>
 
                     </div>
@@ -226,6 +227,7 @@
                         <input type="text" id="request_content" class="field" name="request_content">
                     </div>
                     <!--최근 배송지 정보로 입력-->
+                    <input type="hidden" name="cart_pk" value={{cart.pk}}>
                 </form>
 
             </div>
@@ -238,9 +240,6 @@
                 <div id="total-money-box" class="text-right">
                     상품 가격 : <span id="total-money"></span> 원 +
                     배송비 : 3000원 = <span id="pay-text">결제총액 : <span id="pay-money"></span></span>
-
-
-
 
                 </div>
             </div>
@@ -413,101 +412,6 @@
             });
     }
 
-    //총결제금액 가져오기
-    function get_total(){
-        var total = 0;
-        $.ajax({
-              type : "POST",
-              url : "{% url 'boeun_bread:total' %}",
-              async:false,
-              data : {
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-                'cart_pk':"{{cart.pk}}",
-              },
-
-              success : function(response)
-              {
-                total = response['total'];
-              }
-          });
-        return total;
-    }
-
-    //결제하기
-    function payment(){
-        if(parseInt($("#total-money").text()) < 1){
-            alert("결제할수 없습니다.");
-            return;
-        }
-   
-
-       var IMP = window.IMP; // 생략가능
-        IMP.init('imp91382374'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
-
-        IMP.request_pay({
-          pg : 'inicis', // version 1.1.0부터 지원.
-          pay_method : 'card',
-          merchant_uid : 'merchant_' + new Date().getTime(),
-          name : '보은군',
-          amount : 100,//et_total(),
-          buyer_email : 'iamport@siot.do',
-          buyer_name : '{{request.user.profile.U_name}}',
-          buyer_tel : '{{request.user.profile.U_phone}}',
-          buyer_addr : '서울특별시 강남구 삼성동',
-          buyer_postcode : '123-456',
-          m_redirect_url : 'https://www.yourdomain.com/payments/complete'
-        }, function(rsp) {
-        if ( rsp.success ) {
-          var msg = '결제가 완료되었습니다.';
-          msg += '고유ID : ' + rsp.imp_uid;
-          msg += '상점 거래ID : ' + rsp.merchant_uid;
-          msg += '결제 금액 : ' + rsp.paid_amount;
-          msg += '카드 승인번호 : ' + rsp.apply_num;
-
-          prod_list=[];
-
-         $(".item").each(function(index,item){
-
-             prod_list.push($(item).attr("pk"));
-
-         });
-         $.ajax({
-             type : "POST",
-             url : "{% url 'boeun_bread:payment_result' %}",
-             data : {
-                 'csrfmiddlewaretoken': '{{ csrf_token }}',
-                 'address' : $("#addr").val(),
-                 'detail_addr':$("#detail-addr").val(),
-                 'name' : $("#name").val(),
-                 'email' : $("#email").val(),
-                 'phone' : $("#phone").val(),
-                 'hope_date': $("#hope-day").val(),
-                 'request_content':$("#request_content").val(),
-                 'prod_pk':prod_list,
-                 'Total_price' : get_total(),
-             },
-
-             success : function(response)
-             {
-                 alert("결제완료되었습니다.");
-                 location.href="/";
-
-             }
-         });
-
-
-        } else {
-          var msg = '결제에 실패하였습니다.';
-          msg += '에러내용 : ' + rsp.error_msg;
-        }
-          alert(msg);
-        });
-    }
-    /*
-    function payment(){
-      location.href= "{% url 'boeun_bread:payment_page' %}";
-    }
-    */
     //  최근 배송지 정보로 입력 체크시
     $("#input-recently-info").change(function(){
         if($(this).is(":checked")){
@@ -530,6 +434,10 @@
                   $("#request_content").val(response['request_content']);
                }
           });
+    }
+
+    function payment(){
+      $('#b_payment').submit();
     }
 </script>
 {% endblock %}

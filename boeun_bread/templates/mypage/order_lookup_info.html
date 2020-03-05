@@ -9,14 +9,16 @@
   <label class="table_info" style = "margin-left:10px; width:80px; text-align:center;"> {{order.User.U_name}}</label>
   <label class="table_info" style = "margin-left:60px; width:80px; text-align:center;"> 결제방법 </label>
   <label class="table_info" style = "margin-left:80px; width:80px; text-align:center;"> {{order.Total_price}}</label>
-  <label class="table_info" style = "margin-left:92px; width:80px; text-align:center;"> 결제확인 </label>
+  {% if order.Order_status == False%}
+    <a href="{% url 'boeun_bread:payment_page' order.Order_Number %}" ><label class="table_info" style = "margin-left:92px; width:80px; text-align:center; cursor:pointer;"> 결제 대기 </label></a>
+  {% else %}
+    <label class="table_info" style = "margin-left:92px; width:80px; text-align:center;"> 결제 완료 </label>
+  {% endif %}
   <label class="table_info" style = "margin-left:50px; width:120px; text-align:center;"> {{order.Order_date}}</label>
 
 
 
   <hr style="margin : 0px; margin-left:15px; margin-top:25px; width:960px; background-color:#D8D8D8; height:1px;">
-
-
 
 {% endfor %}
 

@@ -25,7 +25,8 @@ urlpatterns = [
     #주문하기
     path('order/<path>/',views.order,name="order"),
     path('order/detail/<pk>/',views.order_detail,name="orderDetail"),
-    path('payment_page',views.payment_page,name="payment_page"),
+    path('Before_payment/',views.Before_payment, name="Before_payment"),
+    path('payment_page/<ordernumber>/',views.payment_page,name="payment_page"),
     #end 주문하기
 
     #로그인

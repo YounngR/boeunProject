@@ -13,7 +13,6 @@ class Profile(models.Model):
     U_groupName = models.CharField(max_length=50, null=True, blank=True)
     U_email     = models.EmailField(max_length=50)
     U_delete    = models.BooleanField(default=False) #True = 탈퇴
-    U_Reason    = models.IntegerField(default=0)
 
 class Product(models.Model):
     PRODUCT_KIND =(
@@ -64,13 +63,15 @@ class Order(models.Model):
     Order_type            = models.IntegerField(default=0) # 0 : 결제확인
     Order_hope_date       = models.DateTimeField(null=True,blank=True) #배송 희망일
     Order_request_content = models.CharField(null=True,blank=True,max_length=200) #주문시 요청사항
+    Order_status          = models.BooleanField(default=False) #True = 결제완료
+
 class Delivery(models.Model):
     DELIVERY_STATUS = (
         ('1','상품준비중'),
         ('2','배송중'),
         ('3','배송완료')
     )
-    order            = models.OneToOneField(Order,on_delete=models.CASCADE,null=True,blank=True)    
+    order            = models.OneToOneField(Order,on_delete=models.CASCADE,null=True,blank=True)
     delivery_number  = models.CharField(max_length=30) #송장번호
     delivery_company = models.CharField(max_length=20) #택배회사
     #배송상태
@@ -107,10 +108,9 @@ class QNA(models.Model):
         true: 답변완료
         false: 답변 없음
     '''
-    question_status  = models.BooleanField(default=False) 
+    question_status  = models.BooleanField(default=False)
     question_date    = models.DateField(auto_now_add=True) #질문 날짜
 class Answer(models.Model):
-    qna           = models.OneToOneField(QNA,on_delete=models.CASCADE)    
+    qna           = models.OneToOneField(QNA,on_delete=models.CASCADE)
     answer        = models.TextField() #답변내용
     question_date = models.DateField(auto_now_add=True) #답변 날짜
-

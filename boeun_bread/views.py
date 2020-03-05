@@ -72,36 +72,36 @@ def order_list(request):
     if not isAdmin(request):
         return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
     if request.method == "POST":
-        order = get_object(Order,id=request.POST.get('order_pk')) 
+        order = get_object(Order,id=request.POST.get('order_pk'))
         if order.delivery:
             delivery = get_object(Delivery,order=order)
             delivery.delivery_status = request.POST.get('status')
             delivery.save()
-        else:    
+        else:
             Delivery.objects.create(
                 order            = order,
                 delivery_number  = request.POST.get('number'),
                 delivery_company = request.POST.get('company'),
                 delivery_status  = request.POST.get('status')
-            )   
-        
+            )
+
     orders = Order.objects.all()
     context = {
         'orders':orders
     }
-    return render(request,'manage/order_list.html',context) 
+    return render(request,'manage/order_list.html',context)
 #주문목록 팝업으로 보기
 @login_required
 def popup_order_list(request,page):
     order = get_object_or_404(Order,id=page)
     if not isAdmin(request):
         return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
-    order_product = Order_Product.objects.filter(Order=order)    
+    order_product = Order_Product.objects.filter(Order=order)
     context = {
         'order':order,
         'order_product':order_product
-    }    
-    return render(request,'manage/popup_order_list.html',context)     
+    }
+    return render(request,'manage/popup_order_list.html',context)
 
 #수정상품 리스트
 @login_required
@@ -692,8 +692,8 @@ def order_detail(request,pk):
 
     return render(request, 'boeun_bread/order_detail.html',{'prod':prod})
 
-#주문하기
-def payment_result(request):
+def Before_payment(request):
+
     user = None
 
     if request.user.is_authenticated:
@@ -708,26 +708,26 @@ def payment_result(request):
 
         user.save()
 
-
-    cart = get_object(Cart, User=user)
+    total = 0
+    cart = get_object(Cart,pk=request.POST.get('cart_pk'))
+    if cart:
+        total = cart.get_total() + 3000 # 배송비 3000원
 
     order = Order.objects.create(
         User                  = user,
-        Order_Number          = create_order_number(),
-        User_address          = request.POST.get('address'),
-        User_detail_address   = request.POST.get('detail_addr'),
-        Total_price           = request.POST.get('Total_price'),
-        Order_hope_date       = request.POST.get('hope_date'),
-        Order_request_content = request.POST.get('request_content')
+        Order_Number          = str(create_order_number()),
+        User_address          = request.POST.get('addr'),
+        User_detail_address   = request.POST.get('detail-addr'),
+        Total_price           = total,
+        Order_hope_date       = request.POST.get('hopeday'),
+        Order_request_content = request.POST.get('request_content'),
     )
-    for prod_pk in request.POST.getlist('prod_pk[]'):
+
+    m_cart = get_object(Cart, User=user)
+    for prod_pk in request.POST.getlist('prod_pk'):
         product = get_object(Product, pk=prod_pk)
-        cp = get_object(Cart_Product,Cart=cart,product_id=product.pk)
-
-        Product.objects.filter(pk=prod_pk).update(
-            P_sales=F('P_sales')+ cp.product_count
-        )
-
+        cp = get_object(Cart_Product,Cart=m_cart,product_id=product.pk)
+        print(cp)
         Order_Product.objects.create(
             Order = order,
             product_id = product.pk,
@@ -735,6 +735,26 @@ def payment_result(request):
             product_name = product.P_name,
             product_price = product.P_price,
             product_count = cp.product_count,
+        )
+
+    return redirect('/payment_page/' + order.Order_Number)
+
+
+#주문하기
+def payment_result(request):
+
+
+    order = get_object(Order,Order_Number=request.POST.get('Order_Number'))
+    
+    cart = get_object(Cart, User=order.User)
+
+
+    order.Order_status = True
+    order.save()
+
+    for porduct in Order_Product.objects.filter(Order=order):
+        Product.objects.filter(pk=porduct.product_id).update(
+            P_sales=F('P_sales')+ porduct.product_count
         )
 
     Cart_Product.objects.filter(Cart=cart).delete()
@@ -754,7 +774,7 @@ def get_total(request):
     return HttpResponse(json.dumps(context), content_type="application/json")
 
 #결제 최종페이지
-def payment_page(request):
+def payment_page(request, ordernumber):
 
     profile =  request.user.profile if request.user.is_authenticated else None
     if not profile:
@@ -763,12 +783,14 @@ def payment_page(request):
     else:
         copy_product(request)
 
+    order = get_object(Order,User=profile, Order_Number=ordernumber)
+
     cart = get_object(Cart,User=profile)
 
     cp   = Cart_Product.objects.filter(Cart=cart)
 
 
-    return render(request,'cart/payment_page.html',{'cp':cp,'cart':cart})
+    return render(request,'cart/payment_page.html',{'cp':cp,'cart':cart, 'order':order})
 
 #주문번호 생성
 def create_order_number():
@@ -833,7 +855,7 @@ def Service_center(request):
 def notice_list(request):
     board = Board.objects.all().order_by('-id')
     #Pagination
-        
+
     page      = request.GET.get('page',1)
     paginator = Paginator(board,10)
     posts     = paginator.get_page(page)
@@ -871,14 +893,14 @@ def modify_notice(request,page):
     context = {
         'board':board
     }
-    return render(request,'boeun_bread/modify_notice.html',context)    
-#공지사항 삭제    
+    return render(request,'boeun_bread/modify_notice.html',context)
+#공지사항 삭제
 def delete_notice(request,page):
-    
+
     board = get_object_or_404(Board,id=page)
     if board.user == request.user.profile:
         board.delete()
-    return redirect('/Service_center/NoticeList/')    
+    return redirect('/Service_center/NoticeList/')
 #qna리스트
 def qna_list(request):
     myQna = request.GET.get('myQna')
@@ -891,7 +913,7 @@ def qna_list(request):
     elif not myQna :
         qna = QNA.objects.all().order_by('-id')
     else:
-        raise Http404    
+        raise Http404
 
     #Pagination
     page = request.GET.get('page',1)
@@ -907,7 +929,7 @@ def qna_list(request):
         'type':'2'
     }
     return render(request,'boeun_bread/qna_list.html',context)
-    
+
 #qna쓰기
 @login_required
 def qna_write(request):
@@ -920,13 +942,13 @@ def qna_write(request):
         )
         return redirect('/Service_center/QnaList/')
     return render(request,'boeun_bread/write_qna.html')
-#qna 수정    
+#qna 수정
 @login_required
 def qna_modify(request,page):
     qna = get_object_or_404(QNA,id=page)
     if qna.user == request.user.profile:
         if request.method == "POST":
-            
+
             qna.question_title   = request.POST.get('title')
             qna.question_content = request.POST.get('content')
             qna.question_kind        = request.POST.get('kind')
@@ -934,8 +956,8 @@ def qna_modify(request,page):
             return redirect('/Service_center/QnaList/')
         return render(request,'boeun_bread/modify_qna.html',{'qna':qna})
 
-    return redirect('/Service_center/QnaDetail/'+qna_pk)        
-    
+    return redirect('/Service_center/QnaDetail/'+qna_pk)
+
 #qna상세
 def qna_detail(request,page):
     qna = get_object_or_404(QNA,pk=page)
@@ -949,13 +971,13 @@ def delete_qna(request,page):
     qna = get_object_or_404(QNA,id=page)
     if qna.user == request.user.profile:
         qna.delete()
-        
-    return redirect("/Service_center/QnaList/")    
+
+    return redirect("/Service_center/QnaList/")
 
 #qna 답변 작성
 @login_required
 def write_answer(request):
-    
+
     if request.method == "POST":
         if isAdmin(request):# 관리자만 답변 작성가능
             qna_pk = request.POST.get('qna_pk')
@@ -974,7 +996,7 @@ def write_answer(request):
                     answer.answer = request.POST.get('answer')
                     answer.save()
 
-            return redirect('/Service_center/QnaDetail/'+qna_pk)    
+            return redirect('/Service_center/QnaDetail/'+qna_pk)
     raise Http404
 #공지 및 qna 검색
 def search_result(request):
@@ -984,7 +1006,7 @@ def search_result(request):
         query_set = Board.objects.filter(
                         Q(title__icontains=query) |
                         Q(content__icontains=query) |
-                        Q(user__U_name__icontains=query) 
+                        Q(user__U_name__icontains=query)
                     )
         page      = request.GET.get('page',1)
         paginator = Paginator(query_set,2)
@@ -994,17 +1016,17 @@ def search_result(request):
             'posts':posts,
             'type':'1',
             'query':query,
-        }             
+        }
         return render(request,'boeun_bread/notice_list.html',context)
     elif type1 == '2':
         query_set = QNA.objects.filter(
                         Q(question_title__icontains=query) |
                         Q(question_content__icontains=query) |
-                        Q(user__U_name__icontains=query) 
+                        Q(user__U_name__icontains=query)
                     ).order_by('-id')
 
         #Pagination
-        
+
         page      = request.GET.get('page',1)
         paginator = Paginator(query_set,2)
         posts     = paginator.get_page(page)
@@ -1013,8 +1035,8 @@ def search_result(request):
             'posts':posts,
             'type':'2',
             'query':query,
-            
-        } 
+
+        }
         return render(request,'boeun_bread/qna_list.html',context)
     else:
         raise Http404

@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% load mathfilters %}
 {% load static %}
 
 {% block content %}
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
 <style>
-  #payment_table{
+  #payment_table_header{
       width:983px;
       border-top:2px solid #9E9E9E;
       margin: 0 auto;
@@ -11,7 +13,54 @@
       background: #F8F8F8;
 
   }
+  #payment_table{
+    width:960px;
+    height:48px;
+    border-top:2px solid #91938E;
+    border-bottom:2px solid #91938E;
+    margin: 0 auto;
+    margin-top:10px;
+    margin-left:15px;
+    background: #ECEFE4;
+  }
+  #payment_table_bottom{
+    width:960px;
+    height:48px;
+    border-top:2px solid #91938E;
+    border-bottom:2px solid #91938E;
+    margin: 0 auto;
+    margin-left:15px;
+    background: #ECEFE4;
+  }
+  .payment_table_info{
+    margin-top:12px;
+  }
+
+  .table_info{
+    color:#9E9E9E;
+  }
+  .button{
+      display: inline-block;
+      width:157px;
+      height: 38px;
+      background: rgb(51,51,51);
+      color:white;
+      text-align:center;
+      line-height: 34px;
+      font-weight: 600;
+      margin-left: 420px;
+      margin-top: 58px;;
+      cursor: pointer;
+  }
+  .user_table{
+    padding-left:60px;
+    padding-top:30px;
+    width:300px;
+    height:70px;
+    background-color:#ECEFE4;
+  }
 </style>
+
 
 <div class="text-right" style="margin-top:28px; margin-right: 78px;">
    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
@@ -23,12 +72,53 @@
     <p style="margin-left:11px;font-size:20px; font-weight:800;">결재 정보</p>
 </div>
 
-<div id="payment_table">
+<div id="payment_table_header">
   <label style=" margin-left:50px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">결재정보</label>
+
+  <div id="payment_table">
+    <label class="payment_table_info" style="margin-left:50px; width:60px;">이미지</label>
+    <label class="payment_table_info" style="margin-left:133px; width:50px;">제품명</label>
+    <label class="payment_table_info" style="margin-left:264px; width:60px;">가격</label>
+    <label class="payment_table_info" style="margin-left:64px; width:60px;">수량</label>
+    <label class="payment_table_info" style="margin-left:110px; width:60px;">총액</label>
+  </div>
+
+  {% for cp in cp %}
+   <div style="padding-left:40px; padding-top:20px;">
+    <img  width="87" height="90" src="/media/{{ cp.product_img }}">
+    <label class="table_info" style="padding-left:120px; width:300px;">{{ cp.product_name }}</label>
+    <label class="table_info" style="padding-left:145px; width:50px;"">{{ cp.product_price }}</label>
+    <label class="table_info" style="padding-left:130px; width:50px;">{{ cp.product_count }}</label>
+    <label class="table_info" style="padding-left:160px; width:60px;">{{ cp.product_price|mul:cp.product_count}}</label>
+   </div>
+
+    <hr style="margin : 0px; margin-left:15px; margin-top:25px; width:960px; background-color:#91938E; height:1px;">
+
+  {% endfor %}
+  <div id="payment_table_bottom">
+    <label style="padding-left:280px; padding-top:13px; text-align:center; font-size:16px;">상품 가격 :
+      {{cart.get_total}}원 + 배송비 : 3000원 = <span style="color:red;">결제총액 : {{cart.get_total|add:"3000"}}원</span>
+    </label>
+  </div>
+  <div>
+    <div class="button" onclick="payment()">결제하기</div>
+  </div>
+
+  <label style=" margin-left:10px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">주문자 정보</label>
+  <div style="width:960px;">
+    <hr style="margin : 0px; margin-left:15px; margin-top:25px; width:960px; background-color:#91938E; height:1px;">
+    <label class="user_table">주문자 이름</label><label style="padding-left:50px;">{{cart.User.U_name}}</label>
+    <hr style="margin : 0px; margin-left:15px;width:960px; background-color:#91938E; height:1px;">
+    <label class="user_table">이메일</label><label style="padding-left:50px;">{{cart.User.U_email}}</label>
+    <hr style="margin : 0px; margin-left:15px; width:960px; background-color:#91938E; height:1px;">
+    <label class="user_table">휴대전화</label><label style="padding-left:50px;">{{cart.User.U_phone}}</label>
+    <hr style="margin : 0px; margin-left:15px; width:960px; background-color:#91938E; height:1px;">
+    <label class="user_table">주문자주소</label><label style="padding-left:50px;">{{order.User_address}}<br>{{order.User_detail_address}}</label>
+  </div>
 </div>
 
-
 <script>
+  //총결제금액 가져오기
   function get_total(){
       var total = 0;
       $.ajax({
@@ -46,6 +136,57 @@
             }
         });
       return total;
+  }
+  //결제하기
+  function payment(){
+      var IMP = window.IMP; // 생략가능
+      IMP.init('imp91382374'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+
+      IMP.request_pay({
+        pg : 'inicis', // version 1.1.0부터 지원.
+        pay_method : 'card',
+        merchant_uid : 'merchant_' + new Date().getTime(),
+        name : '보은군',
+        amount : 100,//get_total(),
+        buyer_email : 'iamport@siot.do',
+        buyer_name : '{{request.user.profile.U_name}}',
+        buyer_tel : '{{request.user.profile.U_phone}}',
+        buyer_addr : '{{order.user.User_address}}, {{order.user.User_detail_address}}',
+        buyer_postcode : '123-456',
+        m_redirect_url : 'https://www.yourdomain.com/payments/complete'
+      }, function(rsp) {
+      if ( rsp.success ) {
+        var msg = '결제가 완료되었습니다.';
+        /*
+        msg += '고유ID : ' + rsp.imp_uid;
+        msg += '상점 거래ID : ' + rsp.merchant_uid;
+        msg += '결제 금액 : ' + rsp.paid_amount;
+        msg += '카드 승인번호 : ' + rsp.apply_num;
+        */
+        $.ajax({
+           type : "POST",
+           url : "{% url 'boeun_bread:payment_result' %}",
+           data : {
+               'csrfmiddlewaretoken': '{{ csrf_token }}',
+               'Order_Number' : '{{order.Order_Number}}',
+               'Total_price' : get_total(),
+           },
+
+           success : function(response)
+           {
+              alert("결제가 완료되었습니다.");
+              location.href="/";
+
+           }
+       });
+
+
+      } else {
+        var msg = '결제에 실패하였습니다.';
+        msg += '에러내용 : ' + rsp.error_msg;
+      }
+        alert(msg);
+      });
   }
 </script>
 {% endblock %}
