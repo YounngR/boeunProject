@@ -73,8 +73,9 @@ def order_list(request):
         return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
     if request.method == "POST":
         order = get_object(Order,id=request.POST.get('order_pk'))
-        if order.delivery:
-            delivery = get_object(Delivery,order=order)
+        delivery = get_object(Delivery,order=order)
+        if delivery:
+            
             delivery.delivery_status = request.POST.get('status')
             delivery.save()
         else:
@@ -526,8 +527,15 @@ def order_lookup_info(request):
     posts = paginator.get_page(page)
 
     return render(request, 'mypage/order_lookup_info.html', {'order':posts, 'posts':posts})
-#상품복제
+#배송 조회 
+def tracking(request,order_num):
+    order = get_object_or_404(Order,Order_Number=order_num)
+    context = {
+        'order':order,
+    }
+    return render(request, 'mypage/tracking.html',context)
 
+#상품복제
 def copy_product(request):
     '''
     비회원 장바구니를 회원 장바구니에 복제

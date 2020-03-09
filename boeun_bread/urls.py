@@ -44,6 +44,8 @@ urlpatterns = [
     path('order_history/', views.order_history, name="order_history"),
     path('order_lookup/',views.order_lookup, name="order_lookup"),
     path('order_lookup_info', views.order_lookup_info, name="order_lookup_info"),
+    #배송조회
+    path('tracking/<order_num>/',views.tracking,name="tracking"),
 
     #장바구니
     path('cart/',views.cart, name="cart"),
@@ -92,6 +94,7 @@ urlpatterns = [
     path('Service_center/DeleteQna/<page>/', views.delete_qna, name="delete_qna"), #qna 삭제
     path('Service_center/WriteAnswer/', views.write_answer, name="write_answer"),#qna 답변 작성
     path('Service_center/SearchResult/', views.search_result, name="search_result"),#qna 공지 검색
+
     #견적서
     path('estimate/',views.estimate,name='estimate'),
     #아이디 찾기
