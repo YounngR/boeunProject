@@ -24,8 +24,9 @@
             cursor: pointer;
         }
     </style>
-    
-    <div id="write-qna-btn">QnA작성하기</div>
+    {% if request.user.is_authenticated %}
+      <div id="write-qna-btn">QnA작성하기</div>
+    {% endif %}
     
     <table class="table" id="qna-table">
         <thead>
@@ -41,21 +42,41 @@
         </thead>
         <tbody>
             {% for obj in qna %}
-            <tr>
-                <td>질문</td>
-                <td>{{obj.get_question_kind_display}}</td>
-                <td page="{{obj.pk}}" class="detail col-md-6">{{obj.question_title}}</td>
-                <td>{{obj.user.U_name}}</td>
-                <td>{{obj.question_date|date:"Y-m-d"}}</td>
-                
-                    {% if obj.question_status %}
-                        <td>답변완료</td>
-                    {% else %}
-                        <td>답변중</td>
-                    {% endif %}
-                
-                
-            </tr>
+            {% if obj.is_private %}
+              {% if obj.user == request.user.profile %}
+                <tr>
+                    <td>질문</td>
+                    <td>{{obj.get_question_kind_display}}</td>
+                    <td page="{{obj.pk}}" class="detail col-md-6">
+                      (비공개)&nbsp {{obj.question_title|get_qna_text}}
+                    </td>
+                    <td>{{obj.user.U_name}}</td>
+                    <td>{{obj.question_date|date:"Y-m-d"}}</td>
+                    
+                        {% if obj.question_status %}
+                            <td>답변완료</td>
+                        {% else %}
+                            <td>답변중</td>
+                        {% endif %}
+                </tr>
+              {% endif %}
+            {% else %}
+               <tr>
+                  <td>질문</td>
+                  <td>{{obj.get_question_kind_display}}</td>
+                  <td page="{{obj.pk}}" class="detail col-md-6">
+                    {{obj.question_title|get_qna_text}}
+                  </td>
+                  <td>{{obj.user.U_name}}</td>
+                  <td>{{obj.question_date|date:"Y-m-d"}}</td>
+                  
+                      {% if obj.question_status %}
+                          <td>답변완료</td>
+                      {% else %}
+                          <td>답변중</td>
+                      {% endif %}
+              </tr>
+            {% endif %}
 
             {% endfor %}
         </tbody>

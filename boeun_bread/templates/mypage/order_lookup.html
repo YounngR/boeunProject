@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<link  href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+    <script src="{% static 'js/datepicker.js'%}"></script>
 <style>
   #order_lookup_box{
       width:983px;
@@ -134,6 +135,23 @@
       });
     }
 
+    
+  $(document).on("click",".tracking-btn",function(){
+    
+    var order_num = $(this).attr("order");
+    var url  = "/tracking/"+order_num;
+    var left = 0;
+    var top  = 0;
+    window.open(url,'window','width=700,height=500,left='+left+',top='+top);
+  });
+  $(document).on("click",".estimate",function(){
+    
+    var order_num = $(this).attr("order");
+    var url  = "/estimate/"+order_num;
+    var left = 0;
+    var top  = 0;
+    window.open(url,'window','width=1000,height=700,left='+left+',top='+top);
+  });
 
 
 </script>

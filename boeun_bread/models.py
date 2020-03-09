@@ -65,6 +65,7 @@ class Order(models.Model):
     Order_hope_date       = models.DateTimeField(null=True,blank=True) #배송 희망일
     Order_request_content = models.CharField(null=True,blank=True,max_length=200) #주문시 요청사항
     Order_status          = models.BooleanField(default=False) #True = 결제완료
+    
 
 class Delivery(models.Model):
     DELIVERY_STATUS = (
@@ -111,6 +112,11 @@ class QNA(models.Model):
     '''
     question_status  = models.BooleanField(default=False)
     question_date    = models.DateField(auto_now_add=True) #질문 날짜
+    '''
+        true : 비공개
+        false: 공개
+    '''
+    is_private       = models.BooleanField(default=False)
 class Answer(models.Model):
     qna           = models.OneToOneField(QNA,on_delete=models.CASCADE)
     answer        = models.TextField() #답변내용

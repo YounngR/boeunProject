@@ -1,12 +1,11 @@
+{% load extra%}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
      <!--부트스트랩-->
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-     <link rel="stylesheet" href="../../stylesheets/coloringpage.css" type="text/css" media="screen, projection" />
-     <link rel="stylesheet" href="../../stylesheets/coloringpageprint.css" type="text/css" media="print" />
+     
+     
       <!--제이쿼리-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <meta charset="UTF-8">
@@ -14,15 +13,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style type="text/css" media="print">
         @page {
-            size: auto;  /* auto is the initial value */
+            size: auto; 
             margin: 0;  
-            /* this affects the margin in the printer settings */
         }
-    
-        </style>
+     </style>
 </head>
 
 <body>
+
+ <div id="print-box">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <style>
+      .table2{
+          height: 350px;;
+      }
+  </style>
  <div id="print_section" style="width:1000px; margin:0px auto; position: relative;">
     <h3 style="border-bottom: 1px solid black; padding: 10px; padding-bottom: 0px; width: 130px; margin:0px auto;" >
         견&nbsp&nbsp&nbsp적&nbsp&nbsp&nbsp서
@@ -31,15 +38,15 @@
         발행일: 2020년 2월 6일
     </h5>
     <div class="row">
-     <table class="table table-bordered" style="margin-left: 30px; float: left; width: 47%; height: 251px;">
+     <table class="table table-bordered" id="table1"style="margin-left: 30px; float: left; width: 47%; height: 301px;">
         <tr>
             <td class="text-center" colspan="8">공급받는자</td>    
         </tr>
         <tr>
             <td class='text-center'>사업자<br>번호</td>
             <td class='text-center write' colspan="7" >
-                <input  type="text" style="border:0px;" placeholder="입력해주세요">
-                <p class="write-text">58498498</p>
+                <input  type="text" style="border:0px;"  placeholder="입력해주세요">
+                
             </td>
          
             
@@ -91,7 +98,7 @@
         </tr>
     
      </table>
-     <table class="table table-bordered" style="width:45%; margin-left:52%; height: 251px; ">
+     <table class="table table-bordered" id="table2" style="width:45%; margin-left:52%; height: 302px; ">
         <tr>
 
             <td class="text-center" colspan="8">공급자</td>
@@ -148,47 +155,41 @@
             <td class="text-center col-md-1">수량</td>
             <td class="text-center col-md-2" >합계 (원)</td>
         </tr>
-           
+        {% for prod in order_product %}  
         <tr>
-            <td class="text-center col-md-1" >1</td>
-            <td class="text-center col-md-6" >단팥빵 10개 묶음</td>
-            <td class="text-center col-md-2"  >6000원</td>
-            <td class="text-center col-md-1">1개</td>
-            <td class="text-center col-md-2" >6000원</td>
+            <td class="text-center col-md-1" >{{forloop.counter}}</td>
+            <td class="text-center col-md-6" >{{prod.product_name}}</td>
+            <td class="text-center col-md-2"  >{{prod.product_price}}</td>
+            <td class="text-center col-md-1">{{prod.product_count}}개</td>
+            <td class="text-center col-md-2" >{{prod.product_count|get_total:prod.product_price}}원</td>
         </tr>
+        
+        {% endfor %}
         <tr>
             <td class="text-center" colspan="4" >결제금액</td>
            
-            <td class="text-center col-md-2" >6000원</td>
+            <td class="text-center col-md-2" >{{total}}원</td>
         </tr>
     </table>
+    <script>
+       function Close_Event(){
+        opener.document.location.reload();
+    }
+    </script>
  </div>
 <div class="text-center">
     <a id="print"><button id="print-button" style="width: 100px ; height:36px; color: black">  인쇄하기 </button>
     </a>
 </div>
+</div>   
  <script>
-     $(".write-text").css({
-         "display":"none",
-         "width" : "170px",
-         "height" : "22px",
-        });
-     function info_print() {
-        var initBody = document.body.innerHTML;
-        window.onbeforeprint = function () {
-        document.body.innerHTML = document.getElementById("print_section").innerHTML;
-        }
-        window.onafterprint = function () {
-            document.body.innerHTML = initBody;
-            window.location.reload();
-        }
-        window.print();
-
-}
+    
 /*$(".write").keyup(function(){
     
     $(this).next("p").text($(this).val());
 });*/
+        
+
 
 $("#print").click(function(){
         $(".write").each(function(index, item){
@@ -197,10 +198,24 @@ $("#print").click(function(){
             $(item).text(value);
          });
          
-     
-         $("#print").css("display","none");
-         info_print();
+            $("#print").css("display","none");
+            $("#table1").height(320);
+            $("#table2").height(320);
+            printt();
+         
      });
+ function printt(){
+    var initBody =document.getElementById('print-box').innerHTML;
+        window.onbeforeprint = function () {
+        document.body.innerHTML = document.getElementById("print-box").innerHTML;
+        }
+        window.onafterprint = function () {
+            document.body.innerHTML = initBody;
+            window.location.reload();
+        }
+        window.print();
+ }    
+  
  </script>
 </body>
 </html>
