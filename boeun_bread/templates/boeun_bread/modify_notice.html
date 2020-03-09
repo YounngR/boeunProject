@@ -1,70 +1,128 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
-<style>
-    #container{
-        width:983px;
-        
-        border: 1px solid rgb(127,126,126);
-        margin:0 auto;
-        
-    }
-    #form-box{
-        width:700px;
-        margin:30px auto;
-        
-    }
-    #submit-btn{
-        width:100px;
-        height:37px;
-        margin-left:600px;
-        margin-top:30px;
-        background: #7d7d7d;
-        color:white;
-        text-align: center;
-        line-height: 37px;
-        cursor: pointer;
-    }
-</style>
-<div class="text-right" style="margin-top:28px; margin-right: 78px;">
-    <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
-    <i class="glyphicon glyphicon-menu-right"></i>
-    <span style="font-weight: 500; position: relative; top:-1px;">고객센터</span>
-</div>
-<div style="margin-top:14px; margin-left:99px;">
-    <div style="width:5px; height:19px; margin-top:5px; background:#e47f32; float: left;"></div>
-    <p style="margin-left:11px;font-size:20px; font-weight:800;">고객센터</p>
-</div>
-<div id="container">
-    <div id="form-box">
-        <form action="/Service_center/ModifyNotice/{{board.id}}/" id="form" method="POST">
+{% extends 'manage/manage_base.html'%}
+
+{% block manage_content %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <style>
+        #write-container{
+            margin:0 auto;
+        }
+        #file{
+            display: none;
+        }
+        #file-label{
+            width:100px;
+            height: 30px;
+            background: rgb(233,236,239);
+            color:rgb(108,117,125);
+            text-align: center;
+            line-height: 30px;
+            border-radius: 15px;
+        }
+        #filename-list{
+            
+            list-style: none;
+            margin-left: 10px;
+        }
+        .remove-icon{
+            font-size: 14px;
+            font-weight: bold;
+            color: red;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        #submit-btn{
+            width:100px;
+            height: 30px;
+            margin:30px auto;
+            background: rgb(233,236,239);
+            color:rgb(108,117,125);
+            text-align: center;
+            line-height: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+    </style>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'boeun_bread:manage' %}">관리자페이지</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'boeun_bread:manage' %}">공지사항</a>
+        </li>
+        <li class="breadcrumb-item active">공지사항수정</li>
+    </ol>
+    <div id="write-container" class="col-md-7">
+        <form action="{% url 'boeun_bread:modify_notice' board.id %}" method="POST" enctype="multipart/form-data" id="form">
             {% csrf_token %}
-            <label>질문유형</label>
-            <select class="form-control" name="kind">
-                <option value="1">배송기준</option>
-            </select><br>
-            <label>질문제목</label>
-            <input type="text" name="title" value="{{board.title}}" class="form-control"><br>
-            <label>질문내용</label>
-            <div id="summernote">{{board.content|safe}}</div>
-            <input type="hidden" id="content" name="content">
+            <!--제목-->
+            <label>제목</label><br>
+            <input type="text" class="form-control" value="{{board.title}}"  name="title" placeholder="제목"><br>
+            <!--첨부파일-->
+            <input type="hidden" name="exclude_file" id="exclude-file">
+            <input type="hidden" name="pre_exclude_file" id="pre-exclude-file">
+            <label for="file" id="file-label">첨부파일</label>
+            <input type="file" id="file" name="file" multiple="multiple"><br>
+            <ul id="filename-list">
+                {% for f in files %}
+                <li class="pre">
+                    <span class='remove-icon' idx="{{f.pk}}">X</span>
+                    {{f.file}}
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <!--내용-->
+            <div id="summernote">
+                {{board.content|safe}}
+            </div>
+            <input type="hidden" name="content" id="content">
+
             <div id="submit-btn">수정하기</div>
         </form>
     </div>
-</div>
-<script>
-    //summernote 활성화
-    $('#summernote').summernote({
-            height: 150
-        });
-    //submit 버튼클릭시
-    $("#submit-btn").click(function(){
-        $("#content").val($('#summernote').summernote('code'));
-        $("#form").submit();
-    });
+    <script>
+        var exclude_file = []; //파일 객체 배열
+        var pre_exclude_file = [];
 
-</script>
+        var file      = document.getElementById('file');
+        
+        //summernote 활성화
+        $('#summernote').summernote({
+            height: 300
+        });
+        // 파일선택 상태가 변경되면 호출
+        file.onchange = function(e) {
+            var files = e.target.files; // FileList 객체
+            var len   = $("#filename-list").children(".new").length;
+            for(var i=0; i<files.length; i++){
+                
+                var tag = $("<li class='new'><span class='remove-icon' idx="+(len+i)+">X</span>"+files[i].name+"</li>");
+                $("#filename-list").append(tag);
+            }
+            
+        }
+        //첨부파일 삭제 아이콘 클릭시
+        $(document).on("click",".remove-icon",function(){
+            var file_index = parseInt($(this).attr("idx"));
+            
+            if($(this).parent("li").attr('class') == "new"){
+                exclude_file.push(file_index);
+            }else{
+                
+                pre_exclude_file.push(file_index);
+                console.log(pre_exclude_file);
+            }
+            $(this).parent("li").remove();
+            
+        });
+        //작성하기 
+        $("#submit-btn").click(function(){
+            $("#exclude-file").val(exclude_file);
+            $("#pre-exclude-file").val(pre_exclude_file);
+            $("#content").val($('#summernote').summernote('code'));
+            $("#form").submit();
+        });
+    </script>
 {% endblock %}

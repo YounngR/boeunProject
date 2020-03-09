@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--부트스트랩-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <style>
+        .container{
+            margin-top:30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="table table-bordered">
+            <tr>
+                <th>송장번호</th>
+                <th>택배회사</th>
+                <th>배송상태</th>
+            </tr>
+            <tr>
+                <td>{{order.delivery.delivery_number}}</td>
+                <td>{{order.delivery.delivery_company}}</td>
+                <td>{{order.delivery.get_delivery_status_display}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

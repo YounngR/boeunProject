@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load extra %}
 {% block content %}
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <td class="tk" style="border-left: 0px;">질문제목</td>
-                <td class="tv" style="border-right: 0px;">{{qna.question_title}}</td>
+                <td class="tv" style="border-right: 0px;">{{qna.question_title|split_long_text:105}}</td>
             </tr>
             <tr>
                 <td class="tk" style="border-left: 0px;">질문내용</td>
