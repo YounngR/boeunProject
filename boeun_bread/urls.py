@@ -96,7 +96,7 @@ urlpatterns = [
     path('Service_center/SearchResult/', views.search_result, name="search_result"),#qna 공지 검색
 
     #견적서
-    path('estimate/',views.estimate,name='estimate'),
+    path('estimate/<order_num>/',views.estimate,name='estimate'),
     #아이디 찾기
     path('forgetId/',views.forget_id,name="forgetId"),
     #비밀번호찾기

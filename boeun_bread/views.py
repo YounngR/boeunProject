@@ -215,7 +215,7 @@ def non_login(request):
 
     if request.method == "POST":
         context={}
-        user = Profile.objects.get(U_name=request.POST.get('user_id'), U_phone=request.POST.get('phone'))
+        user = get_object(Profile,U_name=request.POST.get('user_id'), U_phone=request.POST.get('phone'))
         if user:
             order = Order.objects.filter(User=user)
             return render(request, 'mypage/non_login_order_lookup.html', {'order':order})
@@ -893,13 +893,44 @@ def notice_detail(request,page):
 def modify_notice(request,page):
     board = get_object_or_404(Board,id=page)
     if request.method == "POST":
+        
         if board.user == request.user.profile:
+            files     = request.FILES.getlist('file')
+            pre_files = request.POST.get('pre_exclude_file')
+            pre_files = pre_files.split(',')
+            '''
+                client 삭제된 리스트로
+                client 삭제된 파일 제외
+            '''
+            
+            for index in request.POST.getlist('exclude_file'):
+                try:
+                    del files[int(index)]
+                except ValueError:
+                    pass
+            for index in pre_files:
+                try:
+                    obj = get_object(BoardFile,id=index)
+                    if obj:
+                        obj.delete()
+                except ValueError:
+                    pass        
+                
+
             board.title   = request.POST.get('title')
             board.content = request.POST.get('content')
             board.save()
+            for f in files:
+                BoardFile.objects.create(
+                    board = board,
+                    file  = f
+                )
+
         return redirect('/Service_center/NoticeDetail/'+page)
+    files = BoardFile.objects.filter(board=board)    
     context = {
-        'board':board
+        'board':board,
+        'files':files
     }
     return render(request,'boeun_bread/modify_notice.html',context)
 #공지사항 삭제
@@ -942,11 +973,16 @@ def qna_list(request):
 @login_required
 def qna_write(request):
     if request.method == "POST":
+        is_private = False
+        if request.POST.get('private') == "on":
+            is_private = True
+
         QNA.objects.create(
             user           = request.user.profile,
             question_title = request.POST.get('title'),
             question_content = request.POST.get('content'),
-            question_kind  = request.POST.get('kind')
+            question_kind  = request.POST.get('kind'),
+            is_private     = is_private
         )
         return redirect('/Service_center/QnaList/')
     return render(request,'boeun_bread/write_qna.html')
@@ -1059,5 +1095,21 @@ def terms_and_conditions(request):
 def Privacy_Policy(request):
     return render(request, 'mypage/Privacy_Policy.html')
 #견적서
-def estimate(request):
-    return render(request,'Estimate/estimate.html')
+def estimate(request,order_num):
+    
+    order = get_object_or_404(Order,Order_Number=order_num)
+    order_product = None
+    total = 0
+    if order:
+        order_product = Order_Product.objects.filter(
+            Order=order
+        )
+        for prod in order_product:
+            total += (prod.product_price * prod.product_count)
+    context = {
+        'order_product':order_product,
+        'total':total
+    }
+    
+    return render(request,'Estimate/estimate.html',context)
+    

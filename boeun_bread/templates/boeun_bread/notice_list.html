@@ -14,7 +14,7 @@
             {% for obj in board %}
             <tr>
                 <td>공지</td>
-                <td page="{{obj.pk}}" class="detail col-md-6" style="cursor: pointer;">{{obj.title}}</td>
+                <td page="{{obj.pk}}" class="detail col-md-6" style="cursor: pointer;">{{obj.title|get_qna_text}}</td>
                 <td>{{obj.user.U_name}}</td>
                 <td>{{obj.date|date:'Y-m-d'}}</td>
             </tr>
