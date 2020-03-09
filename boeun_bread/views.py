@@ -160,17 +160,42 @@ def delete_product(request):
 @login_required
 def manage_Sales_Status(request):
 
+
     prod = Product.objects.all()
 
+    p_name_list = []
+    p_salse_list = []
 
-    return render(request, 'manage/manage_Sales_Status.html',{'prod':prod})
+    for p in prod:
+        p_name_list.append(p.P_name)
+        p_salse_list.append(p.P_sales)
+
+
+    return render(request, 'manage/manage_Sales_Status.html',{'prod':prod, 'p_name_list':p_name_list,'p_salse_list':p_salse_list})
 
 @login_required
 def manage_Sales_Status_table(request):
 
+    bread_list = {}
+    for name in Product.objects.all():
+        bread_list[name.P_name] = 0
 
+    order = Order.objects.all()
 
-    render(request, 'mypage/manage_Sales_Status_table.html', {'prod':prod})
+    if request.POST.get('year') != 0 and request.POST.get('month') != 0:
+        order = Order.objects.filter(Order_date__year=request.POST.get('year'), Order_date__month=request.POST.get('month'))
+
+    elif request.POST.get('year') != 0 and request.POST.get('month') == 0:
+        order = Order.objects.filter(Order_date__year=request.POST.get('year'))
+
+    elif request.POST.get('year') == 0 and request.POST.get('month') != 0:
+        order = Order.objects.filter(Order_date__month=request.POST.get('month'))
+
+    for order in order:
+        for p_order in Order_Product.objects.filter(Order=order):
+            bread_list[p_order.product_name] += p_order.product_count
+
+    return render(request, 'manage/manage_Sales_Status_table.html', {'bread_list':bread_list, 'keyword':"change_table"})
 
 #공지사항 작성
 @login_required
@@ -300,7 +325,7 @@ def send_email(request):
 def LoginPage(request):
     if request.method == "POST":
         context={}
-        user = auth.authenticate(request,username=request.POST['user_id'],password=request.POST['user_pwd'])
+        user = auth.authenticate(request,username=request.POST['user_id'],password=request.POST['user_pwd'],U_delete=False)
         if user:
             if not user.profile.U_is_active:
                 context['msg']="이메일 인증이 완료되지 않았습니다."
@@ -383,7 +408,14 @@ def delete_user(request):
     if request.method == "POST":
         user = auth.authenticate(request,username=request.user.username,password=request.POST.get('user_pw'))
         if user:
-            user.delete()
+            for reason in request.POST.getlist('reason'):
+                Reason.objects.create(
+                user = request.user.profile,
+                reason=reason
+            )
+            user.U_delete=True
+            user.save()
+            auth.logout(request)
             return redirect('/')
         else:
             context['msg'] = "비밀번호가 일치하지 않습니다."
@@ -745,7 +777,7 @@ def payment_result(request):
 
 
     order = get_object(Order,Order_Number=request.POST.get('Order_Number'))
-    
+
     cart = get_object(Cart, User=order.User)
 
 

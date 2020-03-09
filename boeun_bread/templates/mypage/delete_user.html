@@ -4,7 +4,7 @@
 <style>
     #content-box{
         width:983px;
-        height: 472px;
+        height: 650px;
         background: #F8F8F8;
         border-top:2px solid #9E9E9E;
         margin: 0 auto;
@@ -49,6 +49,11 @@
         color:white;
         background-color:black;
     }
+    #delete_reason{
+        font-weight:bold;
+        margin-bottom:30px;
+
+    }
 </style>
 {% if msg %}
 <script>
@@ -82,12 +87,7 @@
     </p>
     <hr style="margin-bottom: 10px;">
     <div class="text-box">
-      <pre style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;">
-        1. 회원정보는 탈퇴 시 즉시 삭제됩니다.
-        2. 전자상거래 이용 후 탈퇴 시 주문정보는 교환/반품/환불 및 사후처리(A/S) 등을 위하여 전자상거래 등에서의
-           소비자보호에 관한 법류에 의거, 일반정보보호정책에 따라 관리됩니다.
-        3. 탈퇴 이후에는 어떠한 방법으로도 삭제된 회원정보를 복원할 수 없습니다.
-      </pre>
+
     </div>
     <hr style="margin-bottom: 10px; margin-top: 6px;">
     <p style="font-size:14px; font-weight:bold; color:#9E9E9E;  margin-left: 51px;">
@@ -97,6 +97,15 @@
     <div style="margin-left:51px;">
         <form action="{% url 'boeun_bread:delete_user' %}" method="POST" onsubmit="return isValid();">
             {% csrf_token %}
+            <div id="delete_reason">
+                <p>회원탈퇴 사유는 무엇입니까?</p>
+                    <input type="checkbox" id="delay" name="reason" value="1">배송불만(지연,반품)<br>
+                    <input type="checkbox" id="homepage" name="reason" value="2">홈페이지 사용 불편<br>
+                    <input type="checkbox" id="price" name="reason" value="3">제품(빵) 가격 불만<br>
+                    <input type="checkbox" id="bread" name="reason" value="4">제품(빵) 품질 불만<br>
+                    <input type="checkbox" id="any"   name="reason" value="5">기타<br>
+            </div>
+
             <label style="font-size:13px; color:#9E9E9E;">비밀번호</label>
             <input type="password" name="user_pw" required>
             <div class="text-center" style="margin-top:35px;">
@@ -107,6 +116,12 @@
     </div>
 </div>
 <script>
+
+
+
+
+
+
     //회원정보 변경 클릭시
     function modify_user(){
         window.location.href="{% url 'boeun_bread:modify_user' %}";
@@ -117,11 +132,17 @@
     });
     //탈퇴하기 클릭시
     function isValid(){
-        if(confirm("회원탈퇴 하시겠습니까?")){
+        if($("input:checkbox[name=reason]:checked").length < 1){
+          alert("탈퇴사유 종류를 한개 이상 선택해주세요.");
+          return false;
+        }
+        else if(confirm("회원탈퇴 하시겠습니까?")){
             return true;
         }else{
             return false;
         }
     }
+
+
 </script>
 {% endblock %}

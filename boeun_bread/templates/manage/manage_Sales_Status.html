@@ -1,7 +1,7 @@
 {% extends 'manage/manage_base.html'%}
 {% load extra %}
 {% block manage_content %}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <div style="float:right;">
   <select id="month">
     <option value="0">전체</option>
@@ -33,16 +33,12 @@
   {% include 'manage/manage_Sales_Status_table.html' %}
 </div>
 
-<div id="after_page">
-
-</div>
-
 <script>
 
   $("#year").change(function(){
     $.ajax({
         type : "POST",
-        url : "{% url 'boeun_bread:order_lookup_info' %}",
+        url : "{% url 'boeun_bread:manage_Sales_Status_table' %}",
         data : {
             'csrfmiddlewaretoken': '{{ csrf_token }}',
             'year' : $("#year option:selected").val(),
@@ -52,7 +48,7 @@
         success : function(response)
         {
           $('#pre_page').empty();
-          $('#after_page').append(response)
+          $('#pre_page').append(response)
         }
     });
   });
@@ -60,7 +56,7 @@
   $("#month").change(function(){
     $.ajax({
         type : "POST",
-        url : "{% url 'boeun_bread:order_lookup_info' %}",
+        url : "{% url 'boeun_bread:manage_Sales_Status_table' %}",
         data : {
             'csrfmiddlewaretoken': '{{ csrf_token }}',
             'year' : $("#year option:selected").val(),
@@ -70,7 +66,7 @@
         success : function(response)
         {
           $('#pre_page').empty();
-          $('#after_page').append(response)
+          $('#pre_page').append(response)
         }
     });
   });

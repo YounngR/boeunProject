@@ -115,3 +115,14 @@ class Answer(models.Model):
     qna           = models.OneToOneField(QNA,on_delete=models.CASCADE)
     answer        = models.TextField() #답변내용
     question_date = models.DateField(auto_now_add=True) #답변 날짜
+
+class Reason(models.Model):
+    REASON = (
+        ('1','배송불만(지연,반품)'),
+        ('2','홈페이지 사용 불편'),
+        ('3','제품(빵) 가격 불만'),
+        ('4','제품(빵) 품질 불만'),
+        ('5','기타')
+    )
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=1, choices=REASON)
