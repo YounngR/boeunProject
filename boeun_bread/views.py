@@ -792,9 +792,21 @@ def payment_result(request):
     order = get_object(Order,Order_Number=request.POST.get('Order_Number'))
 
     cart = get_object(Cart, User=order.User)
+    type = None
 
+    if request.POST.get('type') == "card":
+        type="카드결제"
+    elif request.POST.get('type') == "trans":
+        type="실시간계좌이체"
+    elif request.POST.get('type') == "vbank":
+        type="가상계좌"
+    elif request.POST.get('type') == "phone":
+        type="휴대폰소액결제"
+    elif request.POST.get('type') == "samsung":
+        type="삼성페이"
 
     order.Order_status = True
+    order.payment_type = type
     order.save()
 
     for porduct in Order_Product.objects.filter(Order=order):

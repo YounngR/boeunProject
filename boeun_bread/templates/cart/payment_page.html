@@ -100,6 +100,13 @@
       {{cart.get_total}}원 + 배송비 : 3000원 = <span style="color:red;">결제총액 : {{cart.get_total|add:"3000"}}원</span>
     </label>
   </div>
+  <div style="padding-left:20px; padding-top:30px;">
+    <input type="radio" name="payment_ty" value="card">카드결제&nbsp&nbsp
+    <input type="radio" name="payment_ty" value="trans">실시간계좌이체&nbsp&nbsp
+    <input type="radio" name="payment_ty" value="vbank">가상계좌&nbsp&nbsp
+    <input type="radio" name="payment_ty" value="phone">휴대폰소액결제&nbsp&nbsp
+    <input type="radio" name="payment_ty" value="samsung">삼성페이&nbsp&nbsp
+  </div>
   <div>
     <div class="button" onclick="payment()">결제하기</div>
   </div>
@@ -139,52 +146,55 @@
   }
   //결제하기
   function payment(){
-      var IMP = window.IMP; // 생략가능
-      IMP.init('imp91382374'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
 
-      IMP.request_pay({
-        pg : 'inicis', // version 1.1.0부터 지원.
-        pay_method : 'card',
-        merchant_uid : 'merchant_' + new Date().getTime(),
-        name : "상품결제",
-        amount : 100,//get_total(),
-        buyer_email : '{{request.user.profile.U_email}}',
-        buyer_name : '{{request.user.profile.U_name}}',
-        buyer_tel : '{{request.user.profile.U_phone}}',
-        buyer_addr : '{{order.user.User_address}}, {{order.user.User_detail_address}}',
-      }, function(rsp) {
-      if ( rsp.success ) {
-        var msg = '결제가 완료되었습니다.';
+
+    var IMP = window.IMP; // 생략가능
+    IMP.init('imp91382374'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+
+    IMP.request_pay({
+      pg : 'inicis', // version 1.1.0부터 지원.
+      pay_method : $('input[name="payment_ty"]:checked').val(),
+      merchant_uid : 'merchant_' + new Date().getTime(),
+      name : "상품결제",
+      amount : 100,//get_total(),
+      buyer_email : '{{request.user.profile.U_email}}',
+      buyer_name : '{{request.user.profile.U_name}}',
+      buyer_tel : '{{request.user.profile.U_phone}}',
+      buyer_addr : '{{order.user.User_address}}, {{order.user.User_detail_address}}',
+    }, function(rsp) {
+    if ( rsp.success ) {
+      var msg = '결제가 완료되었습니다.';
         /*
         msg += '고유ID : ' + rsp.imp_uid;
         msg += '상점 거래ID : ' + rsp.merchant_uid;
         msg += '결제 금액 : ' + rsp.paid_amount;
         msg += '카드 승인번호 : ' + rsp.apply_num;
         */
-        $.ajax({
-           type : "POST",
-           url : "{% url 'boeun_bread:payment_result' %}",
-           data : {
-               'csrfmiddlewaretoken': '{{ csrf_token }}',
-               'Order_Number' : '{{order.Order_Number}}',
-               'Total_price' : get_total(),
-           },
+      $.ajax({
+         type : "POST",
+         url : "{% url 'boeun_bread:payment_result' %}",
+         data : {
+             'csrfmiddlewaretoken': '{{ csrf_token }}',
+             'Order_Number' : '{{order.Order_Number}}',
+             'type'  : $('input[name="payment_ty"]:checked').val(),
+             'Total_price' : get_total(),
+         },
 
-           success : function(response)
-           {
-              alert("결제가 완료되었습니다.");
-              location.href="/";
+         success : function(response)
+         {
+            alert("결제가 완료되었습니다.");
+            location.href="/";
 
-           }
-       });
+         }
+     });
 
 
-      } else {
-        var msg = '결제에 실패하였습니다.';
-        msg += '에러내용 : ' + rsp.error_msg;
-      }
-        alert(msg);
-      });
+    } else {
+      var msg = '결제에 실패하였습니다.';
+      msg += '에러내용 : ' + rsp.error_msg;
+    }
+      alert(msg);
+    });
   }
 </script>
 {% endblock %}

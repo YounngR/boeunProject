@@ -59,13 +59,15 @@ class Order(models.Model):
     User_address          = models.CharField(max_length=200) #주소
     User_detail_address   = models.CharField(max_length=100) #상세 주소
     Order_Number          = models.CharField(max_length=200)#주문번호
+    post_number           = models.CharField(max_length=200,null=True, blank=True) #우편번호
     Total_price           = models.IntegerField(default=0) # 주문 총금액
     Order_date            = models.DateField(auto_now_add=True) #주문 날짜
     Order_type            = models.IntegerField(default=0) # 0 : 결제확인
     Order_hope_date       = models.DateTimeField(null=True,blank=True) #배송 희망일
     Order_request_content = models.CharField(null=True,blank=True,max_length=200) #주문시 요청사항
+    payment_type          = models.CharField(max_length=200, null=True, blank=True, default="결제대기") #결제수단
     Order_status          = models.BooleanField(default=False) #True = 결제완료
-    
+
 
 class Delivery(models.Model):
     DELIVERY_STATUS = (
