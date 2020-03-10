@@ -20,7 +20,7 @@
 </ol>
 
 <div style="text-align:center;">
-<table>
+<table id={{keyword}}>
   <tr>
     <th>상품명</th>
     <th>총 판매량</th>
@@ -33,8 +33,10 @@
     </tr>
     {% endfor %}
     <tr>
-      <input type="button" value="그래프보기" onclick="chart_2()">
-      <canvas id="myChart_2" width="400" height="400"></canvas>
+      <div>
+        <input type="button" value="그래프보기" onclick="chart();">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
     </tr>
   {% else %}
     {% for prod in prod %}
@@ -44,8 +46,10 @@
       </tr>
     {% endfor %}
     <tr>
-      <input type="button" value="그래프보기" onclick="chart_1()">
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <div id="chart1">
+        <input type="button" value="그래프보기" onclick="chart();">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
     </tr>
   {%endif%}
 </table>
@@ -54,87 +58,46 @@
 </div>
 <script>
 
-  function chart_1(){
-    var bread = [];
-    var bread_count = [];
-    var color = [];
-    var name_count = 0;
-    var sales_count = 0;
+  function chart(){
+      var bread = [];
+      var bread_count = [];
+      var color = [];
+      var name_count = 0;
+      var sales_count = 0;
 
-    for(var i of {{p_name_list|safe}}){
-      bread[name_count] = i;
-      color[name_count] = "rgba(255, 206, 86, 1)";
-      name_count++;
+      for(var i of {{p_name_list|safe}}){
+        bread[name_count] = i;
+        color[name_count] = "rgba(255, 206, 86, 1)";
+        name_count++;
+      }
+
+      for(var i of {{p_salse_list|safe}}){
+        bread_count[sales_count] = i;
+        sales_count++;
+      }
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: bread,
+              datasets: [{
+                  label: '판매량',
+                  data: bread_count,
+                  backgroundColor: color,
+                  borderColor: color,
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+      });
     }
-
-    for(var i of {{p_salse_list|safe}}){
-      bread_count[sales_count] = i;
-      sales_count++;
-    }
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: bread,
-            datasets: [{
-                label: '판매량',
-                data: bread_count,
-                backgroundColor: color,
-                borderColor: color,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-  };
-
-  function chart_2(){
-    var bread = [];
-    var bread_count = [];
-    var color = [];
-    var count = 0;
-
-    for(var key in {{bread_list}}){
-      bread[count] = key;
-      bread_count[count] = bread_list[key];
-      color[count] = "rgba(255, 206, 86, 1)";
-      count++;
-    }
-
-
-    var ctx = document.getElementById('myChart_2').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: bread,
-            datasets: [{
-                label: '판매량',
-                data: bread_count,
-                backgroundColor: color,
-                borderColor: color,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-  };
-
-
 
 </script>

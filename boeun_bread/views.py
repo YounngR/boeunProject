@@ -75,7 +75,7 @@ def order_list(request):
         order = get_object(Order,id=request.POST.get('order_pk'))
         delivery = get_object(Delivery,order=order)
         if delivery:
-            
+
             delivery.delivery_status = request.POST.get('status')
             delivery.save()
         else:
@@ -178,25 +178,31 @@ def manage_Sales_Status(request):
 def manage_Sales_Status_table(request):
 
     bread_list = {}
+    p_name_list = []
+    p_salse_list = []
+
     for name in Product.objects.all():
         bread_list[name.P_name] = 0
 
     order = Order.objects.all()
 
-    if request.POST.get('year') != 0 and request.POST.get('month') != 0:
+    if request.POST.get('year') != "0" and request.POST.get('month') != "0":
         order = Order.objects.filter(Order_date__year=request.POST.get('year'), Order_date__month=request.POST.get('month'))
 
-    elif request.POST.get('year') != 0 and request.POST.get('month') == 0:
+    elif request.POST.get('year') != "0" and request.POST.get('month') == "0":
+
         order = Order.objects.filter(Order_date__year=request.POST.get('year'))
 
-    elif request.POST.get('year') == 0 and request.POST.get('month') != 0:
+    elif request.POST.get('year') == "0" and request.POST.get('month') != "0":
         order = Order.objects.filter(Order_date__month=request.POST.get('month'))
 
     for order in order:
         for p_order in Order_Product.objects.filter(Order=order):
             bread_list[p_order.product_name] += p_order.product_count
+            p_name_list.append(p_order.product_name)
+            p_salse_list.append(p_order.product_count)
 
-    return render(request, 'manage/manage_Sales_Status_table.html', {'bread_list':bread_list, 'keyword':"change_table"})
+    return render(request, 'manage/manage_Sales_Status_table.html', {'bread_list':bread_list, 'keyword':"change_table", 'p_name_list':p_name_list,'p_salse_list':p_salse_list})
 
 #공지사항 작성
 @login_required
@@ -559,7 +565,7 @@ def order_lookup_info(request):
     posts = paginator.get_page(page)
 
     return render(request, 'mypage/order_lookup_info.html', {'order':posts, 'posts':posts})
-#배송 조회 
+#배송 조회
 def tracking(request,order_num):
     order = get_object_or_404(Order,Order_Number=order_num)
     context = {
@@ -767,7 +773,6 @@ def Before_payment(request):
     for prod_pk in request.POST.getlist('prod_pk'):
         product = get_object(Product, pk=prod_pk)
         cp = get_object(Cart_Product,Cart=m_cart,product_id=product.pk)
-        print(cp)
         Order_Product.objects.create(
             Order = order,
             product_id = product.pk,
@@ -925,7 +930,7 @@ def notice_detail(request,page):
 def modify_notice(request,page):
     board = get_object_or_404(Board,id=page)
     if request.method == "POST":
-        
+
         if board.user == request.user.profile:
             files     = request.FILES.getlist('file')
             pre_files = request.POST.get('pre_exclude_file')
@@ -934,7 +939,7 @@ def modify_notice(request,page):
                 client 삭제된 리스트로
                 client 삭제된 파일 제외
             '''
-            
+
             for index in request.POST.getlist('exclude_file'):
                 try:
                     del files[int(index)]
@@ -946,8 +951,8 @@ def modify_notice(request,page):
                     if obj:
                         obj.delete()
                 except ValueError:
-                    pass        
-                
+                    pass
+
 
             board.title   = request.POST.get('title')
             board.content = request.POST.get('content')
@@ -959,7 +964,7 @@ def modify_notice(request,page):
                 )
 
         return redirect('/Service_center/NoticeDetail/'+page)
-    files = BoardFile.objects.filter(board=board)    
+    files = BoardFile.objects.filter(board=board)
     context = {
         'board':board,
         'files':files
@@ -1128,7 +1133,7 @@ def Privacy_Policy(request):
     return render(request, 'mypage/Privacy_Policy.html')
 #견적서
 def estimate(request,order_num):
-    
+
     order = get_object_or_404(Order,Order_Number=order_num)
     order_product = None
     total = 0
@@ -1142,6 +1147,5 @@ def estimate(request,order_num):
         'order_product':order_product,
         'total':total
     }
-    
+
     return render(request,'Estimate/estimate.html',context)
-    
