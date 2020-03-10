@@ -676,7 +676,8 @@ def recently_info(request):
         response = {
             'addr' : order.User_address,
             'detail_addr':order.User_detail_address,
-            'request_content' : order.Order_request_content
+            'request_content' : order.Order_request_content,
+            'post_number':order.post_number,
 
         }
     return HttpResponse(json.dumps(response), content_type="application/json")
@@ -758,12 +759,14 @@ def Before_payment(request):
     cart = get_object(Cart,pk=request.POST.get('cart_pk'))
     if cart:
         total = cart.get_total() + 3000 # 배송비 3000원
-
+    print("="*20)
+    print(request.POST.get('post_number'))
     order = Order.objects.create(
         User                  = user,
         Order_Number          = str(create_order_number()),
         User_address          = request.POST.get('addr'),
         User_detail_address   = request.POST.get('detail-addr'),
+        post_number           = request.POST.get('post_number'),
         Total_price           = total,
         Order_hope_date       = request.POST.get('hopeday'),
         Order_request_content = request.POST.get('request_content'),

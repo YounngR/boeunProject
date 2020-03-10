@@ -11,7 +11,7 @@
         
             {% for order in orders %}
             {% if not order.delivery.delivery_status == '3'%}
-            <form method="POST">
+            <form method="POST" onsubmit="return isVaild()">
                 {% csrf_token %}
                 <input type="hidden" name="order_pk" value="{{order.pk}}">
                 <tr>
@@ -54,5 +54,9 @@
             var top  = (window.screen.height/2)-(500/2);
             window.open(url,'window','width=700,height=500,left='+left+',top='+top);
         });
+        function isVaild(){
+            alert("저장 되었습니다.");
+            return true;
+        }
     </script>
 {% endblock %}
