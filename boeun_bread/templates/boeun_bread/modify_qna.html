@@ -44,7 +44,10 @@
             {% csrf_token %}
             <label>질문유형</label>
             <select class="form-control" name="kind">
-                <option value="1">배송기준</option>
+                <option value="1">상품정보</option>
+                <option value="2">배송문의</option>
+                <option value="3">결제문의</option>
+                <option value="4">기타</option>
             </select><br>
             <label>질문제목</label>
             <input type="text" name="title" value="{{qna.question_title}}" class="form-control"><br>
