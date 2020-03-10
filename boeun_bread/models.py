@@ -58,6 +58,7 @@ class Order(models.Model):
     User                  = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     User_address          = models.CharField(max_length=200) #주소
     User_detail_address   = models.CharField(max_length=100) #상세 주소
+    post_number           = models.CharField(max_length=200,null=True, blank=True) #우편번호
     Order_Number          = models.CharField(max_length=200)#주문번호
     post_number           = models.CharField(max_length=200,null=True, blank=True) #우편번호
     Total_price           = models.IntegerField(default=0) # 주문 총금액
@@ -102,7 +103,10 @@ class BoardFile(models.Model):
 
 class QNA(models.Model):
     QUESTION_KIND =(
-        ('1','배달기준'),
+        ('1','상품정보'),
+        ('2','배송문의'),
+        ('3','결제문의'),
+        ('4','기타')
 
     )
     user             = models.ForeignKey(Profile, on_delete=models.CASCADE)

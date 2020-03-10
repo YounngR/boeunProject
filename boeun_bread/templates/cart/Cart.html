@@ -190,6 +190,7 @@
                     <div class="field-box">
                         <span>주소 :</span>
                         <input type="text"  class="field" id="addr" name="addr">
+                        <input type="hidden" id="post-code" name="post_number">
                         <div class="detail-addr-field">
                             <input type="text" class="field" id="detail-addr" name="detail-addr" placeholder="상세주소">
                         </div>
@@ -296,6 +297,8 @@
                 //document.getElementById('sample6_postcode').value = data.zonecode;
                 //document.getElementById("sample6_address").value = addr;
                 document.getElementById("addr").value = (addr+extraAddr);
+                document.getElementById("post-code").value = data.zonecode;
+                
                 showDetailAddr();
                 // 커서를 상세주소 필드로 이동한다.
                 //document.getElementById("sample6_detailAddress").focus();
@@ -432,6 +435,8 @@
                   $("#addr").val(response['addr']);
                   $("#detail-addr").val(response['detail_addr']);
                   $("#request_content").val(response['request_content']);
+                  $("#post-code").val(response['post_number']);
+
                }
           });
     }

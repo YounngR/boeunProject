@@ -47,13 +47,20 @@
             <tr>
                 <th>상품명</th>
                 <th>상품개수</th>
+                <th>상품가격</th>
             </tr>
             {% for prod in order_product %}
             <tr>
                 <td>{{prod.product_name}}</td>
                 <td>{{prod.product_count}}</td>
+                <td>{{prod.product_price}}</td>
             </tr>
             {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td>총: {{order.Total_price}}원</td>
+            </tr>
         </table>
     </div>   
 </body>
