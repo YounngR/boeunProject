@@ -67,6 +67,7 @@ class Order(models.Model):
     Order_request_content = models.CharField(null=True,blank=True,max_length=200) #주문시 요청사항
     payment_type          = models.CharField(max_length=200, null=True, blank=True, default="결제대기") #결제수단
     Order_status          = models.BooleanField(default=False) #True = 결제완료
+    Order_receipt         = models.CharField(null=True,blank=True,max_length=200)#카드영수증
 
 
 class Delivery(models.Model):

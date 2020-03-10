@@ -807,6 +807,7 @@ def payment_result(request):
 
     order.Order_status = True
     order.payment_type = type
+    order.Order_receipt = request.POST.get('receipt')
     order.save()
 
     for porduct in Order_Product.objects.filter(Order=order):

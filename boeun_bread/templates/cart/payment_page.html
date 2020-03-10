@@ -161,6 +161,7 @@
       buyer_name : '{{request.user.profile.U_name}}',
       buyer_tel : '{{request.user.profile.U_phone}}',
       buyer_addr : '{{order.user.User_address}}, {{order.user.User_detail_address}}',
+      buyer_postcode : '{{order.post_number}}',
     }, function(rsp) {
     if ( rsp.success ) {
       var msg = '결제가 완료되었습니다.';
@@ -177,12 +178,12 @@
              'csrfmiddlewaretoken': '{{ csrf_token }}',
              'Order_Number' : '{{order.Order_Number}}',
              'type'  : $('input[name="payment_ty"]:checked').val(),
+             'receipt' : rsp.receipt_url,
              'Total_price' : get_total(),
          },
 
          success : function(response)
          {
-            alert("결제가 완료되었습니다.");
             location.href="/";
 
          }
