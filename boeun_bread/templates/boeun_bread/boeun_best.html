@@ -11,15 +11,15 @@
         float: left;
         width:200px;
         height: 380px;
-        background-color: #d7d7d9;
-    
+        background-color: #ffffd8;
+
     }
     #best-prod-list{
         width:750px;
         height: 400px;
         margin-left:240px;
         position: relative;
-        
+
     }
     .text{
         font-size: 13px;
@@ -31,7 +31,7 @@
         cursor: pointer;
     }
     #big-img-box{
-        
+
         width:571px;
         position: absolute;
         left: 0px;
@@ -47,13 +47,13 @@
     .small-item{
         list-style: none;
         width:113px;
-        color:#6E6E6E;        
+        color:#6E6E6E;
         float: left;
     }
     .small-item:nth-child(2n+1){margin-right:71px;}
     .small-item img {width:113px;height: 115px;}
-    .small-item .prod-name{ font-size: 13px; font-weight: 600; text-align: center;}
-    .small-item .prod-kind{ font-size: 8px; font-weight: 600; text-align: center;}
+    .small-item .prod-name{ font-size: 18px; font-weight: 600; text-align: center;}
+    .small-item .prod-kind{ font-size: 14px; font-weight: 600; text-align: center;}
 
     #big-img-box > div:nth-child(1){
 
@@ -76,7 +76,7 @@
         width:210px;
         height: 334px;
         font-weight: 600;
-        background-color: #d7d7d9;
+        background-color: #ededed;
         border-radius: 10px;
         margin-right:50px;
         margin-top:27px;
@@ -91,7 +91,7 @@
         margin-left: 43px;
         margin-top: 21px;
 
-    }   
+    }
     .add-cart-btn{
         width:97px;
         height:28px;
@@ -119,6 +119,9 @@
             text-align: center;
             line-height: 100px;
         }
+  .nav{
+    font-size:20px;
+  }
 </style>
 <div class="text-right" style="margin-top:28px; margin-right: 78px;">
     <img width="20" height="20" src="{% static 'img/homepagelogo.png'%}" style="position: relative; top:-3px;">
@@ -158,14 +161,14 @@
         <p class="text-center" style="font-weight: 800; font-size: 20px; padding-top:27px; padding-bottom: 21px;">
             BOEUN BREAD
         </p>
-        
+
         <p class="text nav" onclick="prod_kind_click(1);">전체</p>
         <p class="text nav" onclick="prod_kind_click(2);">제빵</p>
         <p class="text nav" onclick="prod_kind_click(3);">제과</p>
         <p class="text nav" onclick="prod_kind_click(4);">선물 세트</p>
     </div>
     <div id="best-prod-list">
-        
+
         <div id="big-img-box">
             <!--상단 로고-->
             <div>
@@ -176,7 +179,7 @@
             {% for prod in first_prod %}
                 <div class="prod-btn" pk="{{prod.pk}}">
                     <img src="/media/{{prod.P_img}}" width="245" height="251">
-                    <p class="text-center" style="font-size: 25px; font-weight: 800;">{{prod.P_name}}</p>
+                    <p class="text-center" style="font-size: 30px; font-weight: 800;">{{prod.P_name}}</p>
                     <p class="text-center" style="font-weight: 600; font-size:13px;">{{prod.get_P_kind_display}}</p>
                 </div>
             {% endfor %}
@@ -190,7 +193,7 @@
                         <p class="prod-kind">{{prod.get_P_kind_display}}</p>
                     </li>
                 {% endfor %}
-                
+
             </ul>
         </div>
     </div>
@@ -199,16 +202,16 @@
     <ul id="general-list">
         {% for prod in third_prod_list %}
             <li class="general-item">
-                <p style="font-size:15px; padding-top:39px;" class="text-center">
+                <p style="font-size:20px; padding-top:39px;" class="text-center">
                     {{prod.P_name}}
                 </p>
-                <p style="font-size:8px;" class="text-center">
+                <p style="font-size:12px;" class="text-center">
                     {{prod.get_P_kind_display}}
                 </p>
                 <div class="add-cart-btn" pk="{{prod.pk}}">
                     장바구니 담기
                 </div>
-                <img src="/media/{{prod.P_img}}" class="prod-btn" pk="{{prod.pk}}"> 
+                <img src="/media/{{prod.P_img}}" class="prod-btn" pk="{{prod.pk}}">
             </li>
         {% endfor %}
 
@@ -218,7 +221,7 @@
 <div id="msg-box" style="display:none;">
     <p>상품이 장바구니에 담겼습니다.</p>
 </div>
-<script>    
+<script>
  function center(scroll_top){
             var w = (window.innerWidth/2)-150;
             var h = ((window.innerHeight/2)-50)+scroll_top;
@@ -246,7 +249,7 @@
 
         var pk    = $(this).attr("pk");
         var count = 1;
-        
+
         var url   = "/addCart/"+pk+"/"+count
         $.ajax({
             type : "GET",
@@ -267,9 +270,9 @@
     });
     function prod_kind_click(number){
         number = parseInt(number);
-        
+
         if(number == 1){ // 전체 클릭시
-            
+
             location.href= "/boeun_best/all/";
         }else if(number == 2){ // 제빵 클릭시
             location.href= "/boeun_best/baking/";

@@ -4,8 +4,8 @@
 
 <head>
      <!--부트스트랩-->
-     
-     
+
+
       <!--제이쿼리-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <meta charset="UTF-8">
@@ -13,8 +13,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style type="text/css" media="print">
         @page {
-            size: auto; 
-            margin: 0;  
+            size: auto;
+            margin: 0;
         }
      </style>
 </head>
@@ -31,7 +31,7 @@
       }
   </style>
  <div id="print_section" style="width:1000px; margin:0px auto; position: relative;">
-    <h3 style="border-bottom: 1px solid black; padding: 10px; padding-bottom: 0px; width: 130px; margin:0px auto;" >
+    <h3 style="border-bottom: 1px solid black; padding: 10px; padding-top:100px; padding-bottom: 0px; width: 130px; margin:0px auto;" >
         견&nbsp&nbsp&nbsp적&nbsp&nbsp&nbsp서
     </h3>
     <h5 class='text-right' style="font-size: 13px; position: relative; left: -15px;">
@@ -40,16 +40,16 @@
     <div class="row">
      <table class="table table-bordered" id="table1"style="margin-left: 30px; float: left; width: 47%; height: 301px;">
         <tr>
-            <td class="text-center" colspan="8">공급받는자</td>    
+            <td class="text-center" colspan="8">공급받는자</td>
         </tr>
         <tr>
             <td class='text-center'>사업자<br>번호</td>
             <td class='text-center write' colspan="7" >
                 <input  type="text" style="border:0px;"  placeholder="입력해주세요">
-                
+
             </td>
-         
-            
+
+
         </tr>
         <tr>
             <td class='text-center'>상호</td>
@@ -63,14 +63,14 @@
                 <p class="write-text"></p>
             </td>
 
-            
+
         <tr>
             <td class='text-center'>주소</td>
             <td class='text-center write' colspan="7">
                 <input type="text" style="border:0px;" placeholder="입력해주세요">
                 <p class="write-text"></p>
             </td>
-            
+
         </tr>
         <tr>
             <td class="text-center">업태</td>
@@ -96,7 +96,7 @@
                 <p class="write-text"></p>
             </td>
         </tr>
-    
+
      </table>
      <table class="table table-bordered" id="table2" style="width:45%; margin-left:52%; height: 302px; ">
         <tr>
@@ -145,7 +145,7 @@
             </td>
         </tr>
      </table>
-     
+
     </div>
     <table class="table table-bordered" style="width: 97%; position: relative; left:14px;">
         <tr>
@@ -155,7 +155,7 @@
             <td class="text-center col-md-1">수량</td>
             <td class="text-center col-md-2" >합계 (원)</td>
         </tr>
-        {% for prod in order_product %}  
+        {% for prod in order_product %}
         <tr>
             <td class="text-center col-md-1" >{{forloop.counter}}</td>
             <td class="text-center col-md-6" >{{prod.product_name}}</td>
@@ -163,11 +163,11 @@
             <td class="text-center col-md-1">{{prod.product_count}}개</td>
             <td class="text-center col-md-2" >{{prod.product_count|get_total:prod.product_price}}원</td>
         </tr>
-        
+
         {% endfor %}
         <tr>
             <td class="text-center" colspan="4" >결제금액</td>
-           
+
             <td class="text-center col-md-2" >{{total}}원</td>
         </tr>
     </table>
@@ -181,14 +181,14 @@
     <a id="print"><button id="print-button" style="width: 100px ; height:36px; color: black">  인쇄하기 </button>
     </a>
 </div>
-</div>   
+</div>
  <script>
-    
+
 /*$(".write").keyup(function(){
-    
+
     $(this).next("p").text($(this).val());
 });*/
-        
+
 
 
 $("#print").click(function(){
@@ -197,12 +197,12 @@ $("#print").click(function(){
             if(value)
             $(item).text(value);
          });
-         
+
             $("#print").css("display","none");
             $("#table1").height(320);
             $("#table2").height(320);
             printt();
-         
+
      });
  function printt(){
     var initBody =document.getElementById('print-box').innerHTML;
@@ -214,8 +214,8 @@ $("#print").click(function(){
             window.location.reload();
         }
         window.print();
- }    
-  
+ }
+
  </script>
 </body>
 </html>
