@@ -304,9 +304,10 @@ def non_login(request):
 
     if request.method == "POST":
         context={}
-        user = get_object(Profile,U_name=request.POST.get('user_id'), U_phone=request.POST.get('phone'))
-        if user:
-            order = Order.objects.filter(User=user)
+        #user = get_object(Order,non_user_name=request.POST.get('user_id'), non_user_phone=request.POST.get('phone'))
+        order = Order.objects.filter(non_user_name=request.POST.get('user_id'), non_user_phone=request.POST.get('phone'))
+        if order:
+            
             return render(request, 'mypage/non_login_order_lookup.html', {'order':order})
         else:
             context['msg'] = "주문내역이 존재하지않습니다."
@@ -344,7 +345,8 @@ def SignUp(request):
                     user    = user,
                     U_phone = request.POST.get('user_phone'),
                     U_name  = request.POST.get('user_name'),
-                    U_email = user_email
+                    U_email = user_email,
+                    U_grade = 1
                 )
                 profile.U_is_active = False
 
@@ -817,8 +819,7 @@ def Before_payment(request):
     cart = get_object(Cart,pk=request.POST.get('cart_pk'))
     if cart:
         total = cart.get_total() + 3000 # 배송비 3000원
-    print("="*20)
-    print(request.POST.get('post_number'))
+    hope_day = request.POST.get('hopeday') if request.POST.get('hopeday') else None
     order = Order.objects.create(
         User                  = user,
         Order_Number          = str(create_order_number()),
@@ -826,8 +827,11 @@ def Before_payment(request):
         User_detail_address   = request.POST.get('detail-addr'),
         post_number           = request.POST.get('post_number'),
         Total_price           = total,
-        Order_hope_date       = request.POST.get('hopeday'),
+        Order_hope_date       = hope_day,
         Order_request_content = request.POST.get('request_content'),
+        non_user_name         = request.POST.get('name'),
+        non_user_phone        = request.POST.get('phone'),
+        non_user_email        = request.POST.get('email')
     )
 
     m_cart = get_object(Cart, User=user)
@@ -894,22 +898,13 @@ def get_total(request):
 
 #결제 최종페이지
 def payment_page(request, ordernumber):
+    
 
-    profile =  request.user.profile if request.user.is_authenticated else None
-    if not profile:
-        cookie_id = request.COOKIES.get('cookie_id')
-        profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
-    else:
-        copy_product(request)
-
-    order = get_object(Order,User=profile, Order_Number=ordernumber)
-
-    cart = get_object(Cart,User=profile)
-
-    cp   = Cart_Product.objects.filter(Cart=cart)
+    order = get_object(Order, Order_Number=ordernumber)
+    order_product = Order_Product.objects.filter(Order=order)
 
 
-    return render(request,'cart/payment_page.html',{'cp':cp,'cart':cart, 'order':order})
+    return render(request,'cart/payment_page.html',{'order_product':order_product,'order':order})
 
 #주문번호 생성
 def create_order_number():
@@ -1207,19 +1202,31 @@ def Privacy_Policy(request):
     return render(request, 'mypage/Privacy_Policy.html')
 #견적서
 def estimate(request,order_num):
-
-    order = get_object_or_404(Order,Order_Number=order_num)
-    order_product = None
-    total = 0
-    if order:
-        order_product = Order_Product.objects.filter(
-            Order=order
-        )
-        for prod in order_product:
-            total += (prod.product_price * prod.product_count)
-    context = {
-        'order_product':order_product,
-        'total':total
-    }
+    context = {}
+    if order_num == "CartEstimate":
+        total = 0
+        profile =  request.user.profile if request.user.is_authenticated else None
+        if not profile:
+            cookie_id = request.COOKIES.get('cookie_id')
+            profile   = get_object(Profile,cookie_id=cookie_id,U_grade=2)
+        cart = get_object(Cart,User=profile)
+        if cart:
+            cp = Cart_Product.objects.filter(Cart=cart)
+            for obj in cp:
+                total += (obj.product_price * obj.product_count)
+        context['product']  = cp
+        context['total']    = total + 3000
+        context['title']    = "견   적   서"
+    else:    
+        order = get_object_or_404(Order,Order_Number=order_num)
+        order_product = None
+        if order:
+            order_product = Order_Product.objects.filter(
+                Order=order
+            )
+        
+        context['product'] = order_product
+        context['total']   = order.Total_price
+        context['title']   = "납   품   서"
 
     return render(request,'Estimate/estimate.html',context)

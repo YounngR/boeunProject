@@ -33,7 +33,7 @@
   </style>
  <div id="print_section" style="width:1000px; margin:0px auto; position: relative;">
     <h3 style="border-bottom: 1px solid black; padding: 10px; padding-top:100px; padding-bottom: 0px; width: 130px; margin:0px auto;" >
-        납&nbsp&nbsp&nbsp품&nbsp&nbsp&nbsp서
+        {{title}}
     </h3>
     <h5 class='text-right' style="font-size: 13px; position: relative; left: -15px;">
         발행일: 2020년 2월 6일
@@ -157,7 +157,7 @@
             <td class="text-center col-md-1">수량</td>
             <td class="text-center col-md-2" >합계 (원)</td>
         </tr>
-        {% for prod in order_product %}
+        {% for prod in product %}
         <tr>
             <td class="text-center col-md-1" >{{forloop.counter}}</td>
             <td class="text-center col-md-6" >{{prod.product_name}}</td>
@@ -167,6 +167,10 @@
         </tr>
 
         {% endfor %}
+        <tr>
+            <td class="text-center" colspan="4">배송비</td>
+            <td class="text-center col-md-2" >3000원</td>
+        </tr>
         <tr>
             <td class="text-center" colspan="4" >결제금액</td>
 

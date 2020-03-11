@@ -155,7 +155,7 @@
                 장바구니
             </p>
 
-        <form id="b_payment" action="{% url 'boeun_bread:Before_payment'%}" method="POST">
+        <form id="b_payment" action="{% url 'boeun_bread:Before_payment'%}" method="POST" onsubmit="return isVaild()">
             {% csrf_token %}
             <ul id="product-list" class="content">
                 {% for c in cp %}
@@ -189,7 +189,7 @@
                     <!--주소-->
                     <div class="field-box">
                         <span>주소 :</span>
-                        <input type="text"  class="field" id="addr" name="addr">
+                        <input type="text"  class="field" id="addr" name="addr" required>
                         <input type="hidden" id="post-code" name="post_number">
                         <div class="detail-addr-field">
                             <input type="text" class="field" id="detail-addr" name="detail-addr" placeholder="상세주소">
@@ -204,17 +204,17 @@
                     <!--이메일-->
                     <div class="field-box">
                         <span>이메일 :</span>
-                        <input type="email" id="email" value="{{request.user.profile.U_email}}" >
+                        <input type="email" id="email" name="email" value="{{request.user.profile.U_email}}" >
                     </div>
                     <!--이름-->
                     <div class="field-box">
                         <span>이름 :</span>
-                        <input type="text" id="name"  value="{{request.user.profile.U_name}}" >
+                        <input type="text" id="name" name="name"  value="{{request.user.profile.U_name}}" >
                     </div>
                     <!--핸드폰 번호-->
                     <div class="field-box">
                         <span>핸드폰 번호 :</span>
-                        <input type="text" id="phone"  value="{{request.user.profile.U_phone}}">
+                        <input type="text" id="phone" name="phone" value="{{request.user.profile.U_phone}}">
                     </div>
                     <!--배송 희망일-->
                     <div class="field-box">
@@ -229,6 +229,17 @@
                     </div>
                     <!--최근 배송지 정보로 입력-->
                     <input type="hidden" name="cart_pk" value={{cart.pk}}>
+                    {% if cp %}
+                    <div class="btn btn-default print" style="margin-top:10px;">납품서 출력</div>
+                    {% endif %}
+                    {% if not request.user.is_authenticated %}
+                        <br></br>
+                        
+                        <input type="checkbox" id="non-user-check" required>
+                        <label for="non-user-check">비회원 개인정보 수집동의</label>
+                    {% endif %}    
+
+
                 </form>
 
             </div>
@@ -442,7 +453,46 @@
     }
 
     function payment(){
-      $('#b_payment').submit();
+      
+        $('#b_payment').submit();
+      
     }
+    function isVaild(){
+        var emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if($(".item").length <= 0){
+            alert("상품을 담아주세요.");
+            return false;
+        }
+        else if("{{request.user.is_authenticated}}" == "False" && !$("#non-user-check").is(":checked")){
+            alert("비회원 개인정보 수집동의 체크해주세요.");
+            return false;            
+        }else if ($("#addr").val() == ""){
+            alert("주소를 입력해 주세요.");
+            return false;
+        }else if($("#detail-addr").val() == ""){
+            alert("상세주소를 입력해 주세요.");
+            return false;
+        }else if($("#email").val() == ""){
+            alert("이메일을 입력해 주세요.");
+            return false;
+        }else if(!emailRegExp.test($("#email").val())){
+            alert("이메일 형식이 잘못되었습니다.");
+            return false;
+        }else if($("#name").val() == ""){
+            alert("이름을 입력해 주세요.");
+            return false;
+        }else if($("#phone").val() == ""){
+            alert("전화번호를 입력해 주세요.")
+            return false;
+        }
+        return true;
+    }
+    //납품서 클릭
+    $(".print").click(function(){
+        var url  = "/estimate/CartEstimate/";
+        var left = 0;
+        var top  = 0;
+        window.open(url,'window','width=1000,height=700,left='+left+',top='+top);
+    });
 </script>
 {% endblock %}
