@@ -69,6 +69,9 @@ class Order(models.Model):
     payment_type          = models.CharField(max_length=200, null=True, blank=True, default="결제대기") #결제수단
     Order_status          = models.BooleanField(default=False) #True = 결제완료
     Order_receipt         = models.CharField(null=True,blank=True,max_length=200)#카드영수증
+    non_user_name         = models.CharField(max_length=20,null=True,blank=True) #비회원 이름
+    non_user_phone        = models.CharField(max_length=11,null=True,blank=True) # 비회원 전화번호
+    non_user_email        = models.EmailField(max_length=50,null=True,blank=True) #비회원 이메일
 
 
 class Delivery(models.Model):
@@ -83,7 +86,7 @@ class Delivery(models.Model):
     #배송상태
     delivery_status  = models.CharField(max_length=1,choices=DELIVERY_STATUS,default='1')
 class Order_Product(models.Model):
-    Order         = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
+    Order         = models.ForeignKey(Order, on_delete=models.CASCADE)
     product_id    = models.IntegerField()
     product_img   = models.ImageField()
     product_name  = models.CharField(max_length=50)

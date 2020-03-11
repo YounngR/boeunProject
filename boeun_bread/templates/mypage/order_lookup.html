@@ -145,7 +145,7 @@
     window.open(url,'window','width=700,height=500,left='+left+',top='+top);
   });
   $(document).on("click",".estimate",function(){
-    
+    console.log("click");
     var order_num = $(this).attr("order");
     var url  = "/estimate/"+order_num;
     var left = 0;

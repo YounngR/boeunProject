@@ -83,7 +83,7 @@
     <label class="payment_table_info" style="margin-left:110px; width:60px;">총액</label>
   </div>
 
-  {% for cp in cp %}
+  {% for cp in order_product %}
    <div style="padding-left:40px; padding-top:20px;">
     <img  width="87" height="90" src="/media/{{ cp.product_img }}">
     <label class="table_info" style="padding-left:120px; width:300px;">{{ cp.product_name }}</label>
@@ -97,9 +97,10 @@
   {% endfor %}
   <div id="payment_table_bottom">
     <label style="padding-left:280px; padding-top:13px; text-align:center; font-size:16px;">상품 가격 :
-      {{cart.get_total}}원 + 배송비 : 3000원 = <span style="color:red;">결제총액 : {{cart.get_total|add:"3000"}}원</span>
+      {{order.Total_price|add:"-3000"}}원 + 배송비 : 3000원 = <span style="color:red;">결제총액 : {{order.Total_price}}원</span>
     </label>
   </div>
+  {% if not order.Order_status %}
   <div style="padding-left:20px; padding-top:30px;">
     <input type="radio" name="payment_ty" value="card">카드결제&nbsp&nbsp
     <input type="radio" name="payment_ty" value="trans">실시간계좌이체&nbsp&nbsp
@@ -110,15 +111,15 @@
   <div>
     <div class="button" onclick="payment()">결제하기</div>
   </div>
-
+{% endif %}
   <label style=" margin-left:10px; margin-top:30px; font-weight:800; font-size:18px; color:#58575D; ">주문자 정보</label>
   <div style="width:960px;">
     <hr style="margin : 0px; margin-left:15px; margin-top:25px; width:960px; background-color:#91938E; height:1px;">
-    <label class="user_table">주문자 이름</label><label style="padding-left:50px;">{{cart.User.U_name}}</label>
+    <label class="user_table">주문자 이름</label><label style="padding-left:50px;">{{order.non_user_name}}</label>
     <hr style="margin : 0px; margin-left:15px;width:960px; background-color:#91938E; height:1px;">
-    <label class="user_table">이메일</label><label style="padding-left:50px;">{{cart.User.U_email}}</label>
+    <label class="user_table">이메일</label><label style="padding-left:50px;">{{order.non_user_email}}</label>
     <hr style="margin : 0px; margin-left:15px; width:960px; background-color:#91938E; height:1px;">
-    <label class="user_table">휴대전화</label><label style="padding-left:50px;">{{cart.User.U_phone}}</label>
+    <label class="user_table">휴대전화</label><label style="padding-left:50px;">{{order.non_user_phone}}</label>
     <hr style="margin : 0px; margin-left:15px; width:960px; background-color:#91938E; height:1px;">
     <label class="user_table">주문자주소</label><label style="padding-left:50px;">{{order.User_address}}<br>{{order.User_detail_address}}</label>
   </div>
