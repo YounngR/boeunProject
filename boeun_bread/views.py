@@ -86,7 +86,7 @@ def order_list(request):
                 delivery_status  = request.POST.get('status')
             )
 
-    orders = Order.objects.all()
+    orders = Order.objects.filter(Order_status=True)
     context = {
         'orders':orders
     }
