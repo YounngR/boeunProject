@@ -26,11 +26,18 @@
     <option value="2020">2020</option>
     <option value="2021">2021</option>
     <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+    <option value="2025">2025</option>
   </select>
 </div>
 
 <div id="pre_page">
   {% include 'manage/manage_Sales_Status_table.html' %}
+</div>
+
+<div style="padding-left:20px; padding-top:50px;">
+  <a type="button" id="save_csv" onclick="s_csv()">엑셀 다운로드</a>
 </div>
 
 <script>
@@ -70,5 +77,10 @@
         }
     });
   });
+
+  function s_csv(){
+
+    location.href="/manage/manage_Sales_csv?year="+$("#year option:selected").val()+"&month="+$("#month option:selected").val();
+  }
 </script>
 {% endblock %}

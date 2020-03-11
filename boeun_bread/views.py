@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import *
 from django.contrib.auth.models import User # 회원가입
 from django.contrib import auth #로그
-import json, random, string
+import json, random, string, csv
 #이메일 인증
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -19,7 +19,6 @@ from django.contrib import messages
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import F
-import pandas
 from django.db.models import Q
 
 
@@ -158,8 +157,11 @@ def delete_product(request):
             product[0].delete()
         return redirect('/manage/modify_list')
 
+#매출 현황
 @login_required
 def manage_Sales_Status(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
 
 
     prod = Product.objects.all()
@@ -174,8 +176,11 @@ def manage_Sales_Status(request):
 
     return render(request, 'manage/manage_Sales_Status.html',{'prod':prod, 'p_name_list':p_name_list,'p_salse_list':p_salse_list})
 
+#매출현황 그래프
 @login_required
 def manage_Sales_Status_table(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
 
     bread_list = {}
     p_name_list = []
@@ -184,25 +189,78 @@ def manage_Sales_Status_table(request):
     for name in Product.objects.all():
         bread_list[name.P_name] = 0
 
-    order = Order.objects.all()
+    order = Order.objects.filter(Order_status=True)
 
     if request.POST.get('year') != "0" and request.POST.get('month') != "0":
-        order = Order.objects.filter(Order_date__year=request.POST.get('year'), Order_date__month=request.POST.get('month'))
+        order = Order.objects.filter(Order_date__year=request.POST.get('year'), Order_date__month=request.POST.get('month'),Order_status=True)
 
     elif request.POST.get('year') != "0" and request.POST.get('month') == "0":
 
-        order = Order.objects.filter(Order_date__year=request.POST.get('year'))
+        order = Order.objects.filter(Order_date__year=request.POST.get('year'),Order_status=True)
 
     elif request.POST.get('year') == "0" and request.POST.get('month') != "0":
-        order = Order.objects.filter(Order_date__month=request.POST.get('month'))
+        order = Order.objects.filter(Order_date__month=request.POST.get('month'),Order_status=True)
 
     for order in order:
         for p_order in Order_Product.objects.filter(Order=order):
             bread_list[p_order.product_name] += p_order.product_count
-            p_name_list.append(p_order.product_name)
-            p_salse_list.append(p_order.product_count)
+            try:
+                index = p_name_list.index(str(p_order.product_name))
+                p_salse_list[index] += p_order.product_count
+            except ValueError:
+                p_name_list.append(p_order.product_name)
+                p_salse_list.append(p_order.product_count)
+
+
 
     return render(request, 'manage/manage_Sales_Status_table.html', {'bread_list':bread_list, 'keyword':"change_table", 'p_name_list':p_name_list,'p_salse_list':p_salse_list})
+
+
+#매출현황 csv
+@login_required
+def manage_Sales_csv(request):
+    if not isAdmin(request):
+        return render(request,'boeun_bread/main.html',{'manage_msg':'권한 없습니다.'})
+
+    p_name_list = []
+    p_salse_list = []
+    order = Order.objects.filter(Order_status=True)
+    day = ["전체매출"]
+
+
+    if request.GET.get('year') != "0" and request.GET.get('month') != "0":
+        day = [request.GET.get('year')+"년",request.GET.get('month')+"월"]
+        order = Order.objects.filter(Order_date__year=request.GET.get('year'), Order_date__month=request.GET.get('month'),Order_status=True)
+
+    elif request.GET.get('year') != "0" and request.GET.get('month') == "0":
+        day = [request.GET.get('year')+"년"]
+        order = Order.objects.filter(Order_date__year=request.GET.get('year'),Order_status=True)
+
+    elif request.GET.get('year') == "0" and request.GET.get('month') != "0":
+        day = [request.GET.get('month')+"월"]
+        order = Order.objects.filter(Order_date__month=request.GET.get('month'),Order_status=True)
+
+    for order in order:
+        for p_order in Order_Product.objects.filter(Order=order):
+            try:
+                index = p_name_list.index(str(p_order.product_name))
+                p_salse_list[index] += p_order.product_count
+            except ValueError:
+                p_name_list.append(p_order.product_name)
+                p_salse_list.append(p_order.product_count)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition']='attachment; filename="sales.csv"'
+    response.write(u'\ufeff'.encode('utf8'))
+    writer = csv.writer(response)
+    writer.writerow(day)
+    writer.writerow(p_name_list)
+    writer.writerow(p_salse_list)
+
+
+
+    return response
+
 
 #공지사항 작성
 @login_required

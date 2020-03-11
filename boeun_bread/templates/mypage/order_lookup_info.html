@@ -48,6 +48,11 @@
 
 <script>
   function open_receipt(url){
+    if(url != "None"){
       window.open(url,'window','width=1000,height=700,left=0,top=0');
+    }
+    else{
+      alert("결제를 하지 않으셨습니다.");
+    }
   }
 </script>
