@@ -68,21 +68,13 @@
   <div id="pre_page">
     {% for order in order %}
     <div style="float:left; margin-top:17px;">
-<<<<<<< HEAD
-      <label style = "margin-left:40px; width:80px; color:#9E9E9E; text-align:center;"> {{order.Order_Number}} </label>
-=======
       <label style = "margin-left:40px; width:80px; color:#9E9E9E; text-align:center; cursor: pointer;" onclick="orderNumberClick('{{order.Order_Number}}')"> {{order.Order_Number}} </label>
->>>>>>> 931f9ccb6c300493dec4a25696d2f333b3ffba6f
       <br>
       <button class="info_button_1 estimate" order="{{order.Order_Number}}" style="margin-left:25px;">납품서</button>
       <button class="info_button_1" onclick="open_receipt('{{order.Order_receipt}}')">카드 영수증</button>
       <button class="info_button_1 tracking-btn" order="{{order.Order_Number}}">배송 조회</button>
     </div>
-<<<<<<< HEAD
-    <label class="table_info" style = "margin-left:10px; width:80px; text-align:center;"> {{order.User.U_name}}</label>
-=======
     <label class="table_info" style = "margin-left:10px; width:80px; text-align:center;"> {{order.non_user_name}}</label>
->>>>>>> 931f9ccb6c300493dec4a25696d2f333b3ffba6f
     <label class="table_info" style = "margin-left:60px; width:80px; text-align:center;"> {{order.payment_type}} </label>
     <label class="table_info" style = "margin-left:80px; width:80px; text-align:center;"> {{order.Total_price}}</label>
     {% if order.Order_status == False%}
@@ -103,11 +95,7 @@
 
 </div>
 <script>
-<<<<<<< HEAD
-  function open_receipt(url){
-=======
     function open_receipt(url){
->>>>>>> 931f9ccb6c300493dec4a25696d2f333b3ffba6f
     if(url != "None"){
       window.open(url,'window','width=1000,height=700,left=0,top=0');
     }
@@ -115,13 +103,9 @@
       alert("결제를 하지 않으셨습니다.");
     }
   }
-<<<<<<< HEAD
-</script>
-{%endblock%}
-=======
-    
+
   $(document).on("click",".tracking-btn",function(){
-    
+
     var order_num = $(this).attr("order");
     var url  = "/tracking/"+order_num;
     var left = 0;
@@ -129,7 +113,7 @@
     window.open(url,'window','width=700,height=500,left='+left+',top='+top);
   });
   $(document).on("click",".estimate",function(){
-    
+
     var order_num = $(this).attr("order");
     var url  = "/estimate/"+order_num;
     var left = 0;
@@ -141,4 +125,3 @@
   }
 </script>
 {%endblock%}
->>>>>>> 931f9ccb6c300493dec4a25696d2f333b3ffba6f

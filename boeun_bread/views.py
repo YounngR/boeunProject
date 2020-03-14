@@ -18,8 +18,8 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.core import serializers
 from django.core.paginator import Paginator
-from django.db.models import F
-from django.db.models import Q
+from django.db.models import F, Q
+
 
 
 
@@ -28,7 +28,6 @@ def get_object(model,**args):
     query_set = model.objects.filter(**args)
     return query_set[0] if query_set else None
 
-#날짜 계산(일주일)
 
 
 def main(request):
@@ -307,7 +306,7 @@ def non_login(request):
         #user = get_object(Order,non_user_name=request.POST.get('user_id'), non_user_phone=request.POST.get('phone'))
         order = Order.objects.filter(non_user_name=request.POST.get('user_id'), non_user_phone=request.POST.get('phone'))
         if order:
-            
+
             return render(request, 'mypage/non_login_order_lookup.html', {'order':order})
         else:
             context['msg'] = "주문내역이 존재하지않습니다."
@@ -898,7 +897,7 @@ def get_total(request):
 
 #결제 최종페이지
 def payment_page(request, ordernumber):
-    
+
 
     order = get_object(Order, Order_Number=ordernumber)
     order_product = Order_Product.objects.filter(Order=order)
@@ -1217,14 +1216,14 @@ def estimate(request,order_num):
         context['product']  = cp
         context['total']    = total + 3000
         context['title']    = "견   적   서"
-    else:    
+    else:
         order = get_object_or_404(Order,Order_Number=order_num)
         order_product = None
         if order:
             order_product = Order_Product.objects.filter(
                 Order=order
             )
-        
+
         context['product'] = order_product
         context['total']   = order.Total_price
         context['title']   = "납   품   서"

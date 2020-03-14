@@ -48,22 +48,35 @@
 </div>
 
 <script>
-<<<<<<< HEAD
-  function open_receipt(url){
-=======
     function open_receipt(url){
->>>>>>> 931f9ccb6c300493dec4a25696d2f333b3ffba6f
+
     if(url != "None"){
       window.open(url,'window','width=1000,height=700,left=0,top=0');
     }
     else{
       alert("결제를 하지 않으셨습니다.");
     }
-<<<<<<< HEAD
-=======
   }
-  function orderNumberClick(orderNumber){
-    location.href = "/payment_page/"+orderNumber;
->>>>>>> 931f9ccb6c300493dec4a25696d2f333b3ffba6f
-  }
+
+    $(document).on("click",".tracking-btn",function(){
+
+      var order_num = $(this).attr("order");
+      var url  = "/tracking/"+order_num;
+      var left = 0;
+      var top  = 0;
+      window.open(url,'window','width=700,height=500,left='+left+',top='+top);
+    });
+
+    $(document).on("click",".estimate",function(){
+
+      var order_num = $(this).attr("order");
+      var url  = "/estimate/"+order_num;
+      var left = 0;
+      var top  = 0;
+      window.open(url,'window','width=1000,height=700,left='+left+',top='+top);
+    });
+
+    function orderNumberClick(orderNumber){
+      location.href = "/payment_page/"+orderNumber;
+    }
 </script>
