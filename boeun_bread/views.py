@@ -676,7 +676,7 @@ def cart(request):
 
     cart = get_object(Cart,User=profile)
     cp   = Cart_Product.objects.filter(Cart=cart)
-    return render(request, 'cart/cart.html',{'cp':cp,'cart':cart})
+    return render(request, 'cart/Cart.html',{'cp':cp,'cart':cart})
 
 #장바구니 담기
 def add_cart(request,pk,count):
@@ -816,6 +816,9 @@ def Before_payment(request):
 
     total = 0
     cart = get_object(Cart,pk=request.POST.get('cart_pk'))
+
+    phone_number = request.POST.get('phone')
+    phone_number = phone_number[0:3] + "-" + phone_number[3:7] + "-" + phone_number[7:11]
     if cart:
         total = cart.get_total() + 3000 # 배송비 3000원
     hope_day = request.POST.get('hopeday') if request.POST.get('hopeday') else None
@@ -829,7 +832,7 @@ def Before_payment(request):
         Order_hope_date       = hope_day,
         Order_request_content = request.POST.get('request_content'),
         non_user_name         = request.POST.get('name'),
-        non_user_phone        = request.POST.get('phone'),
+        non_user_phone        = phone_number,
         non_user_email        = request.POST.get('email')
     )
 
