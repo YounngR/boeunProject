@@ -900,10 +900,11 @@ def payment_page(request, ordernumber):
 
 
     order = get_object(Order, Order_Number=ordernumber)
+    cart  = get_object(Cart, User=order.User)
     order_product = Order_Product.objects.filter(Order=order)
 
 
-    return render(request,'cart/payment_page.html',{'order_product':order_product,'order':order})
+    return render(request,'cart/payment_page.html',{'order_product':order_product,'order':order, 'cart':cart})
 
 #주문번호 생성
 def create_order_number():

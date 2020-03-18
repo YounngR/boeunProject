@@ -140,6 +140,7 @@
 
             success : function(response)
             {
+              console.log(response)
               total = response['total'];
             }
         });
@@ -157,11 +158,11 @@
       pay_method : $('input[name="payment_ty"]:checked').val(),
       merchant_uid : 'merchant_' + new Date().getTime(),
       name : "상품결제",
-      amount : 100,//get_total(),
-      buyer_email : '{{request.user.profile.U_email}}',
-      buyer_name : '{{request.user.profile.U_name}}',
-      buyer_tel : '{{request.user.profile.U_phone}}',
-      buyer_addr : '{{order.user.User_address}}, {{order.user.User_detail_address}}',
+      amount : get_total(),
+      buyer_email : '{{order.non_user_email}}',
+      buyer_name : '{{order.non_user_name}}',
+      buyer_tel : '{{order.non_user_phone}}',
+      buyer_addr : '{{order.User_address}}, {{order.User_detail_address}}',
       buyer_postcode : '{{order.post_number}}',
     }, function(rsp) {
     if ( rsp.success ) {
